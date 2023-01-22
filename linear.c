@@ -1,51 +1,51 @@
 #include "linear.h"
 
-inline struct vec2_t create_vec2_t(float x, float y)
+inline vec2_t create_vec2_t(float x, float y)
 {
-        return (struct vec2_t) {x, y};
+        return (vec2_t) {x, y};
 }
 
-inline float length_vec2_t(struct vec2_t vec)
+inline float length_vec2_t(vec2_t vec)
 {
         return (float) sqrt((vec.x * vec.x) + (vec.y * vec.y));
 }
 
-struct vec2_t normalise_vec2_t(struct vec2_t vec)
+vec2_t normalise_vec2_t(vec2_t vec)
 {
         float length = length_vec2_t(vec);
-        return (struct vec2_t) {vec.x / length, vec.y / length};
+        return (vec2_t) {vec.x / length, vec.y / length};
 }
 
-inline struct vec3_t create_vec3_t(float x, float y, float z)
+inline vec3_t create_vec3_t(float x, float y, float z)
 {
-        return (struct vec3_t) {x, y, z};
+        return (vec3_t) {x, y, z};
 }
 
-inline float length_vec3_t(struct vec3_t vec)
+inline float length_vec3_t(vec3_t vec)
 {
         return (float) sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
 
-struct vec3_t normalise_vec3_t(struct vec3_t vec)
+inline vec3_t normalise_vec3_t(vec3_t vec)
 {
         float length = length_vec3_t(vec);
-        return (struct vec3_t) {vec.x / length, vec.y / length, vec.z / length};
+        return (vec3_t) {vec.x / length, vec.y / length, vec.z / length};
 }
 
-inline struct vec4_t create_vec4_t(float x, float y, float z, float w)
+inline vec4_t create_vec4_t(float x, float y, float z, float w)
 {
-        return (struct vec4_t) {x, y, z, w};
+        return (vec4_t) {x, y, z, w};
 }
 
-inline float length_vec4_t(struct vec4_t vec)
+inline float length_vec4_t(vec4_t vec)
 {
         return (float) sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
 }
 
-struct vec4_t normalise_vec4_t(struct vec4_t vec)
+inline vec4_t normalise_vec4_t(vec4_t vec)
 {
         float length = length_vec4_t(vec);
-        return (struct vec4_t) {vec.x / length, vec.y / length, vec.z / length, vec.w / length};
+        return (vec4_t) {vec.x / length, vec.y / length, vec.z / length, vec.w / length};
 }
 
 int multiply_matrix(float l[16], float r[16])
@@ -88,7 +88,7 @@ int translate_matrix3f(float m[16], float dx, float dy, float dz)
         return multiply_matrix(m, other);
 }
 
-int translate_matrix3fv(float m[16], struct vec3_t vec)
+int translate_matrix3fv(float m[16], vec3_t vec)
 {
         return translate_matrix3f(m, vec.x, vec.y, vec.z);
 }
@@ -105,7 +105,7 @@ int scale_matrix3f(float m[16], float w, float h, float d)
         return multiply_matrix(m, other);
 }
 
-int scale_matrix3fv(float m[16], struct vec3_t vec)
+int scale_matrix3fv(float m[16], vec3_t vec)
 {
         return scale_matrix3f(m, vec.x, vec.y, vec.z);
 }
@@ -113,16 +113,16 @@ int scale_matrix3fv(float m[16], struct vec3_t vec)
 int rotate_matrix3f(float m[16], float x, float y, float z, float theta)
 {
         float other[16] = {
-                cos(theta) + x*x*(1-cos(theta)), x*y*(1-cos(theta)) - z*sin(theta), x*z*(1-cos(theta)) + y*sin(theta), 0.0,
-                y*x*(1-cos(theta)) + z*sin(theta), cos(theta) + y*y*(1-cos(theta)), y*z*(1-cos(theta)) - x*sin(theta), 0.0,
-                z*x*(1-cos(theta)) - y*sin(theta), y*z*(1-cos(theta)) + x*sin(theta), cos(theta) + x*x*(1-cos(theta)), 0.0,
-                0.0,                               0.0,                               0.0,                             1.0,
+                cos(theta) + x*x*(1-cos(theta)),   x*y*(1-cos(theta)) - z*sin(theta), x*z*(1-cos(theta)) + y*sin(theta), 0.0,
+                y*x*(1-cos(theta)) + z*sin(theta), cos(theta) + y*y*(1-cos(theta)),   y*z*(1-cos(theta)) - x*sin(theta), 0.0,
+                z*x*(1-cos(theta)) - y*sin(theta), y*z*(1-cos(theta)) + x*sin(theta), cos(theta) + x*x*(1-cos(theta)),   0.0,
+                0.0,                               0.0,                               0.0,                               1.0,
         };
 
         return multiply_matrix(m, other);
 }
 
-int rotate_matrix3fv(float m[16], struct vec3_t vec, float theta)
+int rotate_matrix3fv(float m[16], vec3_t vec, float theta)
 {
         return rotate_matrix3f(m, vec.x, vec.y, vec.z, theta);
 }
@@ -133,7 +133,7 @@ int orthographic_matrix(float m[16], float t, float r, float b, float l, float n
                 2.0/(r-l), 0.0,       0.0,        -(r+l)/(r-l),
                 0.0,       2.0/(t-b), 0.0,        -(t+b)/(t-b),
                 0.0,       0.0,       -2.0/(f-n), -(f+n)/(f-n),
-                0.0,       0.0,       0.0,      1.0
+                0.0,       0.0,       0.0,        1.0
         };
 
         identity_matrix(m);
