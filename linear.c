@@ -1,15 +1,18 @@
 #include "linear.h"
 
+/* returns a 2-dimensional vector with (x, y) as it's components */
 inline vec2_t create_vec2_t(float x, float y)
 {
         return (vec2_t) {x, y};
 }
 
+/* returns the length of @vec  */
 inline float length_vec2_t(vec2_t vec)
 {
-        return (float) sqrt((vec.x * vec.x) + (vec.y * vec.y));
+        return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
 }
 
+/* return  */
 vec2_t normalise_vec2_t(vec2_t vec)
 {
         float length = length_vec2_t(vec);
@@ -23,7 +26,7 @@ inline vec3_t create_vec3_t(float x, float y, float z)
 
 inline float length_vec3_t(vec3_t vec)
 {
-        return (float) sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+        return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
 
 inline vec3_t normalise_vec3_t(vec3_t vec)
@@ -39,7 +42,7 @@ inline vec4_t create_vec4_t(float x, float y, float z, float w)
 
 inline float length_vec4_t(vec4_t vec)
 {
-        return (float) sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
+        return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
 }
 
 inline vec4_t normalise_vec4_t(vec4_t vec)
