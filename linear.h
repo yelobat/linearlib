@@ -18,14 +18,19 @@ typedef struct vec4_t {
 
 vec2_t create_vec2_t(float x, float y);
 float length_vec2_t(vec2_t vec);
+float dot_vec2_t(vec2_t first, vec2_t second);
+float cross_vec2_t(vec2_t first, vec2_t second);
 vec2_t normalise_vec2_t(vec2_t vec);
 
 vec3_t create_vec3_t(float x, float y, float z);
 float length_vec3_t(vec3_t vec);
+float dot_vec3_t(vec3_t first, vec3_t second);
+vec3_t cross_vec3_t(vec3_t first, vec3_t second);
 vec3_t normalise_vec3_t(vec3_t vec);
 
 vec4_t create_vec4_t(float x, float y, float z, float w);
 float length_vec4_t(vec4_t vec);
+float dot_vec4_t(vec4_t first, vec4_t second);
 vec4_t normalise_vec4_t(vec4_t vec);
 
 int identity_matrix(float m[16]);

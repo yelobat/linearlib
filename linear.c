@@ -12,8 +12,20 @@ inline float length_vec2_t(vec2_t vec)
         return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
 }
 
+/* returns the dot-product of @first and @second */
+inline float dot_vec2_t(vec2_t first, vec2_t second)
+{
+        return first.x * second.x + first.y * second.y;
+}
+
+/* returns the cross-product of @first and @second */
+inline float cross_vec2_t(vec2_t first, vec2_t second)
+{
+        return first.x * second.y - first.y * second.x;
+}
+
 /* returns a normalised vector of @vec */
-vec2_t normalise_vec2_t(vec2_t vec)
+inline vec2_t normalise_vec2_t(vec2_t vec)
 {
         float length = length_vec2_t(vec);
         return (vec2_t) {vec.x / length, vec.y / length};
@@ -29,6 +41,20 @@ inline vec3_t create_vec3_t(float x, float y, float z)
 inline float length_vec3_t(vec3_t vec)
 {
         return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+}
+
+/* returns the dot-product of @first and @second */
+inline float dot_vec3_t(vec3_t first, vec3_t second)
+{
+        return first.x * second.x + first.y * second.y + first.z * second.z;
+}
+
+/* returns the cross-product of @first and @second */
+inline vec3_t cross_vec3_t(vec3_t first, vec3_t second)
+{
+        return create_vec3_t(first.y*second.z - first.z*second.y,
+                             first.z*second.x - first.x*second.z,
+                             first.x*second.y - first.y*second.x);
 }
 
 /* returns a normalised vector of @vec */
@@ -48,6 +74,13 @@ inline vec4_t create_vec4_t(float x, float y, float z, float w)
 inline float length_vec4_t(vec4_t vec)
 {
         return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
+}
+
+/* return the dot-product of @first and @second */
+inline float dot_vec4_t(vec4_t first, vec4_t second)
+{
+        return first.x * second.x + first.y * second.y
+                + first.z * second.z + first.w * second.w;
 }
 
 /* returns a normalised vector of @vec */
