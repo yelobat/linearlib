@@ -33,6 +33,7 @@ float length_vec4_t(vec4_t vec);
 float dot_vec4_t(vec4_t first, vec4_t second);
 vec4_t normalise_vec4_t(vec4_t vec);
 
+int multiply_matrix(float l[16], float r[16]);
 int identity_matrix(float m[16]);
 int translate_matrix3f(float m[16], float dx, float dy, float dz);
 int translate_matrix3fv(float m[16], vec3_t vec);
