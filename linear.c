@@ -111,6 +111,13 @@ int multiply_matrix(float l[16], float r[16])
         return 0;
 }
 
+/* copy the matrix contents of @from into @to */
+void copy_matrix(float to[16], float from[16])
+{
+        for (int i = 0; i < 16; i++)
+                to[i] = from[i];
+}
+
 /* stores the identity matrix into @m */
 int identity_matrix(float m[16])
 {
@@ -186,7 +193,7 @@ int rotate_matrix3fv(float m[16], vec3_t vec, float theta)
 }
 
 /* stores the orthographic matrix into @m, details of how this works can be found online or
-   found at https://github.com/wwotz/linearlib */
+   found at https://github.com/wwotz/linearlib/README.md */
 int orthographic_matrix(float m[16], float t, float r, float b, float l, float n, float f)
 {
         float other[16] = {
@@ -201,7 +208,7 @@ int orthographic_matrix(float m[16], float t, float r, float b, float l, float n
 }
 
 /* stores the perspective matrix into @m, details of how this works can be found online or
-   found at https://github.com/wwotz/linearlib */
+   found at https://github.com/wwotz/linearlib/README.md */
 int perspective_matrix(float m[16], float t, float r, float b, float l, float n, float f)
 {
         float other[16] = {
