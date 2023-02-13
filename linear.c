@@ -12,6 +12,34 @@ inline float length_vec2_t(vec2_t vec)
         return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
 }
 
+/* returns a new vector containing the sum of first and second,
+   component-wise sum */
+inline vec2_t add_vec2_t(vec2_t first, vec2_t second)
+{
+        return create_vec2_t(first.x + second.x, first.y + second.y);
+}
+
+/* returns a new vector containing the subtraction of second from first,
+   component-wise difference  */
+inline vec2_t sub_vec2_t(vec2_t first, vec2_t second)
+{
+        return create_vec2_t(first.x - second.x, first.y - second.y);
+}
+
+/* returns a new vector containing the product of first and second,
+   component-wise multiplication */
+inline vec2_t mul_vec2_t(vec2_t first, vec2_t second)
+{
+        return create_vec2_t(first.x * second.x, first.y * second.y);
+}
+
+/* returns a new vector containing the division of first by second,
+   component-wise division */
+inline vec2_t div_vec2_t(vec2_t first, vec2_t second)
+{
+        return create_vec2_t(first.x / second.x, first.y / second.y);
+}
+
 /* returns the dot-product of @first and @second */
 inline float dot_vec2_t(vec2_t first, vec2_t second)
 {
@@ -41,6 +69,38 @@ inline vec3_t create_vec3_t(float x, float y, float z)
 inline float length_vec3_t(vec3_t vec)
 {
         return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+}
+
+/* returns a new vector containing the sum of first and second,
+   component-wise sum */
+inline vec3_t add_vec3_t(vec3_t first, vec3_t second)
+{
+        return create_vec3_t(first.x + second.x, first.y + second.y,
+                             first.z + second.z);
+}
+
+/* returns a new vector containing the subtraction of second from first,
+   component-wise difference  */
+inline vec3_t sub_vec3_t(vec3_t first, vec3_t second)
+{
+        return create_vec3_t(first.x - second.x, first.y - second.y,
+                             first.z - second.z);
+}
+
+/* returns a new vector containing the product of first and second,
+   component-wise multiplication */
+inline vec3_t mul_vec3_t(vec3_t first, vec3_t second)
+{
+        return create_vec3_t(first.x * second.x, first.y * second.y,
+                             first.z * second.z);
+}
+
+/* returns a new vector containing the division of first by second,
+   component-wise division */
+inline vec3_t div_vec3_t(vec3_t first, vec3_t second)
+{
+        return create_vec3_t(first.x / second.x, first.y / second.y,
+                             first.z / second.z);
 }
 
 /* returns the dot-product of @first and @second */
@@ -74,6 +134,38 @@ inline vec4_t create_vec4_t(float x, float y, float z, float w)
 inline float length_vec4_t(vec4_t vec)
 {
         return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
+}
+
+/* returns a new vector containing the sum of first and second,
+   component-wise sum */
+inline vec4_t add_vec4_t(vec4_t first, vec4_t second)
+{
+        return create_vec4_t(first.x + second.x, first.y + second.y,
+                             first.z + second.z, first.w + second.w);
+}
+
+/* returns a new vector containing the subtraction of second from first,
+   component-wise difference  */
+inline vec4_t sub_vec4_t(vec4_t first, vec4_t second)
+{
+        return create_vec4_t(first.x - second.x, first.y - second.y,
+                             first.z - second.z, first.w - second.w);
+}
+
+/* returns a new vector containing the product of first and second,
+   component-wise multiplication */
+inline vec4_t mul_vec4_t(vec4_t first, vec4_t second)
+{
+        return create_vec4_t(first.x * second.x, first.y * second.y,
+                             first.z * second.z, first.w * second.w);
+}
+
+/* returns a new vector containing the division of first by second,
+   component-wise division */
+inline vec4_t div_vec4_t(vec4_t first, vec4_t second)
+{
+        return create_vec4_t(first.x / second.x, first.y / second.y,
+                             first.z / second.z, first.w / second.w);
 }
 
 /* return the dot-product of @first and @second */

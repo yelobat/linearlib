@@ -18,18 +18,30 @@ typedef struct vec4_t {
 
 vec2_t create_vec2_t(float x, float y);
 float length_vec2_t(vec2_t vec);
+vec2_t add_vec2_t(vec2_t first, vec2_t second);
+vec2_t sub_vec2_t(vec2_t first, vec2_t second);
+vec2_t mul_vec2_t(vec2_t first, vec2_t second);
+vec2_t div_vec2_t(vec2_t first, vec2_t second);
 float dot_vec2_t(vec2_t first, vec2_t second);
 float cross_vec2_t(vec2_t first, vec2_t second);
 vec2_t normalise_vec2_t(vec2_t vec);
 
 vec3_t create_vec3_t(float x, float y, float z);
 float length_vec3_t(vec3_t vec);
+vec3_t add_vec3_t(vec3_t first, vec3_t second);
+vec3_t sub_vec3_t(vec3_t first, vec3_t second);
+vec3_t mul_vec3_t(vec3_t first, vec3_t second);
+vec3_t div_vec3_t(vec3_t first, vec3_t second);
 float dot_vec3_t(vec3_t first, vec3_t second);
 vec3_t cross_vec3_t(vec3_t first, vec3_t second);
 vec3_t normalise_vec3_t(vec3_t vec);
 
 vec4_t create_vec4_t(float x, float y, float z, float w);
 float length_vec4_t(vec4_t vec);
+vec4_t add_vec4_t(vec4_t first, vec4_t second);
+vec4_t sub_vec4_t(vec4_t first, vec4_t second);
+vec4_t mul_vec4_t(vec4_t first, vec4_t second);
+vec4_t div_vec4_t(vec4_t first, vec4_t second);
 float dot_vec4_t(vec4_t first, vec4_t second);
 vec4_t normalise_vec4_t(vec4_t vec);
 
