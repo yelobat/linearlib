@@ -5,8 +5,7 @@ A C linear algebra library, tested and used in all of my graphics projects. The 
 designed to be used alongside OpenGL.
 
 ## How to use 
-Simply copy and paste the files into their src (or your equivalent) and include (or your equivalent) folders and add them 
-to compilation, that is all. Additional functionality that is added in the future may require that you call an initialisation 
-function in order to prepare data to be accessed, otherwise this is not the case.
+Simply copy the single header file into your project. Inside one of the file where this file is included, 
+write: `#define LINEARLIB_IMPLEMENTATION` which will include the C code which implements the functions
 
 
