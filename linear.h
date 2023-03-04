@@ -56,6 +56,7 @@ extern int  matrix_rotate3f(float m[16], float x, float y, float z, float angle)
 extern int  matrix_rotate3fv(float m[16], vec3_t, float angle);
 extern int  matrix_orthographic(float m[16], float t, float r, float b, float l, float n, float f);
 extern int  matrix_perspective(float m[16], float t, float r, float b, float l, float n, float f);
+extern int matrix_lookat(float m[16], vec3_t at, vec3_t eye, vec3_t up);
 
 #ifdef LINEARLIB_IMPLEMENTATION
 
@@ -335,16 +336,40 @@ int matrix_rotate3f(float m[16], float x, float y, float z, float theta)
         return matrix_multiply(m, other);
 }
 
+int matrix_rotatex3f(float m[16], float theta)
+{
+        float other[16] = {
+                1.0, 0.0, 0.0, 0.0,
+                0.0, cos(theta), -sin(theta), 0.0,
+                0.0, sin(theta), cos(theta), 0.0,
+                0.0, 0.0, 0.0, 1.0
+        };
+
+        return matrix_multiply(m, other);
+}
+
+int matrix_rotatey3f(float m[16], float theta)
+{
+        float other[16] = {
+                cos(theta), 0.0, sin(theta), 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                -sin(theta), 0.0, cos(theta), 0.0,
+                0.0, 0.0, 0.0, 1.0
+        };
+
+        return matrix_multiply(m, other);
+}
+
 /* same as above, but instead allows to supply a 3-dimensional
    vector as the 2nd argument, containing (x, y, z) */
-int rotate_matrix3fv(float m[16], vec3_t vec, float theta)
+int matrix_rotate3fv(float m[16], vec3_t vec, float theta)
 {
         return matrix_rotate3f(m, vec.x, vec.y, vec.z, theta);
 }
 
 /* stores the orthographic matrix into @m, details of how this works can be found online or
    found at https://github.com/wwotz/linearlib/README.md */
-int orthographic_matrix(float m[16], float t, float r, float b, float l, float n, float f)
+int matrix_orthographic(float m[16], float t, float r, float b, float l, float n, float f)
 {
         float other[16] = {
                 2.0/(r-l), 0.0,       0.0,        -(r+l)/(r-l),
@@ -359,16 +384,32 @@ int orthographic_matrix(float m[16], float t, float r, float b, float l, float n
 
 /* stores the perspective matrix into @m, details of how this works can be found online or
    found at https://github.com/wwotz/linearlib/README.md */
-int perspective_matrix(float m[16], float t, float r, float b, float l, float n, float f)
+int matrix_perspective(float m[16], float t, float r, float b, float l, float n, float f)
 {
         float other[16] = {
-                2.0*n/(r-l), 0.0,         (r+l)/(r-l),        0.0,
-                0.0,         2.0*n/(t-b), (t+b)/(t-b),        0.0,
-                0.0,         0.0,         -(f+n)/(f-n),       -2*(f*n)/(f-n),
-                0.0,         0.0,         -1.0,               0.0
+                2.0*n/(r-l), 0.0, 2.0*(l+r)/(r-l), 0.0,
+                0.0, 2.0*n/(b-t), 2.0*(t+b)/(b-t), 0.0,
+                0.0, 0.0, -(f+n)/(f-n), 2.0*(f*n)/(f-n),
+                0.0, 0.0, -1.0, 0.0
         };
 
         matrix_identity(m);
+        return matrix_multiply(m, other);
+}
+
+int matrix_lookat(float m[16], vec3_t at, vec3_t eye, vec3_t up)
+{
+        vec3_t cam_direction = vec3_normalise(vec3_sub(at, eye));
+        vec3_t cam_right = vec3_normalise(vec3_cross(up, cam_direction));
+        vec3_t cam_up = vec3_cross(cam_direction, cam_right);
+
+        float other[16] = {
+                cam_right.x, cam_right.y, cam_right.z, 0.0,
+                cam_up.x, cam_up.y, cam_up.z, 0.0,
+                cam_direction.x, cam_direction.y, cam_direction.z, 0.0,
+                0.0, 0.0, 0.0, 1.0,
+        };
+
         return matrix_multiply(m, other);
 }
 
