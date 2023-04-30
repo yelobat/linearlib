@@ -1,419 +1,459 @@
-#ifndef LINEAR_H_
-#define LINEAR_H_
+/*
+  Author: wwotz
+  Add #LINEARLIB_IMPLEMENTATION to the start of the implementation
+  file in order to add the implementation code to your project. 
+*/
+
+#ifndef LINEARLIB_H_
+#define LINEARLIB_H_
 
 //requires -lm flag to link the math library
 #include <math.h>
 
-typedef struct vec2_t {
-        float x, y;
+#ifndef LINEARLIBDEF
+#ifdef LINEARLIBSTATIC
+#define LINEARLIBDEF static
+#else /* !defined(LINEARLIBSTATIC) */
+#define LINEARLIBDEF extern
+#endif /* LINEARLIBSTATIC */
+#endif /* LINEARLIBDEF */
+
+typedef union vec2_t {
+        float data[2];
+        struct {
+                float x, y;
+        };
+        struct {
+                float r, g;
+        };
 } vec2_t;
 
-typedef struct vec3_t {
-        float x, y, z;
+typedef union vec3_t {
+        float data[3];
+        struct {
+                float x, y, z;
+        };
+        struct {
+                float r, g, b;
+        };        
 } vec3_t;
 
-typedef struct vec4_t {
-        float x, y, z, w;
+typedef union vec4_t {
+        float data[4];
+        struct {
+                float x, y, z, w;
+        };
+        struct {
+                float r, g, b, a;
+        };
 } vec4_t;
 
-extern vec2_t vec2_create(float x, float y);
-extern float  vec2_length(vec2_t vec);
-extern vec2_t vec2_add(vec2_t first, vec2_t second);
-extern vec2_t vec2_sub(vec2_t first, vec2_t second);
-extern vec2_t vec2_mul(vec2_t first, vec2_t second);
-extern vec2_t vec2_div(vec2_t first, vec2_t second);
-extern float  vec2_dot(vec2_t first, vec2_t second);
-extern float  vec2_cross(vec2_t first, vec2_t second);
-extern vec2_t vec2_normalise(vec2_t vec);
+typedef union mat2_t {
+        float data[4];
+        struct {
+                float m00, m01;
+                float m10, m11;
+        };
+} mat2_t;
 
-extern vec3_t vec3_create(float x, float y, float z);
-extern float  vec3_length(vec3_t vec);
-extern vec3_t vec3_add(vec3_t first, vec3_t second);
-extern vec3_t vec3_sub(vec3_t first, vec3_t second);
-extern vec3_t vec3_mul(vec3_t first, vec3_t second);
-extern vec3_t vec3_div(vec3_t first, vec3_t second);
-extern float  vec3_dot(vec3_t first, vec3_t second);
-extern vec3_t vec3_cross(vec3_t first, vec3_t second);
-extern vec3_t vec3_normalise(vec3_t vec);
+typedef union mat3_t {
+        float data[9];
+        struct {
+                float m00, m01, m02;
+                float m10, m11, m12;
+                float m20, m21, m22;
+        };
+} mat3_t;
 
-extern vec4_t vec4_create(float x, float y, float z, float w);
-extern float  vec4_length(vec4_t vec);
-extern vec4_t vec4_add(vec4_t first, vec4_t second);
-extern vec4_t vec4_sub(vec4_t first, vec4_t second);
-extern vec4_t vec4_mul(vec4_t first, vec4_t second);
-extern vec4_t vec4_div(vec4_t first, vec4_t second);
-extern float  vec4_dot(vec4_t first, vec4_t second);
-extern vec4_t vec4_normalise(vec4_t vec);
+typedef union mat4_t {
+        float data[16];
+        struct {
+                float m00, m01, m02, m03;
+                float m10, m11, m12, m13;
+                float m20, m21, m22, m23;
+                float m30, m31, m32, m33;
+        };
+} mat4_t;
 
-extern int  matrix_multiply(float l[16], float r[16]);
-extern void matrix_copy(float to[16], float from[16]);
-extern int  matrix_identity(float m[16]);
-extern int  matrix_translate3f(float m[16], float dx, float dy, float dz);
-extern int  matrix_translate3fv(float m[16], vec3_t vec);
-extern int  matrix_scale3f(float m[16], float w, float h, float d);
-extern int  matrix_scale3fv(float m[16], vec3_t vec);
-extern int  matrix_rotate3f(float m[16], float x, float y, float z, float angle);
-extern int  matrix_rotate3fv(float m[16], vec3_t, float angle);
-extern int  matrix_orthographic(float m[16], float t, float r, float b, float l, float n, float f);
-extern int  matrix_perspective(float m[16], float t, float r, float b, float l, float n, float f);
-extern int matrix_lookat(float m[16], vec3_t at, vec3_t eye, vec3_t up);
+LINEARLIBDEF vec2_t ll_vec2_create(float x, float y);
+LINEARLIBDEF float  ll_vec2_length(vec2_t vec);
+LINEARLIBDEF vec2_t ll_vec2_add(vec2_t left, vec2_t right);
+LINEARLIBDEF vec2_t ll_vec2_sub(vec2_t left, vec2_t right);
+LINEARLIBDEF vec2_t ll_vec2_mul(vec2_t left, vec2_t right);
+LINEARLIBDEF vec2_t ll_vec2_div(vec2_t left, vec2_t right);
+LINEARLIBDEF float  ll_vec2_dot(vec2_t left, vec2_t right);
+LINEARLIBDEF float  ll_vec2_cross(vec2_t left, vec2_t right);
+LINEARLIBDEF vec2_t ll_vec2_normalise(vec2_t vec);
+
+LINEARLIBDEF vec3_t ll_vec3_create(float x, float y, float z);
+LINEARLIBDEF float  ll_vec3_length(vec3_t vec);
+LINEARLIBDEF vec3_t ll_vec3_add(vec3_t left, vec3_t right);
+LINEARLIBDEF vec3_t ll_vec3_sub(vec3_t left, vec3_t right);
+LINEARLIBDEF vec3_t ll_vec3_mul(vec3_t left, vec3_t right);
+LINEARLIBDEF vec3_t ll_vec3_div(vec3_t left, vec3_t right);
+LINEARLIBDEF float  ll_vec3_dot(vec3_t left, vec3_t right);
+LINEARLIBDEF vec3_t ll_vec3_cross(vec3_t left, vec3_t right);
+LINEARLIBDEF vec3_t ll_vec3_normalise(vec3_t vec);
+
+LINEARLIBDEF vec4_t ll_vec4_create(float x, float y, float z, float w);
+LINEARLIBDEF float  ll_vec4_length(vec4_t vec);
+LINEARLIBDEF vec4_t ll_vec4_add(vec4_t left, vec4_t right);
+LINEARLIBDEF vec4_t ll_vec4_sub(vec4_t left, vec4_t right);
+LINEARLIBDEF vec4_t ll_vec4_mul(vec4_t left, vec4_t right);
+LINEARLIBDEF vec4_t ll_vec4_div(vec4_t left, vec4_t right);
+LINEARLIBDEF float  ll_vec4_dot(vec4_t left, vec4_t right);
+LINEARLIBDEF vec4_t ll_vec4_normalise(vec4_t vec);
+
+LINEARLIBDEF void ll_mat4_multiply(mat4_t *left, mat4_t *right);
+LINEARLIBDEF void ll_mat4_copy(mat4_t *to, mat4_t *from);
+LINEARLIBDEF void ll_mat4_identity(mat4_t *mat);
+LINEARLIBDEF void ll_mat4_translate3f(mat4_t *mat, float dx, float dy, float dz);
+LINEARLIBDEF void ll_mat4_translate3fv(mat4_t *mat, vec3_t vec);
+LINEARLIBDEF void ll_mat4_scale3f(mat4_t *mat, float w, float h, float d);
+LINEARLIBDEF void ll_mat4_scale3fv(mat4_t *mat, vec3_t vec);
+LINEARLIBDEF void ll_mat4_rotate3f(mat4_t *mat, float x, float y, float z, float angle);
+LINEARLIBDEF void ll_mat4_rotate3fv(mat4_t *mat, vec3_t vec, float angle);
+LINEARLIBDEF void ll_mat4_orthographic(mat4_t *mat, float top, float right,
+                                 float bottom, float left, float near, float far);
+LINEARLIBDEF void  ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
+                                 float near, float far);
+LINEARLIBDEF void ll_mat4_frustum(mat4_t *mat, float left, float right,
+                            float bottom, float top, float near, float far);
 
 #ifdef LINEARLIB_IMPLEMENTATION
 
 /* returns a 2-dimensional vector with (x, y) as it's components */
-inline vec2_t vec2_create(float x, float y)
+vec2_t ll_vec2_create(float x, float y)
 {
         return (vec2_t) {x, y};
 }
 
 /* returns the length of @vec  */
-inline float vec2_length(vec2_t vec)
+float ll_vec2_length(vec2_t vec)
 {
         return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
 }
 
 /* returns a new vector containing the sum of first and second,
    component-wise sum */
-inline vec2_t vec2_add(vec2_t first, vec2_t second)
+vec2_t ll_vec2_add(vec2_t first, vec2_t second)
 {
-        return vec2_create(first.x + second.x, first.y + second.y);
+        return ll_vec2_create(first.x + second.x, first.y + second.y);
 }
 
 /* returns a new vector containing the subtraction of second from first,
    component-wise difference  */
-inline vec2_t vec2_sub(vec2_t first, vec2_t second)
+vec2_t ll_vec2_sub(vec2_t first, vec2_t second)
 {
-        return vec2_create(first.x - second.x, first.y - second.y);
+        return ll_vec2_create(first.x - second.x, first.y - second.y);
 }
 
 /* returns a new vector containing the product of first and second,
    component-wise multiplication */
-inline vec2_t vec2_mul(vec2_t first, vec2_t second)
+vec2_t ll_vec2_mul(vec2_t first, vec2_t second)
 {
-        return vec2_create(first.x * second.x, first.y * second.y);
+        return ll_vec2_create(first.x * second.x, first.y * second.y);
 }
 
 /* returns a new vector containing the division of first by second,
    component-wise division */
-inline vec2_t vec2_div(vec2_t first, vec2_t second)
+vec2_t ll_vec2_div(vec2_t first, vec2_t second)
 {
-        return vec2_create(first.x / second.x, first.y / second.y);
+        return ll_vec2_create(first.x / second.x, first.y / second.y);
 }
 
 /* returns the dot-product of @first and @second */
-inline float vec2_dot(vec2_t first, vec2_t second)
+float ll_vec2_dot(vec2_t first, vec2_t second)
 {
         return first.x * second.x + first.y * second.y;
 }
 
 /* returns the cross-product of @first and @second */
-inline float vec2_cross(vec2_t first, vec2_t second)
+float ll_vec2_cross(vec2_t first, vec2_t second)
 {
         return first.x * second.y - first.y * second.x;
 }
 
 /* returns a normalised vector of @vec */
-inline vec2_t vec2_normalise(vec2_t vec)
+vec2_t ll_vec2_normalise(vec2_t vec)
 {
-        float length = vec2_length(vec);
+        float length = ll_vec2_length(vec);
         return (vec2_t) {vec.x / length, vec.y / length};
 }
 
 /* returns a 3-dimensional vector with (x, y, z) as it's components */
-inline vec3_t vec3_create(float x, float y, float z)
+vec3_t ll_vec3_create(float x, float y, float z)
 {
         return (vec3_t) {x, y, z};
 }
 
 /* returns the length of @vec  */
-inline float vec3_length(vec3_t vec)
+float ll_vec3_length(vec3_t vec)
 {
         return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
 
 /* returns a new vector containing the sum of first and second,
    component-wise sum */
-inline vec3_t vec3_add(vec3_t first, vec3_t second)
+vec3_t ll_vec3_add(vec3_t first, vec3_t second)
 {
-        return vec3_create(first.x + second.x, first.y + second.y,
-                             first.z + second.z);
+        return ll_vec3_create(first.x + second.x, first.y + second.y,
+                              first.z + second.z);
 }
 
 /* returns a new vector containing the subtraction of second from first,
    component-wise difference  */
-inline vec3_t vec3_sub(vec3_t first, vec3_t second)
+vec3_t ll_vec3_sub(vec3_t first, vec3_t second)
 {
-        return vec3_create(first.x - second.x, first.y - second.y,
-                             first.z - second.z);
+        return ll_vec3_create(first.x - second.x, first.y - second.y,
+                              first.z - second.z);
 }
 
 /* returns a new vector containing the product of first and second,
    component-wise multiplication */
-inline vec3_t vec3_mul(vec3_t first, vec3_t second)
+vec3_t ll_vec3_mul(vec3_t first, vec3_t second)
 {
-        return vec3_create(first.x * second.x, first.y * second.y,
-                             first.z * second.z);
+        return ll_vec3_create(first.x * second.x, first.y * second.y,
+                              first.z * second.z);
 }
 
 /* returns a new vector containing the division of first by second,
    component-wise division */
-inline vec3_t vec3_div(vec3_t first, vec3_t second)
+vec3_t ll_vec3_div(vec3_t first, vec3_t second)
 {
-        return vec3_create(first.x / second.x, first.y / second.y,
-                             first.z / second.z);
+        return ll_vec3_create(first.x / second.x, first.y / second.y,
+                              first.z / second.z);
 }
 
 /* returns the dot-product of @first and @second */
-inline float vec3_dot(vec3_t first, vec3_t second)
+float ll_vec3_dot(vec3_t first, vec3_t second)
 {
         return first.x * second.x + first.y * second.y + first.z * second.z;
 }
 
 /* returns the cross-product of @first and @second */
-inline vec3_t vec3_cross(vec3_t first, vec3_t second)
+vec3_t ll_vec3_cross(vec3_t first, vec3_t second)
 {
-        return vec3_create(first.y*second.z - first.z*second.y,
-                             first.z*second.x - first.x*second.z,
-                             first.x*second.y - first.y*second.x);
+        return ll_vec3_create(first.y*second.z - first.z*second.y,
+                              first.z*second.x - first.x*second.z,
+                              first.x*second.y - first.y*second.x);
 }
 
 /* returns a normalised vector of @vec */
-inline vec3_t vec3_normalise(vec3_t vec)
+vec3_t ll_vec3_normalise(vec3_t vec)
 {
-        float length = vec3_length(vec);
+        float length = ll_vec3_length(vec);
         return (vec3_t) {vec.x / length, vec.y / length, vec.z / length};
 }
 
 /* returns a 4-dimensional vector with (x, y, z, w) as it's components */
-inline vec4_t vec4_create(float x, float y, float z, float w)
+vec4_t ll_vec4_create(float x, float y, float z, float w)
 {
         return (vec4_t) {x, y, z, w};
 }
 
 /* returns the length of @vec  */
-inline float vec4_length(vec4_t vec)
+float ll_vec4_length(vec4_t vec)
 {
         return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
 }
 
 /* returns a new vector containing the sum of first and second,
    component-wise sum */
-inline vec4_t vec4_add(vec4_t first, vec4_t second)
+vec4_t ll_vec4_add(vec4_t first, vec4_t second)
 {
-        return vec4_create(first.x + second.x, first.y + second.y,
+        return ll_vec4_create(first.x + second.x, first.y + second.y,
                              first.z + second.z, first.w + second.w);
 }
 
 /* returns a new vector containing the subtraction of second from first,
    component-wise difference  */
-inline vec4_t vec4_sub(vec4_t first, vec4_t second)
+vec4_t ll_vec4_sub(vec4_t first, vec4_t second)
 {
-        return vec4_create(first.x - second.x, first.y - second.y,
+        return ll_vec4_create(first.x - second.x, first.y - second.y,
                              first.z - second.z, first.w - second.w);
 }
 
 /* returns a new vector containing the product of first and second,
    component-wise multiplication */
-inline vec4_t vec4_mul(vec4_t first, vec4_t second)
+vec4_t ll_vec4_mul(vec4_t first, vec4_t second)
 {
-        return vec4_create(first.x * second.x, first.y * second.y,
+        return ll_vec4_create(first.x * second.x, first.y * second.y,
                              first.z * second.z, first.w * second.w);
 }
 
 /* returns a new vector containing the division of first by second,
    component-wise division */
-inline vec4_t vec4_div(vec4_t first, vec4_t second)
+vec4_t ll_vec4_div(vec4_t first, vec4_t second)
 {
-        return vec4_create(first.x / second.x, first.y / second.y,
+        return ll_vec4_create(first.x / second.x, first.y / second.y,
                              first.z / second.z, first.w / second.w);
 }
 
 /* return the dot-product of @first and @second */
-inline float vec4_dot(vec4_t first, vec4_t second)
+float ll_vec4_dot(vec4_t first, vec4_t second)
 {
         return first.x * second.x + first.y * second.y
                 + first.z * second.z + first.w * second.w;
 }
 
 /* returns a normalised vector of @vec */
-inline vec4_t vec4_normalise(vec4_t vec)
+vec4_t ll_vec4_normalise(vec4_t vec)
 {
-        float length = vec4_length(vec);
+        float length = ll_vec4_length(vec);
         return (vec4_t) {vec.x / length, vec.y / length, vec.z / length, vec.w / length};
 }
 
 /* performs matrix multiplcation on the matrices @l and @r
    matrix multiplication is not commutative, so order matters
-   @l corresponds to the matrix on the left.
-   @r corresponds to the matrix on the right. */
-int matrix_multiply(float l[16], float r[16])
+   @left corresponds to the matrix on the left.
+   @right corresponds to the matrix on the right. */
+void ll_mat4_multiply(mat4_t *left, mat4_t *right)
 {
-        float final[16];
+        mat4_t final;
+        if (!left || !right) return;
         for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                         float sum = 0.0;
                         for (int k = 0; k < 4; k++)
-                                sum += l[j * 4 + k] * r[i * 4 + k];
-                        final[j * 4 + i] = sum;
+                                sum += left->data[j * 4 + k] * right->data[i * 4 + k];
+                        final.data[j * 4 + i] = sum;
                 }
         }
-
-        matrix_copy(l, final);
-        return 0;
+        ll_mat4_copy(left, &final);
 }
 
 /* copy the matrix contents of @from into @to */
-void matrix_copy(float to[16], float from[16])
+void ll_mat4_copy(mat4_t *to,  mat4_t *from)
 {
+        if (!to || !from) return;
         for (int i = 0; i < 16; i++)
-                to[i] = from[i];
+                to->data[i] = from->data[i];
 }
 
 /* stores the identity matrix into @m */
-int matrix_identity(float m[16])
+void ll_mat4_identity(mat4_t *mat)
 {
+        if (!mat) return;
         for (int i = 0; i < 16; i++)
-                m[i] = 0;
-        m[0]  = 1;
-        m[5]  = 1;
-        m[10] = 1;
-        m[15] = 1;
-        return 0;
+                mat->data[i] = 0;
+        mat->m00 = 1.0;
+        mat->m11 = 1.0;
+        mat->m22 = 1.0;
+        mat->m33 = 1.0;
 }
 
-/* multiplies @m by a translation matrix with components (dx, dy, dz)
-   storing the result back into @m */
-int matrix_translate3f(float m[16], float dx, float dy, float dz)
+/* stores a translation matrix inside of @mat with @dx, @dy and @dz */
+void ll_mat4_translate3f(mat4_t *mat, float dx, float dy, float dz)
 {
-        float other[16] = {
-                1.0, 0.0, 0.0, dx,
-                0.0, 1.0, 0.0, dy,
-                0.0, 0.0, 1.0, dz,
-                0.0, 0.0, 0.0, 1.0,
-        };
-
-        return matrix_multiply(m, other);
+        if (!mat) return;
+        ll_mat4_identity(mat);
+        mat->m30 = dx;
+        mat->m31 = dy;
+        mat->m32 = dz;
 }
 
 /* same as above, but instead allows to supply a 3-dimensional
    vector as the 2nd argument, containing (dx, dy, dz) */
-int matrix_translate3fv(float m[16], vec3_t vec)
+void ll_mat4_translate3fv(mat4_t *mat, vec3_t vec)
 {
-        return matrix_translate3f(m, vec.x, vec.y, vec.z);
+        ll_mat4_translate3f(mat, vec.x, vec.y, vec.z);
 }
 
 /* multiplies @m by a scaling matrix with components (w, h, d)
    storing the result back into @m */
-int matrix_scale3f(float m[16], float w, float h, float d)
+void ll_mat4_scale3f(mat4_t *mat, float w, float h, float d)
 {
-        float other[16] = {
-                w, 0, 0, 0,
-                0, h, 0, 0,
-                0, 0, d, 0,
-                0, 0, 0, 1,
-        };
-
-        return matrix_multiply(m, other);
+        if (!mat) return;
+        ll_mat4_identity(mat);
+        mat->m00 = w;
+        mat->m11 = h;
+        mat->m22 = d;
 }
 
 /* same as above, but instead allows to supply a 3-dimensional
    vector as the 2nd arugment, containing (w, h, d) */
-int matrix_scale3fv(float m[16], vec3_t vec)
+void ll_mat4_scale3fv(mat4_t *mat, vec3_t vec)
 {
-        return matrix_scale3f(m, vec.x, vec.y, vec.z);
+        ll_mat4_scale3f(mat, vec.x, vec.y, vec.z);
 }
 
-/* needs to some testing */
-int matrix_rotate3f(float m[16], float x, float y, float z, float theta)
+/* found whilst reading over rougier/freetype-gl implementation.
+   that can be found here: https://github.com/rougier/freetype-gl */
+void ll_mat4_rotate3f(mat4_t *mat, float x, float y, float z, float theta)
 {
-        float other[16] = {
-                cos(theta) + x*x*(1-cos(theta)),   x*y*(1-cos(theta)) - z*sin(theta), x*z*(1-cos(theta)) + y*sin(theta), 0.0,
-                y*x*(1-cos(theta)) + z*sin(theta), cos(theta) + y*y*(1-cos(theta)),   y*z*(1-cos(theta)) - x*sin(theta), 0.0,
-                z*x*(1-cos(theta)) - y*sin(theta), y*z*(1-cos(theta)) + x*sin(theta), cos(theta) + x*x*(1-cos(theta)),   0.0,
-                0.0,                               0.0,                               0.0,                               1.0,
-        };
+        float c, s, norm;
+        if (!mat) return;
 
-        return matrix_multiply(m, other);
-}
+        c =    (float) cos(M_PI * theta/180.0);
+        s =    (float) sin(M_PI * theta/180.0);
+        norm = (float) sqrt(x*x+y*y+z*z);
+        
+        x /= norm;
+        y /= norm;
+        z /= norm;
 
-int matrix_rotatex3f(float m[16], float theta)
-{
-        float other[16] = {
-                1.0, 0.0, 0.0, 0.0,
-                0.0, cos(theta), -sin(theta), 0.0,
-                0.0, sin(theta), cos(theta), 0.0,
-                0.0, 0.0, 0.0, 1.0
-        };
-
-        return matrix_multiply(m, other);
-}
-
-int matrix_rotatey3f(float m[16], float theta)
-{
-        float other[16] = {
-                cos(theta), 0.0, sin(theta), 0.0,
-                0.0, 1.0, 0.0, 0.0,
-                -sin(theta), 0.0, cos(theta), 0.0,
-                0.0, 0.0, 0.0, 1.0
-        };
-
-        return matrix_multiply(m, other);
+        ll_mat4_identity(mat);
+        
+        mat->m00 = x*x*(1-c)+c;
+        mat->m10 = y*x*(1-c)-z*s;
+        mat->m20 = z*x*(1-c)+y*s;
+        mat->m01 = x*y*(1-c)+z*s;
+        mat->m11 = y*y*(1-c)+c;
+        mat->m21 = z*y*(1-c)-x*s;
+        mat->m02 = x*z*(1-c)-y*s;
+        mat->m12 = y*z*(1-c)+x*s;
+        mat->m22 = z*z*(1-c)+c;
 }
 
 /* same as above, but instead allows to supply a 3-dimensional
    vector as the 2nd argument, containing (x, y, z) */
-int matrix_rotate3fv(float m[16], vec3_t vec, float theta)
+void ll_mat4_rotate3fv(mat4_t *mat, vec3_t vec, float theta)
 {
-        return matrix_rotate3f(m, vec.x, vec.y, vec.z, theta);
+        ll_mat4_rotate3f(mat, vec.x, vec.y, vec.z, theta);
 }
 
 /* stores the orthographic matrix into @m, details of how this works can be found online or
    found at https://github.com/wwotz/linearlib/README.md */
-int matrix_orthographic(float m[16], float t, float r, float b, float l, float n, float f)
+void ll_mat4_orthographic(mat4_t *mat, float top, float right,
+                          float bottom, float left, float near, float far)
 {
-        float other[16] = {
-                2.0/(r-l), 0.0,       0.0,        -(r+l)/(r-l),
-                0.0,       2.0/(t-b), 0.0,        -(t+b)/(t-b),
-                0.0,       0.0,       -2.0/(f-n), -(f+n)/(f-n),
-                0.0,       0.0,       0.0,        1.0
-        };
-
-        matrix_identity(m);
-        return matrix_multiply(m, other);
+        if (!mat || left == right || near == far || bottom == top) return;
+        ll_mat4_identity(mat);
+        mat->m00 = 2.0f/(right-left);
+        mat->m30 = -(right+left)/(right-left);
+        mat->m11 = 2.0f/(top-bottom);
+        mat->m31 = -(top+bottom)/(top-bottom);
+        mat->m22 = -2.0f/(far-near);
+        mat->m32 = -(far+near)/(far-near);
 }
 
 /* stores the perspective matrix into @m, details of how this works can be found online or
    found at https://github.com/wwotz/linearlib/README.md */
-int matrix_perspective(float m[16], float t, float r, float b, float l, float n, float f)
+void ll_mat4_perspective(mat4_t *mat, float fovy, float aspect, float near, float far)
 {
-        float other[16] = {
-                2.0*n/(r-l), 0.0, 2.0*(l+r)/(r-l), 0.0,
-                0.0, 2.0*n/(b-t), 2.0*(t+b)/(b-t), 0.0,
-                0.0, 0.0, -(f+n)/(f-n), 2.0*(f*n)/(f-n),
-                0.0, 0.0, -1.0, 0.0
-        };
-
-        matrix_identity(m);
-        return matrix_multiply(m, other);
+        float w, h;
+        if (!mat || near == far) return;
+        
+        h = (float) tan(fovy / 360.0 * M_PI) * near;
+        w = h * aspect;
+        ll_mat4_frustum(mat, -w, w, -h, h, near, far);
 }
 
-int matrix_lookat(float m[16], vec3_t at, vec3_t eye, vec3_t up)
+void ll_mat4_frustum(mat4_t *mat, float top, float right,
+                     float bottom, float left, float near, float far)
 {
-        vec3_t cam_direction = vec3_normalise(vec3_sub(at, eye));
-        vec3_t cam_right = vec3_normalise(vec3_cross(up, cam_direction));
-        vec3_t cam_up = vec3_cross(cam_direction, cam_right);
-
-        float other[16] = {
-                cam_right.x, cam_right.y, cam_right.z, 0.0,
-                cam_up.x, cam_up.y, cam_up.z, 0.0,
-                cam_direction.x, cam_direction.y, cam_direction.z, 0.0,
-                0.0, 0.0, 0.0, 1.0,
-        };
-
-        return matrix_multiply(m, other);
+        if (!mat || left == right || bottom == top || near == far) return;
+        ll_mat4_identity(mat);
+        mat->m00 = (2.0f*near)/(right-left);
+        mat->m20 = (right+left)/(right-left);
+        mat->m11 = (2.0f*near)/(top-bottom);
+        mat->m21 = (top+bottom)/(top-bottom);
+        mat->m22 = -(far+near)/(far-near);
+        mat->m32 = -(2.0f*far*near)/(far-near);
+        mat->m23 = -1.0f;
+        mat->m33 = 0.0;
 }
-
 
 #endif /* LINEARLIB_IMPLEMENTATION */
-
-#endif // LINEAR_H_
+#endif // LINEARLIB_H_
