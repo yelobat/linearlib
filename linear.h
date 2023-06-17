@@ -18,6 +18,16 @@
 #endif /* LINEARLIBSTATIC */
 #endif /* LINEARLIBDEF */
 
+/* &optional */
+#define LL_USE_MATRIX
+
+typedef enum matrix_type_t {
+        LL_MATRIX_MODEL,
+        LL_MATRIX_VIEW,
+        LL_MATRIX_PROJECTION,
+        LL_MATRIX_COUNT
+} matrix_type_t;
+
 typedef union vec2_t {
         float data[2];
         struct {
@@ -157,6 +167,36 @@ ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
 LINEARLIBDEF void
 ll_mat4_frustum(mat4_t *mat, float left, float right,
                 float bottom, float top, float near, float far);
+
+#ifdef LL_USE_MATRIX
+LINEARLIBDEF void
+ll_matrix_mode(matrix_type_t type);
+LINEARLIBDEF void
+ll_matrix_multiply(mat4_t *right);
+LINEARLIBDEF void
+ll_matrix_identity(void);
+LINEARLIBDEF void
+ll_matrix_translate3f(float dx, float dy, float dz);
+LINEARLIBDEF void
+ll_matrix_translate3fv(vec3_t vec);
+LINEARLIBDEF void
+ll_matrix_scale3f(float w, float h, float d);
+LINEARLIBDEF void
+ll_matrix_scale3fv(vec3_t vec);
+LINEARLIBDEF void
+ll_matrix_rotate3f(float x, float y, float z, float angle);
+LINEARLIBDEF void
+ll_matrix_rotate3fv(vec3_t vec, float angle);
+LINEARLIBDEF void
+ll_matrix_orthographic(float top, float right,
+                       float bottom, float left, float near, float far);
+LINEARLIBDEF void
+ll_matrix_perspective(float fovy, float aspect,
+                      float near, float far);
+LINEARLIBDEF void
+ll_matrix_frustum(float left, float right,
+                  float bottom, float top, float near, float far);
+#endif /* LL_USE_MATRIX */
 
 #ifdef LINEARLIB_IMPLEMENTATION
 
@@ -322,7 +362,7 @@ vec4_t
 ll_vec4_add(vec4_t first, vec4_t second)
 {
         return ll_vec4_create(first.x + second.x, first.y + second.y,
-                             first.z + second.z, first.w + second.w);
+                              first.z + second.z, first.w + second.w);
 }
 
 /* returns a new vector containing the subtraction of second from first,
@@ -331,7 +371,7 @@ vec4_t
 ll_vec4_sub(vec4_t first, vec4_t second)
 {
         return ll_vec4_create(first.x - second.x, first.y - second.y,
-                             first.z - second.z, first.w - second.w);
+                              first.z - second.z, first.w - second.w);
 }
 
 /* returns a new vector containing the product of first and second,
@@ -340,7 +380,7 @@ vec4_t
 ll_vec4_mul(vec4_t first, vec4_t second)
 {
         return ll_vec4_create(first.x * second.x, first.y * second.y,
-                             first.z * second.z, first.w * second.w);
+                              first.z * second.z, first.w * second.w);
 }
 
 /* returns a new vector containing the division of first by second,
@@ -349,7 +389,7 @@ vec4_t
 ll_vec4_div(vec4_t first, vec4_t second)
 {
         return ll_vec4_create(first.x / second.x, first.y / second.y,
-                             first.z / second.z, first.w / second.w);
+                              first.z / second.z, first.w / second.w);
 }
 
 /* return the dot-product of @first and @second */
@@ -491,7 +531,7 @@ ll_mat4_rotate3fv(mat4_t *mat, vec3_t vec, float theta)
    found at https://github.com/wwotz/linearlib/README.md */
 void
 ll_mat4_orthographic(mat4_t *mat, float top, float right,
-                          float bottom, float left, float near, float far)
+                     float bottom, float left, float near, float far)
 {
         if (!mat || left == right || near == far || bottom == top) return;
         ll_mat4_identity(mat);
@@ -533,5 +573,96 @@ ll_mat4_frustum(mat4_t *mat, float top, float right,
         mat->m33 = 0.0;
 }
 
+#ifdef LINEARLIB_USE_MATRIX
+
+static mat4_t ll_matrices[LL_MATRIX_COUNT];
+static int ll_matrices_idx;
+
+void
+ll_matrix_mode(matrix_type_t type)
+{
+        if (type >= 0 && type < LL_MATRIX_COUNT)
+                ll_matrices_idx = type;
+}
+
+void
+ll_matrix_multiply(mat4_t *right)
+{
+        ll_mat4_multiply(ll_matrices+ll_matrices_idx, mat);
+}
+
+void
+ll_matrix_identity(void)
+{
+        ll_mat4_identity(ll_matrices+ll_matrices_idx);
+}
+
+void
+ll_matrix_translate3f(float dx, float dy, float dz)
+{
+        mat4_t m;
+        ll_mat4_translate3f(&m, dx, dy, dz);
+        ll_matrix_multiply(&m);
+}
+
+void
+ll_matrix_translate3fv(vec3_t vec)
+{
+        ll_matrix_translate3f(vec.x, vec.y, vec.z);
+}
+
+void
+ll_matrix_scale3f(float w, float h, float d)
+{
+        mat4_t m;
+        ll_mat4_scale3f(&m, w, h, d);
+        ll_matrix_multiply(&m);
+}
+
+void
+ll_matrix_scale3fv(vec3_t vec)
+{
+        ll_matrix_scale3f(vec.x, vec.y, vec.z);
+}
+
+void
+ll_matrix_rotate3f(float x, float y, float z, float angle)
+{
+        mat4_t m;
+        ll_mat4_rotate3f(&m, x, y, z, angle);
+        ll_matrix_multiply(&m);
+}
+
+void
+ll_matrix_rotate3fv(vec3_t vec, float angle)
+{
+        ll_matrix_rotate3f(vec.x, vec.y, vec.z, angle);
+}
+
+void
+ll_matrix_orthographic(float top, float right,
+                       float bottom, float left, float near, float far)
+{
+        ll_mat4_orthographic(matrices+matrices_idx, top, right, bottom,
+                             left, near, far);
+}
+
+void
+ll_matrix_perspective(float fovy, float aspect,
+                      float near, float far)
+{
+        ll_mat4_perspective(matrices+matrice_idx, fovy, aspect,
+                            near, far);
+}
+
+void
+ll_matrix_frustum(float left, float right,
+                  float bottom, float top, float near, float far)
+{
+        ll_mat4_frustum(matrices+matrices_idx, left, right, bottom, top,
+                        near, far);
+}
+
+#endif /* LINEARLIB_USE_MATRIX */
 #endif /* LINEARLIB_IMPLEMENTATION */
-#endif // LINEARLIB_H_
+#endif /* LINEARLIB_H_ */
