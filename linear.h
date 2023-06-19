@@ -31,32 +31,94 @@ typedef enum matrix_type_t {
 typedef union vec2_t {
         float data[2];
         struct {
-                float x, y;
+                float x;
+                float y;
         };
         struct {
-                float r, g;
+                float r;
+                float g;
+        };
+        struct {
+                float s;
+                float t;
         };
 } vec2_t;
 
 typedef union vec3_t {
         float data[3];
         struct {
-                float x, y, z;
+                float x;
+                float y;
+                float z;
         };
         struct {
-                float r, g, b;
+                float r;
+                float g;
+                float b;
         };        
 } vec3_t;
 
 typedef union vec4_t {
         float data[4];
         struct {
-                float x, y, z, w;
+                float x;
+                float y;
+                float z;
+                float w;
         };
         struct {
-                float r, g, b, a;
+                float r;
+                float g;
+                float b;
+                float a;
         };
 } vec4_t;
+
+typedef union ivec2_t {
+        int data[2];
+        struct {
+                int x;
+                int y;
+        };
+        struct {
+                int r;
+                int g;
+        };
+        struct {
+                int s;
+                int t;
+        };
+} ivec2_t;
+
+typedef union ivec3_t {
+        int data[3];
+        struct {
+                int x;
+                int y;
+                int z;
+        };
+        struct {
+                int r;
+                int g;
+                int b;
+        };
+} ivec3_t;
+
+typedef union ivec4_t {
+        int data[4];
+        struct {
+                int x;
+                int y;
+                int z;
+                int w;
+        };
+        struct {
+                int r;
+                int g;
+                int b;
+                int a;
+        };
+} ivec4_t;
 
 typedef union mat2_t {
         float data[4];
@@ -140,6 +202,61 @@ ll_vec4_dot(vec4_t left, vec4_t right);
 LINEARLIBDEF vec4_t
 ll_vec4_normalise(vec4_t vec);
 
+LINEARLIBDEF ivec2_t
+ll_ivec2_create(int x, int y);
+LINEARLIBDEF float
+ll_ivec2_length(ivec2_t ivec);
+LINEARLIBDEF ivec2_t
+ll_ivec2_add(ivec2_t left, ivec2_t right);
+LINEARLIBDEF ivec2_t
+ll_ivec2_sub(ivec2_t left, ivec2_t right);
+LINEARLIBDEF ivec2_t
+ll_ivec2_mul(ivec2_t left, ivec2_t right);
+LINEARLIBDEF ivec2_t
+ll_ivec2_div(ivec2_t left, ivec2_t right);
+LINEARLIBDEF float
+ll_ivec2_dot(ivec2_t left, ivec2_t right);
+LINEARLIBDEF float
+ll_ivec2_cross(ivec2_t left, ivec2_t right);
+LINEARLIBDEF ivec2_t
+ll_ivec2_normalise(ivec2_t ivec);
+
+LINEARLIBDEF ivec3_t
+ll_ivec3_create(int x, int y, int z);
+LINEARLIBDEF float
+ll_ivec3_length(ivec3_t ivec);
+LINEARLIBDEF ivec3_t
+ll_ivec3_add(ivec3_t left, ivec3_t right);
+LINEARLIBDEF ivec3_t
+ll_ivec3_sub(ivec3_t left, ivec3_t right);
+LINEARLIBDEF ivec3_t
+ll_ivec3_mul(ivec3_t left, ivec3_t right);
+LINEARLIBDEF ivec3_t
+ll_ivec3_div(ivec3_t left, ivec3_t right);
+LINEARLIBDEF float
+ll_ivec3_dot(ivec3_t left, ivec3_t right);
+LINEARLIBDEF ivec3_t
+ll_ivec3_cross(ivec3_t left, ivec3_t right);
+LINEARLIBDEF ivec3_t
+ll_ivec3_normalise(ivec3_t ivec);
+
+LINEARLIBDEF ivec4_t
+ll_ivec4_create(int x, int y, int z, int w);
+LINEARLIBDEF float
+ll_ivec4_length(ivec4_t ivec);
+LINEARLIBDEF ivec4_t
+ll_ivec4_add(ivec4_t left, ivec4_t right);
+LINEARLIBDEF ivec4_t
+ll_ivec4_sub(ivec4_t left, ivec4_t right);
+LINEARLIBDEF ivec4_t
+ll_ivec4_mul(ivec4_t left, ivec4_t right);
+LINEARLIBDEF ivec4_t
+ll_ivec4_div(ivec4_t left, ivec4_t right);
+LINEARLIBDEF float
+ll_ivec4_dot(ivec4_t left, ivec4_t right);
+LINEARLIBDEF ivec4_t
+ll_ivec4_normalise(ivec4_t ivec);
+
 LINEARLIBDEF void
 ll_mat4_multiply(mat4_t *left, mat4_t *right);
 LINEARLIBDEF void
@@ -214,50 +331,50 @@ ll_vec2_length(vec2_t vec)
         return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
 }
 
-/* returns a new vector containing the sum of first and second,
+/* returns a new vector containing the sum of left and right,
    component-wise sum */
 vec2_t
-ll_vec2_add(vec2_t first, vec2_t second)
+ll_vec2_add(vec2_t left, vec2_t right)
 {
-        return ll_vec2_create(first.x + second.x, first.y + second.y);
+        return ll_vec2_create(left.x + right.x, left.y + right.y);
 }
 
-/* returns a new vector containing the subtraction of second from first,
+/* returns a new vector containing the subtraction of right from left,
    component-wise difference  */
 vec2_t
-ll_vec2_sub(vec2_t first, vec2_t second)
+ll_vec2_sub(vec2_t left, vec2_t right)
 {
-        return ll_vec2_create(first.x - second.x, first.y - second.y);
+        return ll_vec2_create(left.x - right.x, left.y - right.y);
 }
 
-/* returns a new vector containing the product of first and second,
+/* returns a new vector containing the product of left and right,
    component-wise multiplication */
 vec2_t
-ll_vec2_mul(vec2_t first, vec2_t second)
+ll_vec2_mul(vec2_t left, vec2_t right)
 {
-        return ll_vec2_create(first.x * second.x, first.y * second.y);
+        return ll_vec2_create(left.x * right.x, left.y * right.y);
 }
 
-/* returns a new vector containing the division of first by second,
+/* returns a new vector containing the division of left by right,
    component-wise division */
 vec2_t
-ll_vec2_div(vec2_t first, vec2_t second)
+ll_vec2_div(vec2_t left, vec2_t right)
 {
-        return ll_vec2_create(first.x / second.x, first.y / second.y);
+        return ll_vec2_create(left.x / right.x, left.y / right.y);
 }
 
-/* returns the dot-product of @first and @second */
+/* returns the dot-product of @left and @right */
 float
-ll_vec2_dot(vec2_t first, vec2_t second)
+ll_vec2_dot(vec2_t left, vec2_t right)
 {
-        return first.x * second.x + first.y * second.y;
+        return left.x * right.x + left.y * right.y;
 }
 
-/* returns the cross-product of @first and @second */
+/* returns the cross-product of @left and @right */
 float
-ll_vec2_cross(vec2_t first, vec2_t second)
+ll_vec2_cross(vec2_t left, vec2_t right)
 {
-        return first.x * second.y - first.y * second.x;
+        return left.x * right.y - left.y * right.x;
 }
 
 /* returns a normalised vector of @vec */
@@ -282,56 +399,56 @@ ll_vec3_length(vec3_t vec)
         return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
 
-/* returns a new vector containing the sum of first and second,
+/* returns a new vector containing the sum of left and right,
    component-wise sum */
 vec3_t
-ll_vec3_add(vec3_t first, vec3_t second)
+ll_vec3_add(vec3_t left, vec3_t right)
 {
-        return ll_vec3_create(first.x + second.x, first.y + second.y,
-                              first.z + second.z);
+        return ll_vec3_create(left.x + right.x, left.y + right.y,
+                              left.z + right.z);
 }
 
-/* returns a new vector containing the subtraction of second from first,
+/* returns a new vector containing the subtraction of right from left,
    component-wise difference  */
 vec3_t
-ll_vec3_sub(vec3_t first, vec3_t second)
+ll_vec3_sub(vec3_t left, vec3_t right)
 {
-        return ll_vec3_create(first.x - second.x, first.y - second.y,
-                              first.z - second.z);
+        return ll_vec3_create(left.x - right.x, left.y - right.y,
+                              left.z - right.z);
 }
 
-/* returns a new vector containing the product of first and second,
+/* returns a new vector containing the product of left and right,
    component-wise multiplication */
 vec3_t
-ll_vec3_mul(vec3_t first, vec3_t second)
+ll_vec3_mul(vec3_t left, vec3_t right)
 {
-        return ll_vec3_create(first.x * second.x, first.y * second.y,
-                              first.z * second.z);
+        return ll_vec3_create(left.x * right.x, left.y * right.y,
+                              left.z * right.z);
 }
 
-/* returns a new vector containing the division of first by second,
+/* returns a new vector containing the division of left by right,
    component-wise division */
 vec3_t
-ll_vec3_div(vec3_t first, vec3_t second)
+ll_vec3_div(vec3_t left, vec3_t right)
 {
-        return ll_vec3_create(first.x / second.x, first.y / second.y,
-                              first.z / second.z);
+        return ll_vec3_create(left.x / right.x, left.y / right.y,
+                              left.z / right.z);
 }
 
-/* returns the dot-product of @first and @second */
+/* returns the dot-product of @left and @right */
 float
-ll_vec3_dot(vec3_t first, vec3_t second)
+ll_vec3_dot(vec3_t left, vec3_t right)
 {
-        return first.x * second.x + first.y * second.y + first.z * second.z;
+        return left.x * right.x + left.y * right.y + left.z * right.z;
 }
 
-/* returns the cross-product of @first and @second */
+/* returns the cross-product of @left and @right */
 vec3_t
-ll_vec3_cross(vec3_t first, vec3_t second)
+ll_vec3_cross(vec3_t left, vec3_t right)
 {
-        return ll_vec3_create(first.y*second.z - first.z*second.y,
-                              first.z*second.x - first.x*second.z,
-                              first.x*second.y - first.y*second.x);
+        return ll_vec3_create(left.y*right.z - left.z*right.y,
+                              left.z*right.x - left.x*right.z,
+                              left.x*right.y - left.y*right.x);
 }
 
 /* returns a normalised vector of @vec */
@@ -356,48 +473,48 @@ ll_vec4_length(vec4_t vec)
         return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
 }
 
-/* returns a new vector containing the sum of first and second,
+/* returns a new vector containing the sum of left and right,
    component-wise sum */
 vec4_t
-ll_vec4_add(vec4_t first, vec4_t second)
+ll_vec4_add(vec4_t left, vec4_t right)
 {
-        return ll_vec4_create(first.x + second.x, first.y + second.y,
-                              first.z + second.z, first.w + second.w);
+        return ll_vec4_create(left.x + right.x, left.y + right.y,
+                              left.z + right.z, left.w + right.w);
 }
 
-/* returns a new vector containing the subtraction of second from first,
+/* returns a new vector containing the subtraction of right from left,
    component-wise difference  */
 vec4_t
-ll_vec4_sub(vec4_t first, vec4_t second)
+ll_vec4_sub(vec4_t left, vec4_t right)
 {
-        return ll_vec4_create(first.x - second.x, first.y - second.y,
-                              first.z - second.z, first.w - second.w);
+        return ll_vec4_create(left.x - right.x, left.y - right.y,
+                              left.z - right.z, left.w - right.w);
 }
 
-/* returns a new vector containing the product of first and second,
+/* returns a new vector containing the product of left and right,
    component-wise multiplication */
 vec4_t
-ll_vec4_mul(vec4_t first, vec4_t second)
+ll_vec4_mul(vec4_t left, vec4_t right)
 {
-        return ll_vec4_create(first.x * second.x, first.y * second.y,
-                              first.z * second.z, first.w * second.w);
+        return ll_vec4_create(left.x * right.x, left.y * right.y,
+                              left.z * right.z, left.w * right.w);
 }
 
-/* returns a new vector containing the division of first by second,
+/* returns a new vector containing the division of left by right,
    component-wise division */
 vec4_t
-ll_vec4_div(vec4_t first, vec4_t second)
+ll_vec4_div(vec4_t left, vec4_t right)
 {
-        return ll_vec4_create(first.x / second.x, first.y / second.y,
-                              first.z / second.z, first.w / second.w);
+        return ll_vec4_create(left.x / right.x, left.y / right.y,
+                              left.z / right.z, left.w / right.w);
 }
 
-/* return the dot-product of @first and @second */
+/* return the dot-product of @left and @right */
 float
-ll_vec4_dot(vec4_t first, vec4_t second)
+ll_vec4_dot(vec4_t left, vec4_t right)
 {
-        return first.x * second.x + first.y * second.y
-                + first.z * second.z + first.w * second.w;
+        return left.x * right.x + left.y * right.y
+                + left.z * right.z + left.w * right.w;
 }
 
 /* returns a normalised vector of @vec */
@@ -407,6 +524,182 @@ ll_vec4_normalise(vec4_t vec)
         float length = ll_vec4_length(vec);
         return (vec4_t) {vec.x / length, vec.y / length,
                          vec.z / length, vec.w / length};
+}
+
+ivec2_t
+ll_ivec2_create(int x, int y)
+{
+        return (ivec2_t) { x, y };
+}
+
+float
+ll_ivec2_length(ivec2_t ivec)
+{
+        return sqrtf(ivec.x * ivec.x + ivec.y * ivec.y);
+}
+
+ivec2_t
+ll_ivec2_add(ivec2_t left, ivec2_t right)
+{
+        return ll_ivec2_create(left.x + right.x, left.y + right.y);
+}
+
+ivec2_t
+ll_ivec2_sub(ivec2_t left, ivec2_t right)
+{
+        return ll_ivec2_create(left.x - right.x, left.y - right.y);
+}
+
+ivec2_t
+ll_ivec2_mul(ivec2_t left, ivec2_t right)
+{
+        return ll_ivec2_create(left.x * right.x, left.y * right.y);
+}
+
+ivec2_t
+ll_ivec2_div(ivec2_t left, ivec2_t right)
+{
+        return ll_ivec2_create(left.x / right.x, left.y / right.y);
+}
+
+float
+ll_ivec2_dot(ivec2_t left, ivec2_t right)
+{
+        return left.x * right.y + left.y * right.y;
+}
+
+float
+ll_ivec2_cross(ivec2_t left, ivec2_t right)
+{
+        return left.x * right.y - left.y * right.x;
+}
+
+ivec2_t
+ll_ivec2_normalise(ivec2_t ivec)
+{
+        float length = ll_ivec2_length(ivec);
+        return ll_ivec2_create( ivec.x / length, ivec.y / length);
+}
+
+
+ivec3_t
+ll_ivec3_create(int x, int y, int z)
+{
+        return (ivec3_t) { x, y, z };
+}
+
+float
+ll_ivec3_length(ivec3_t ivec)
+{
+        return sqrtf(ivec.x * ivec.x + ivec.y * ivec.y
+                     + ivec.z * ivec.z);
+}
+
+ivec3_t
+ll_ivec3_add(ivec3_t left, ivec3_t right)
+{
+        return ll_ivec3_create(left.x + right.x, left.y + right.y,
+                               left.z + right.z);
+}
+
+ivec3_t
+ll_ivec3_sub(ivec3_t left, ivec3_t right)
+{
+        return ll_ivec3_create(left.x - right.x, left.y - right.y,
+                               left.z - right.z);
+}
+
+ivec3_t
+ll_ivec3_mul(ivec3_t left, ivec3_t right)
+{
+        return ll_ivec3_create(left.x * right.x, left.y * right.y,
+                               left.z * right.z);
+}
+
+ivec3_t
+ll_ivec3_div(ivec3_t left, ivec3_t right)
+{
+        return ll_ivec3_create(left.x / right.x, left.y / right.y,
+                               left.z / right.z);
+}
+
+float
+ll_ivec3_dot(ivec3_t left, ivec3_t right)
+{
+        return left.x * right.x + left.y * right.y
+                + left.z * right.z;
+}
+
+ivec3_t
+ll_ivec3_cross(ivec3_t left, ivec3_t right)
+{
+        return ll_ivec3_create(left.y*right.z - left.z*right.y,
+                              left.z*right.x - left.x*right.z,
+                              left.x*right.y - left.y*right.x);
+}
+
+ivec3_t
+ll_ivec3_normalise(ivec3_t ivec)
+{
+        float length = ll_ivec3_length(ivec);
+        return ll_ivec3_create(ivec.x / length, ivec.y / length,
+                               ivec.z / length);
+}
+
+ivec4_t
+ll_ivec4_create(int x, int y, int z, int w)
+{
+        return (ivec4_t) { x, y, z, w };
+}
+
+float
+ll_ivec4_length(ivec4_t ivec)
+{
+        return sqrtf(ivec.x * ivec.x + ivec.y * ivec.y +
+                     ivec.z * ivec.z + ivec.w * ivec.w);
+}
+
+ivec4_t
+ll_ivec4_add(ivec4_t left, ivec4_t right)
+{
+        return ll_ivec4_create(left.x + right.x, left.y + right.y,
+                               left.z + right.z, left.w + right.w);
+}
+
+ivec4_t
+ll_ivec4_sub(ivec4_t left, ivec4_t right)
+{
+        return ll_ivec4_create(left.x - right.x, left.y - right.y,
+                               left.z - right.z, left.w - right.w);
+}
+
+ivec4_t
+ll_ivec4_mul(ivec4_t left, ivec4_t right)
+{
+        return ll_ivec4_create(left.x * right.x, left.y * right.y,
+                               left.z * right.z, left.w * right.w);
+}
+
+ivec4_t
+ll_ivec4_div(ivec4_t left, ivec4_t right)
+{
+        return ll_ivec4_create(left.x / right.x, left.y / right.y,
+                               left.z / right.z, left.w / right.w);
+}
+
+float
+ll_ivec4_dot(ivec4_t left, ivec4_t right)
+{
+        return left.x * right.x + left.y * right.y +
+                left.z * right.z + left.w * right.w;
+}
+
+ivec4_t
+ll_ivec4_normalise(ivec4_t ivec)
+{
+        float length = ll_ivec4_length(ivec);
+        return ll_ivec4_create(ivec.x / length, ivec.y / length,
+                               ivec.z / length, ivec.w / length);
 }
 
 /* performs matrix multiplcation on the matrices @l and @r
@@ -422,8 +715,8 @@ ll_mat4_multiply(mat4_t *left, mat4_t *right)
                 for (int j = 0; j < 4; j++) {
                         float sum = 0.0;
                         for (int k = 0; k < 4; k++)
-                                sum += left->data[j * 4 + k] * right->data[i * 4 + k];
-                        final.data[j * 4 + i] = sum;
+                                sum += left->data[i * 4 + k] * right->data[k * 4 + j];
+                        final.data[i * 4 + j] = sum;
                 }
         }
         ll_mat4_copy(left, &final);
