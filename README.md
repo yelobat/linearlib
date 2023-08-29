@@ -6,7 +6,11 @@ designed to be used alongside OpenGL.
 
 ## How to use 
 Simply copy the single header file into your project. Inside one of the file where this file is included, 
-write: `#define LINEARLIB_IMPLEMENTATION` which will include the C code which implements the functions
+write: `#define LINEARLIB_IMPLEMENTATION` which will include the C code which implements the functions.
+
+## Examples Projects
+
+- `RayTracing` at https://github.com/wwotz/RayTracing
 
 
 
