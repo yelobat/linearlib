@@ -499,7 +499,7 @@ ll_matrix_get_copy(void);
 LINEARLIBDEF vec2_t
 ll_vec2_create2f(float x, float y)
 {
-	return (vec2_t) { x, y };
+	return (vec2_t) {{ x, y }};
 }
 
 /**
@@ -744,7 +744,7 @@ ll_vec2_normalise2f(float x, float y)
 LINEARLIBDEF vec3_t
 ll_vec3_create3f(float x, float y, float z)
 {
-	return (vec3_t) { x, y, z };
+	return (vec3_t) {{ x, y, z }};
 }
 
 /**
@@ -1002,7 +1002,7 @@ ll_vec3_normalise3f(float x, float y, float z)
 LINEARLIBDEF vec4_t
 ll_vec4_create4f(float x, float y, float z, float w)
 {
-	return (vec4_t) { x, y, z, w };
+	return (vec4_t) {{ x, y, z, w }};
 }
 
 /**
@@ -1237,7 +1237,7 @@ ll_vec4_normalise4f(float x, float y, float z, float w)
 LINEARLIBDEF ivec2_t
 ll_ivec2_create2i(int x, int y)
 {
-	return (ivec2_t) { x, y };
+	return (ivec2_t) {{ x, y }};
 }
 
 /**
@@ -1482,7 +1482,7 @@ ll_ivec2_normalise2i(int x, int y)
 LINEARLIBDEF ivec3_t
 ll_ivec3_create3i(int x, int y, int z)
 {
-	return (ivec3_t) { x, y, z };
+	return (ivec3_t) {{ x, y, z }};
 }
 
 /**
@@ -1740,7 +1740,7 @@ ll_ivec3_normalise3i(int x, int y, int z)
 LINEARLIBDEF ivec4_t
 ll_ivec4_create4i(int x, int y, int z, int w)
 {
-	return (ivec4_t) { x, y, z, w };
+	return (ivec4_t) {{ x, y, z, w }};
 }
 
 /**
