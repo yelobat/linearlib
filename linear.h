@@ -1,7 +1,7 @@
 /**
  * Author: wwotz
  * Add #LINEARLIB_IMPLEMENTATION to the start of the implementation
- * file in order to add the implementation code to your project. 
+ * file in order to add the implementation code to your project.
  */
 
 #ifndef LINEARLIB_H_
@@ -457,6 +457,10 @@ LINEARLIBDEF void
 ll_mat4_frustum(mat4_t *mat, float left, float right,
                 float bottom, float top, float near, float far);
 
+LINEARLIBDEF void
+ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
+	       vec3_t lookat);
+
 #ifdef LL_USE_MATRIX
 LINEARLIBDEF void
 ll_matrix_mode(matrix_type_t type);
@@ -485,6 +489,9 @@ ll_matrix_perspective(float fovy, float aspect,
 LINEARLIBDEF void
 ll_matrix_frustum(float left, float right,
                   float bottom, float top, float near, float far);
+
+LINEARLIBDEF void
+ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
 
 LINEARLIBDEF mat4_t
 ll_matrix_get_copy(void);
@@ -2114,7 +2121,7 @@ ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
         
         h = (float) tan(fovy / 360.0 * M_PI) * near;
         w = h * aspect;
-        ll_mat4_frustum(mat, -w, w, -h, h, near, far);
+        ll_mat4_frustum(mat, -h, w, h, -w, near, far);
 }
 
 void
@@ -2131,6 +2138,29 @@ ll_mat4_frustum(mat4_t *mat, float top, float right,
         mat->m32 = -(2.0f*far*near)/(far-near);
         mat->m23 = -1.0f;
         mat->m33 = 0.0;
+}
+
+LINEARLIBDEF void
+ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
+	       vec3_t lookat)
+{
+	ll_mat4_identity(mat);
+	mat->m00 = x.x;
+	mat->m01 = y.x;
+	mat->m02 = z.x;
+	mat->m03 = 0.0;
+	mat->m10 = x.y;
+	mat->m11 = y.y;
+	mat->m12 = z.y;
+	mat->m13 = 0.0;
+	mat->m20 = x.z;
+	mat->m21 = y.z;
+	mat->m22 = z.z;
+	mat->m23 = 0.0;
+	mat->m30 = -ll_vec3_dot3fv(x, lookat);
+	mat->m31 = -ll_vec3_dot3fv(y, lookat);
+	mat->m32 = -ll_vec3_dot3fv(z, lookat);
+	mat->m33 = 1.0;
 }
 
 #ifdef LL_USE_MATRIX
@@ -2221,6 +2251,13 @@ ll_matrix_frustum(float left, float right,
 {
         ll_mat4_frustum(ll_matrices+ll_matrices_idx, left, right,
                         bottom, top, near, far);
+}
+
+LINEARLIBDEF void
+ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat)
+{
+	ll_mat4_lookat(ll_matrices+ll_matrices_idx,
+		       x, y, z, lookat)
 }
 
 mat4_t
