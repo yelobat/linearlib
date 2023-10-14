@@ -195,6 +195,12 @@ LINEARLIBDEF vec2_t
 ll_vec2_normalise2fv(vec2_t vec);
 LINEARLIBDEF vec2_t
 ll_vec2_normalise2f(float x, float y);
+LINEARLIBDEF vec2_t
+ll_vec2_apply2fv(vec2_t vec, float (*f)(float));
+LINEARLIBDEF vec2_t
+ll_vec2_apply2f(float x, float y, float (*f)(float));
+LINEARLIBDEF vec2_t
+ll_vec2_origin(void);
 
 LINEARLIBDEF vec3_t
 ll_vec3_create3f(float x, float y, float z);
@@ -743,6 +749,33 @@ ll_vec2_normalise2f(float x, float y)
 {
 	float length = ll_vec2_length2f(x, y);
 	return ll_vec2_create2f( x / length, y / length );
+}
+
+/**
+ * @return A new vector, that is the result of applying @f
+ * over all the elements of @vec.
+ */
+LINEARLIBDEF vec2_t
+ll_vec2_apply2fv(vec2_t vec, float (*f)(float))
+{
+	return (vec2_t) {{ f(vec.x), f(vec.y) }};
+}
+
+/**
+ * @return A new vector, that is the result of applying @f
+ * over @x and @y, inserting their values into the components
+ * of the returned vector.
+ */
+LINEARLIBDEF vec2_t
+ll_vec2_apply2f(float x, float y, float (*f)(float))
+{
+	return (vec2_t) {{ f(x), f(y) }};
+}
+
+LINEARLIBDEF vec2_t
+ll_vec2_origin(void)
+{
+	return (vec2_t) {{ 0.0, 0.0 }};
 }
 
 /**
@@ -2257,7 +2290,7 @@ LINEARLIBDEF void
 ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat)
 {
 	ll_mat4_lookat(ll_matrices+ll_matrices_idx,
-		       x, y, z, lookat)
+		       x, y, z, lookat);
 }
 
 mat4_t
