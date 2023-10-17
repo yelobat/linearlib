@@ -13,4 +13,3 @@ write: `#define LINEARLIB_IMPLEMENTATION` which will include the C code which im
 - `RayTracing` at https://github.com/wwotz/RayTracing
 
 
-
