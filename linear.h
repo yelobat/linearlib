@@ -177,7 +177,7 @@ typedef union mat3_t {
         };
 } mat3_t;
 
-/*
+/**
  * @description A union which is essentially an array containing 16 floats.
  * The union allows for ease of access of attributes in meaningful ways.
  * This is a 4x4 matrix.
@@ -191,6 +191,15 @@ typedef union mat4_t {
                 float m30, m31, m32, m33;  /* the bottom row of the matrix */
         };
 } mat4_t;
+
+/**
+ * @description A struct which represents a mechanism for 3D rotation, called
+ * a quaternion.
+ */
+typedef struct quaternion_t {
+	float s;
+	vec3_t v;
+} quaternion_t;
 
 LINEARLIBDEF vec2_t
 ll_vec2_create2f(float x, float y);
@@ -507,10 +516,36 @@ ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
 LINEARLIBDEF void
 ll_mat4_frustum(mat4_t *mat, float left, float right,
                 float bottom, float top, float near, float far);
-
 LINEARLIBDEF void
 ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
 	       vec3_t lookat);
+
+LINEARLIBDEF quaternion_t
+ll_quaternion_create3f(float s, float x, float y, float z);
+LINEARLIBDEF quaternion_t
+ll_quaternion_create3fv(float s, vec3_t v);
+LINEARLIBDEF quaternion_t
+ll_quaternion_angle_axis3f(float angle, float x, float y, float z);
+LINEARLIBDEF quaternion_t
+ll_quaternion_angle_axis3fv(float radians, vec3_t v);
+LINEARLIBDEF quaternion_t 
+ll_quaternion_add(quaternion_t a, quaternion_t b);
+LINEARLIBDEF quaternion_t
+ll_quaternion_sub(quaternion_t a, quaternion_t b);
+LINEARLIBDEF quaternion_t
+ll_quaternion_prod(quaternion_t a, quaternion_t b);
+LINEARLIBDEF float
+ll_quaternion_norm(quaternion_t a);
+LINEARLIBDEF quaternion_t
+ll_quaternion_normalise(quaternion_t a);
+LINEARLIBDEF quaternion_t
+ll_quaternion_conjugate(quaternion_t a);
+LINEARLIBDEF quaternion_t
+ll_quaternion_inverse(quaternion_t a);
+LINEARLIBDEF vec3_t
+ll_quaternion_rotate3fv(quaternion_t a, vec3_t v);
+LINEARLIBDEF vec3_t
+ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z);
 
 #ifdef LL_USE_MATRIX
 LINEARLIBDEF void
@@ -2273,6 +2308,228 @@ ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
 	mat->m31 = -ll_vec3_dot3fv(y, lookat);
 	mat->m32 = -ll_vec3_dot3fv(z, lookat);
 	mat->m33 = 1.0;
+}
+
+/** 
+ * @description Create a quaternion with scale, @s and vector
+ * components @x, @y and @z.
+ *
+ * @return A quaternion.
+ */
+LINEARLIBDEF quaternion_t
+ll_quaternion_create3f(float s, float x, float y, float z)
+{
+	quaternion_t c;
+	c.s = s;
+	c.v.x = x;
+	c.v.y = y;
+	c.v.z = z;
+	return c;
+}
+
+/** 
+ * @description Create a quaternion with rotation, @s and 
+ * vector @v.
+ *
+ * @return A quaternion.
+ */
+LINEARLIBDEF quaternion_t
+ll_quaternion_create3fv(float s, vec3_t v)
+{
+	quaternion_t c;
+	c.s = s;
+	c.v = v;
+	return c;
+}
+
+/** 
+ * @description Create a quaternion with rotation defined in radians
+ * about the axis defined by the vector components @x, @y and @z.
+ *
+ * @return A quaternion.
+ */
+LINEARLIBDEF quaternion_t
+ll_quaternion_angle_axis3f(float radians, float x, float y, float z)
+{
+	vec3_t v;
+	quaternion_t c;
+	radians /= 2.0;
+	v = ll_vec3_normalise3f(x, y, z);
+	c = ll_quaternion_create3fv(cosf(radians), ll_vec3_mul1f(v, sinf(radians)));
+	return c;
+}
+
+/** 
+ * @description Create a quaternion with rotation defined in radians
+ * about the axis defined by the vector components @x, @y and @z.
+ *
+ * @return A quaternion.
+ */
+LINEARLIBDEF quaternion_t
+ll_quaternion_angle_axis3fv(float radians, vec3_t v)
+{
+	quaternion_t c;
+	radians /= 2.0;
+	v = ll_vec3_normalise3fv(v);
+	c = ll_quaternion_create3fv(cosf(radians), ll_vec3_mul1f(v, sinf(radians)));
+	return c;
+}
+
+/** 
+ * @description Add quaternions @a and @b to produce a new
+ * quaternion.
+ *
+ * @return A quaternion.
+ */
+LINEARLIBDEF quaternion_t 
+ll_quaternion_add(quaternion_t a, quaternion_t b)
+{
+	quaternion_t c;
+	c.s = a.s + b.s;
+	c.v = ll_vec3_add3fv(a.v, b.v);
+	return c;
+}
+
+/** 
+ * @description Subtract quaternions @a and @b to produce a new
+ * quaternion.
+ *
+ * @return A quaternion.
+ */
+LINEARLIBDEF quaternion_t
+ll_quaternion_sub(quaternion_t a, quaternion_t b)
+{
+	quaternion_t c;
+	c.s = a.s - b.s;
+	c.v = ll_vec3_sub3fv(a.v, b.v);
+	return c;
+}
+
+/** 
+ * @description Multiply quaternions @a and @b to produce a new
+ * quaternion, known as the Hamilton Product.
+ *
+ * @return A quaternion.
+ */
+LINEARLIBDEF quaternion_t
+ll_quaternion_prod(quaternion_t a, quaternion_t b)
+{
+	quaternion_t c;
+	c.s = a.s*b.s - ll_vec3_dot3fv(a.v, b.v);
+	c.v = ll_vec3_add3fv(ll_vec3_mul1f(b.v, a.s),
+			     ll_vec3_add3fv(ll_vec3_mul1f(a.v, b.s),
+					    ll_vec3_cross3fv(a.v, b.v)));
+	return c;
+}
+
+/** 
+ * @description Multiply quaternions @a and @b to produce a new
+ * scalar float, known as the Quaternion Dot Product.
+ *
+ * @return A scalar float.
+ */
+LINEARLIBDEF float
+ll_quaternion_dot(quaternion_t a, quaternion_t b)
+{
+	float dot;
+	dot = a.s * b.s;
+	dot += ll_vec3_dot3fv(a.v, b.v);
+	return dot;
+}
+
+/** 
+ * @description Compute the norm of the quaternion @a.
+ *
+ * @return A scalar float.
+ */
+LINEARLIBDEF float
+ll_quaternion_norm(quaternion_t a)
+{
+	return sqrtf(a.s*a.s + ll_vec3_dot3fv(a.v, a.v));
+}
+
+/** 
+ * @description Normalise the quaternion @a.
+ *
+ * @return A normalised version of the quaternion @a.
+ */
+LINEARLIBDEF quaternion_t
+ll_quaternion_normalise(quaternion_t a)
+{
+	int i;
+	float norm;
+	quaternion_t c;
+
+	norm = ll_quaternion_norm(a);
+	c.s = a.s / norm;
+	c.v.data[0] = a.v.data[0] / norm;
+	c.v.data[1] = a.v.data[1] / norm;
+	c.v.data[2] = a.v.data[2] / norm;
+	return c;
+}
+
+/** 
+ * @description Compute the conjugate of the quaternion @a.
+ *
+ * @return The conjugate of the quaternion @a.
+ */
+LINEARLIBDEF quaternion_t
+ll_quaternion_conjugate(quaternion_t a)
+{
+	quaternion_t c;
+	c.s = a.s;
+	c.v = ll_vec3_mul1f(a.v, -1.0);
+	return c;
+}
+
+/** 
+ * @description Compute the inverse of the quaternion @a.
+ *
+ * @return The inverse of the quaternion @a.
+ */
+LINEARLIBDEF quaternion_t
+ll_quaternion_inverse(quaternion_t a)
+{
+	quaternion_t c;
+	float sqrd_norm;
+	c = ll_quaternion_conjugate(a);
+	sqrd_norm = a.s*a.s + ll_vec3_dot3fv(a.v, a.v);
+	c.s = c.s / sqrd_norm;
+	c.v.data[0] = c.v.data[0] / sqrd_norm;
+	c.v.data[1] = c.v.data[1] / sqrd_norm;
+	c.v.data[2] = c.v.data[2] / sqrd_norm;
+	return c;
+}
+
+/** 
+ * @description Apply the quaternion to the vector components
+ * @x, @y and @z.
+ *
+ * @return A rotated vec3_t.
+ */
+LINEARLIBDEF vec3_t
+ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z)
+{
+	quaternion_t c, a_conj;
+	c = ll_quaternion_create3f(0.0, x, y, z);
+	a_conj = ll_quaternion_conjugate(a);
+	c = ll_quaternion_prod(ll_quaternion_prod(a, c), a_conj);
+	return c.v;
+}
+
+/** 
+ * @description Apply the quaternion to the vector @v.
+ *
+ * @return A rotated vec3_t.
+ */
+LINEARLIBDEF vec3_t
+ll_quaternion_rotate3fv(quaternion_t a, vec3_t v)
+{
+	quaternion_t c, a_conj;
+	c = ll_quaternion_create3fv(0.0, v);
+	a_conj = ll_quaternion_conjugate(a);
+	c = ll_quaternion_prod(ll_quaternion_prod(a, c), a_conj);
+	return c.v;
 }
 
 #ifdef LL_USE_MATRIX
