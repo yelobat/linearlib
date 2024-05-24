@@ -519,6 +519,8 @@ ll_mat4_frustum(mat4_t *mat, float left, float right,
 LINEARLIBDEF void
 ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
 	       vec3_t lookat);
+LINEARLIBDEF void
+ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat);
 
 LINEARLIBDEF quaternion_t
 ll_quaternion_create3f(float s, float x, float y, float z);
@@ -2095,7 +2097,7 @@ ll_ivec4_normalise4i(int x, int y, int z, int w)
  * corresponds to the matrix on the left. @right corresponds to the
  * matrix on the right.
  */
-void
+LINEARLIBDEF void
 ll_mat4_multiply(mat4_t *left, mat4_t *right)
 {
         mat4_t final;
@@ -2114,7 +2116,7 @@ ll_mat4_multiply(mat4_t *left, mat4_t *right)
 /**
  * @description copy the matrix contents of @from into @to
  */
-void
+LINEARLIBDEF void
 ll_mat4_copy(mat4_t *to,  mat4_t *from)
 {
         if (!to || !from) return;
@@ -2125,7 +2127,7 @@ ll_mat4_copy(mat4_t *to,  mat4_t *from)
 /**
  * @description stores the identity matrix into @m
  */
-void
+LINEARLIBDEF void
 ll_mat4_identity(mat4_t *mat)
 {
         if (!mat) return;
@@ -2140,7 +2142,7 @@ ll_mat4_identity(mat4_t *mat)
 /**
  * @description stores a translation matrix inside of @mat with @dx, @dy and @dz.
  */
-void
+LINEARLIBDEF void
 ll_mat4_translate3f(mat4_t *mat, float dx, float dy, float dz)
 {
         if (!mat) return;
@@ -2154,7 +2156,7 @@ ll_mat4_translate3f(mat4_t *mat, float dx, float dy, float dz)
  * @description same as above, but instead allows to supply a 3-dimensional
  * vector as the 2nd argument, containing (dx, dy, dz)
  */
-void
+LINEARLIBDEF void
 ll_mat4_translate3fv(mat4_t *mat, vec3_t vec)
 {
         ll_mat4_translate3f(mat, vec.x, vec.y, vec.z);
@@ -2164,7 +2166,7 @@ ll_mat4_translate3fv(mat4_t *mat, vec3_t vec)
  * @description multiplies @m by a scaling matrix with components (w, h, d)
  * storing the result back into @m
  */
-void
+LINEARLIBDEF void
 ll_mat4_scale3f(mat4_t *mat, float w, float h, float d)
 {
         if (!mat) return;
@@ -2178,7 +2180,7 @@ ll_mat4_scale3f(mat4_t *mat, float w, float h, float d)
  * @description same as above, but instead allows to supply a 3-dimensional
  * vector as the 2nd arugment, containing (w, h, d)
  */
-void
+LINEARLIBDEF void
 ll_mat4_scale3fv(mat4_t *mat, vec3_t vec)
 {
         ll_mat4_scale3f(mat, vec.x, vec.y, vec.z);
@@ -2188,7 +2190,7 @@ ll_mat4_scale3fv(mat4_t *mat, vec3_t vec)
  * @description found whilst reading over rougier/freetype-gl implementation.
  * that can be found here: https://github.com/rougier/freetype-gl
  */
-void
+LINEARLIBDEF void
 ll_mat4_rotate3f(mat4_t *mat, float x, float y, float z, float theta)
 {
         float c, s, norm;
@@ -2219,7 +2221,7 @@ ll_mat4_rotate3f(mat4_t *mat, float x, float y, float z, float theta)
  * @descriptionsame as above, but instead allows to supply a 3-dimensional
  * vector as the 2nd argument, containing (x, y, z)
  */
-void
+LINEARLIBDEF void
 ll_mat4_rotate3fv(mat4_t *mat, vec3_t vec, float theta)
 {
         ll_mat4_rotate3f(mat, vec.x, vec.y, vec.z, theta);
@@ -2230,7 +2232,7 @@ ll_mat4_rotate3fv(mat4_t *mat, vec3_t vec, float theta)
  * details of how this works can be found online or
  * found at https://github.com/wwotz/linearlib/README.md
  */
-void
+LINEARLIBDEF void
 ll_mat4_orthographic(mat4_t *mat, float top, float right,
                      float bottom, float left, float near, float far)
 {
@@ -2249,7 +2251,7 @@ ll_mat4_orthographic(mat4_t *mat, float top, float right,
  * details of how this works can be found online or
  * found at https://github.com/wwotz/linearlib/README.md
  */
-void
+LINEARLIBDEF void
 ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
                     float near, float far)
 {
@@ -2266,7 +2268,7 @@ ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
  * details of how this works can be found online or
  * found at https://github.com/wwotz/linearlib/README.md
  */
-void
+LINEARLIBDEF void
 ll_mat4_frustum(mat4_t *mat, float top, float right,
                 float bottom, float left, float near, float far)
 {
@@ -2308,6 +2310,32 @@ ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
 	mat->m31 = -ll_vec3_dot3fv(y, lookat);
 	mat->m32 = -ll_vec3_dot3fv(z, lookat);
 	mat->m33 = 1.0;
+}
+
+LINEARLIBDEF void
+ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat)
+{
+	float q00, q01, q11, q12, q03, q13, q02, q22, q23, q33;
+	q00 = q.s*q.s;
+	q01 = q.s*q.v.data[0];
+	q11 = q.v.data[0]*q.v.data[0];
+	q12 = q.v.data[0]*q.v.data[1];
+	q03 = q.s*q.v.data[2];
+	q13 = q.v.data[0]*q.v.data[2];
+	q02 = q.s*q.v.data[1];
+	q22 = q.v.data[1]*q.v.data[1];
+	q23 = q.v.data[1]*q.v.data[2];
+	q33 = q.v.data[2]*q.v.data[2];
+	ll_mat4_identity(mat);
+	mat->m00 = 2*(q00 + q11) - 1;
+	mat->m01 = 2*(q12 - q03);
+	mat->m02 = 2*(q13 + q02);
+	mat->m10 = 2*(q12 + q03);
+	mat->m11 = 2*(q00 + q22) - 1;
+	mat->m12 = 2*(q23 - q01);
+	mat->m20 = 2*(q13 - q02);
+	mat->m21 = 2*(q23 + q01);
+	mat->m22 = 2*(q00 + q33) - 1;
 }
 
 /** 
@@ -2537,7 +2565,7 @@ ll_quaternion_rotate3fv(quaternion_t a, vec3_t v)
 static mat4_t ll_matrices[LL_MATRIX_COUNT]; /* Model, View, Projection Matrices */
 static int ll_matrices_idx;                 /* The currently bound matrix from @ll_matrices */
 
-/*
+/**
  * @description Binds the current matrix to @type.
  */
 LINEARLIBDEF void
@@ -2547,7 +2575,7 @@ ll_matrix_mode(matrix_type_t type)
                 ll_matrices_idx = type;
 }
 
-/*
+/**
  * @description Performs matrix multiplication on the currently
  * bound matrix, with the @right matrix.
  */
@@ -2557,7 +2585,7 @@ ll_matrix_multiply(mat4_t *right)
         ll_mat4_multiply(ll_matrices+ll_matrices_idx, right);
 }
 
-/*
+/**
  * @description Places the identity matrix (I) into the
  * currently bound matrix.
  */
@@ -2567,7 +2595,7 @@ ll_matrix_identity(void)
         ll_mat4_identity(ll_matrices+ll_matrices_idx);
 }
 
-/*
+/**
  * @description Multiplies the translation matrix by the
  * currently bound matrix. The translation matrix is
  * defined as translating some 3D coordinate by the
@@ -2581,7 +2609,7 @@ ll_matrix_translate3f(float dx, float dy, float dz)
         ll_matrix_multiply(&m);
 }
 
-/*
+/**
  * @description Multiplies the translation matrix by the
  * currently bound matrix. The translation matrix is
  * defined as translating some 3D coordinate by the
@@ -2699,10 +2727,20 @@ ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat)
  * prevents modification of the internal matrix
  * that is bound.
  */
-mat4_t
+LINEARLIBDEF mat4_t
 ll_matrix_get_copy(void)
 {
         return ll_matrices[ll_matrices_idx];
+}
+
+/**
+ * @description Converts a quaternion to a matrix and loads
+ * it into the currently bound matrix.
+ */
+LINEARLIBDEF void
+ll_quaternion_to_matrix(quaternion_t a)
+{
+	
 }
 
 #endif /* LL_USE_MATRIX */
