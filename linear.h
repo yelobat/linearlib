@@ -563,6 +563,12 @@ LINEARLIBDEF vec3_t
 ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z);
 
 #ifdef LL_USE_MATRIX
+
+#define LL_MATRIX_STACK_CAPACITY (16)
+
+static size_t ll_matrix_stack_size;
+static mat4_t ll_matrix_stack[LL_MATRIX_STACK_CAPACITY];
+
 LINEARLIBDEF void
 ll_matrix_mode(matrix_type_t type);
 LINEARLIBDEF void
@@ -596,6 +602,15 @@ ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
 
 LINEARLIBDEF mat4_t
 ll_matrix_get_copy(void);
+
+LINEARLIBDEF int
+ll_matrix_stack_pop(mat4_t *mat);
+
+LINEARLIBDEF int
+ll_matrix_stack_push(mat4_t *mat);
+
+LINEARLIBDEF void
+ll_quaternion_to_matrix(quaternion_t a);
 
 #endif /* LL_USE_MATRIX */
 
@@ -2786,6 +2801,22 @@ LINEARLIBDEF mat4_t
 ll_matrix_get_copy(void)
 {
         return ll_matrices[ll_matrices_idx];
+}
+
+LINEARLIBDEF int
+ll_matrix_stack_pop(mat4_t *mat)
+{
+	if (ll_matrix_stack_size <= 0 || !mat) return -1;
+	*mat = ll_matrix_stack[--ll_matrix_stack_size];
+	return 0;
+}
+
+LINEARLIBDEF int
+ll_matrix_stack_push(mat4_t *mat)
+{
+	if (ll_matrix_stack_size >= LL_MATRIX_STACK_CAPACITY || !mat) return -1;
+	ll_matrix_stack[ll_matrix_stack_size++] = *mat;
+	return 0;
 }
 
 /**
