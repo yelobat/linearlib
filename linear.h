@@ -2826,7 +2826,7 @@ ll_matrix_stack_push(mat4_t *mat)
 LINEARLIBDEF void
 ll_quaternion_to_matrix(quaternion_t a)
 {
-	
+	ll_quaternion_to_mat4(a, ll_matrices+ll_matrices_idx);
 }
 
 #endif /* LL_USE_MATRIX */
