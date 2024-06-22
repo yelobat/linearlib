@@ -25,6 +25,7 @@ typedef enum matrix_type_t {
         LL_MATRIX_MODEL,       /* Model matrix, used to transform objects to object space */
         LL_MATRIX_VIEW,        /* View matrix, used to transform objects to camera space */
         LL_MATRIX_PROJECTION,  /* Projection matrix, used to transform objects to viewport space */
+	LL_MATRIX_CAMERA,      /* Camera matrix, used for implementing separate matrix for camera view */
         LL_MATRIX_COUNT
 } matrix_type_t;
 
@@ -562,6 +563,12 @@ LINEARLIBDEF vec3_t
 ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z);
 
 #ifdef LL_USE_MATRIX
+
+#define LL_MATRIX_STACK_CAPACITY (16)
+
+static size_t ll_matrix_stack_size;
+static mat4_t ll_matrix_stack[LL_MATRIX_STACK_CAPACITY];
+
 LINEARLIBDEF void
 ll_matrix_mode(matrix_type_t type);
 LINEARLIBDEF void
@@ -595,6 +602,15 @@ ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
 
 LINEARLIBDEF mat4_t
 ll_matrix_get_copy(void);
+
+LINEARLIBDEF int
+ll_matrix_stack_pop(mat4_t *mat);
+
+LINEARLIBDEF int
+ll_matrix_stack_push(mat4_t *mat);
+
+LINEARLIBDEF void
+ll_quaternion_to_matrix(quaternion_t a);
 
 #endif /* LL_USE_MATRIX */
 
@@ -2243,8 +2259,8 @@ LINEARLIBDEF void
 ll_mat4_translate3f2(mat4_t *mat, float dx, float dy, float dz)
 {
 	mat4_t m;
-	ll_mat4_translate3f(&m, dx, dy, dz);
-	ll_mat4_multiply(mat, &m);
+        ll_mat4_translate3f(&m, dx, dy, dz);
+        ll_mat4_multiply(mat, &m);
 }
 
 LINEARLIBDEF void
@@ -2257,8 +2273,8 @@ LINEARLIBDEF void
 ll_mat4_scale3f2(mat4_t *mat, float w, float h, float d)
 {
 	mat4_t m;
-	ll_mat4_scale3f(&m, w, h, d);
-	ll_mat4_multiply(mat, &m);
+        ll_mat4_scale3f(&m, w, h, d);
+        ll_mat4_multiply(mat, &m);
 }
 
 LINEARLIBDEF void
@@ -2271,8 +2287,8 @@ LINEARLIBDEF void
 ll_mat4_rotate3f2(mat4_t *mat, float x, float y, float z, float angle)
 {
 	mat4_t m;
-	ll_mat4_rotate3f(&m, x, y, z, angle);
-	ll_mat4_multiply(mat, &m);
+        ll_mat4_rotate3f(&m, x, y, z, angle);
+        ll_mat4_multiply(mat, &m);
 }
 
 LINEARLIBDEF void
@@ -2787,6 +2803,22 @@ ll_matrix_get_copy(void)
         return ll_matrices[ll_matrices_idx];
 }
 
+LINEARLIBDEF int
+ll_matrix_stack_pop(mat4_t *mat)
+{
+	if (ll_matrix_stack_size <= 0 || !mat) return -1;
+	*mat = ll_matrix_stack[--ll_matrix_stack_size];
+	return 0;
+}
+
+LINEARLIBDEF int
+ll_matrix_stack_push(mat4_t *mat)
+{
+	if (ll_matrix_stack_size >= LL_MATRIX_STACK_CAPACITY || !mat) return -1;
+	ll_matrix_stack[ll_matrix_stack_size++] = *mat;
+	return 0;
+}
+
 /**
  * @description Converts a quaternion to a matrix and loads
  * it into the currently bound matrix.
@@ -2794,7 +2826,7 @@ ll_matrix_get_copy(void)
 LINEARLIBDEF void
 ll_quaternion_to_matrix(quaternion_t a)
 {
-	
+	ll_quaternion_to_mat4(a, ll_matrices+ll_matrices_idx);
 }
 
 #endif /* LL_USE_MATRIX */
