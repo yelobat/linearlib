@@ -9,6 +9,8 @@
 
 //requires -lm flag to link the math library
 #include <math.h>
+#include <stddef.h>
+#include <string.h>
 
 #ifndef LINEARLIBDEF
 #ifdef LINEARLIBSTATIC
@@ -202,365 +204,187 @@ typedef struct quaternion_t {
 	vec3_t v;
 } quaternion_t;
 
-LINEARLIBDEF vec2_t
-ll_vec2_create2f(float x, float y);
-LINEARLIBDEF vec2_t
-ll_vec2_create2fv(vec2_t vec);
-LINEARLIBDEF float
-ll_vec2_length2fv(vec2_t vec);
-LINEARLIBDEF float
-ll_vec2_length2f(float x, float y);
-LINEARLIBDEF float
-ll_vec2_length_squared2fv(vec2_t vec);
-LINEARLIBDEF float
-ll_vec2_length_squared2f(float x, float y);
-LINEARLIBDEF vec2_t
-ll_vec2_add2fv(vec2_t left, vec2_t right);
-LINEARLIBDEF vec2_t
-ll_vec2_add2f(vec2_t left, float x, float y);
-LINEARLIBDEF vec2_t
-ll_vec2_add1f(vec2_t left, float value);
-LINEARLIBDEF vec2_t
-ll_vec2_sub2fv(vec2_t left, vec2_t right);
-LINEARLIBDEF vec2_t
-ll_vec2_sub2f(vec2_t left, float x, float y);
-LINEARLIBDEF vec2_t
-ll_vec2_sub1f(vec2_t left, float value);
-LINEARLIBDEF vec2_t
-ll_vec2_mul2fv(vec2_t left, vec2_t right);
-LINEARLIBDEF vec2_t
-ll_vec2_mul2f(vec2_t left, float x, float y);
-LINEARLIBDEF vec2_t
-ll_vec2_mul1f(vec2_t left, float value);
-LINEARLIBDEF vec2_t
-ll_vec2_div2fv(vec2_t left, vec2_t right);
-LINEARLIBDEF vec2_t
-ll_vec2_div2f(vec2_t left, float x, float y);
-LINEARLIBDEF vec2_t
-ll_vec2_div1f(vec2_t left, float value);
-LINEARLIBDEF float
-ll_vec2_dot2fv(vec2_t left, vec2_t right);
-LINEARLIBDEF float
-ll_vec2_dot2f(vec2_t left, float x, float y);
-LINEARLIBDEF float
-ll_vec2_cross2fv(vec2_t left, vec2_t right);
-LINEARLIBDEF float
-ll_vec2_cross2f(vec2_t left, float x, float y);
-LINEARLIBDEF vec2_t
-ll_vec2_normalise2fv(vec2_t vec);
-LINEARLIBDEF vec2_t
-ll_vec2_normalise2f(float x, float y);
-LINEARLIBDEF vec2_t
-ll_vec2_apply2fv(vec2_t vec, float (*f)(float));
-LINEARLIBDEF vec2_t
-ll_vec2_apply2f(float x, float y, float (*f)(float));
-LINEARLIBDEF vec2_t
-ll_vec2_origin(void);
+LINEARLIBDEF vec2_t ll_vec2_create2f(float x, float y);
+LINEARLIBDEF vec2_t ll_vec2_create2fv(vec2_t vec);
+LINEARLIBDEF float  ll_vec2_length2fv(vec2_t vec);
+LINEARLIBDEF float  ll_vec2_length2f(float x, float y);
+LINEARLIBDEF float  ll_vec2_length_squared2fv(vec2_t vec);
+LINEARLIBDEF float  ll_vec2_length_squared2f(float x, float y);
+LINEARLIBDEF vec2_t ll_vec2_add2fv(vec2_t left, vec2_t right);
+LINEARLIBDEF vec2_t ll_vec2_add2f(vec2_t left, float x, float y);
+LINEARLIBDEF vec2_t ll_vec2_add1f(vec2_t left, float value);
+LINEARLIBDEF vec2_t ll_vec2_sub2fv(vec2_t left, vec2_t right);
+LINEARLIBDEF vec2_t ll_vec2_sub2f(vec2_t left, float x, float y);
+LINEARLIBDEF vec2_t ll_vec2_sub1f(vec2_t left, float value);
+LINEARLIBDEF vec2_t ll_vec2_mul2fv(vec2_t left, vec2_t right);
+LINEARLIBDEF vec2_t ll_vec2_mul2f(vec2_t left, float x, float y);
+LINEARLIBDEF vec2_t ll_vec2_mul1f(vec2_t left, float value);
+LINEARLIBDEF vec2_t ll_vec2_div2fv(vec2_t left, vec2_t right);
+LINEARLIBDEF vec2_t ll_vec2_div2f(vec2_t left, float x, float y);
+LINEARLIBDEF vec2_t ll_vec2_div1f(vec2_t left, float value);
+LINEARLIBDEF float  ll_vec2_dot2fv(vec2_t left, vec2_t right);
+LINEARLIBDEF float  ll_vec2_dot2f(vec2_t left, float x, float y);
+LINEARLIBDEF float  ll_vec2_cross2fv(vec2_t left, vec2_t right);
+LINEARLIBDEF float  ll_vec2_cross2f(vec2_t left, float x, float y);
+LINEARLIBDEF vec2_t ll_vec2_normalise2fv(vec2_t vec);
+LINEARLIBDEF vec2_t ll_vec2_normalise2f(float x, float y);
+LINEARLIBDEF vec2_t ll_vec2_apply2fv(vec2_t vec, float (*f)(float));
+LINEARLIBDEF vec2_t ll_vec2_apply2f(float x, float y, float (*f)(float));
+LINEARLIBDEF vec2_t ll_vec2_origin(void);
 
-LINEARLIBDEF vec3_t
-ll_vec3_create3f(float x, float y, float z);
-LINEARLIBDEF vec3_t
-ll_vec3_create3fv(vec3_t ivec);
-LINEARLIBDEF float
-ll_vec3_length3fv(vec3_t ivec);
-LINEARLIBDEF float
-ll_vec3_length3f(float x, float y, float z);
-LINEARLIBDEF float
-ll_vec3_length_squared3fv(vec3_t ivec);
-LINEARLIBDEF float
-ll_vec3_length_squared3f(float x, float y, float z);
-LINEARLIBDEF vec3_t
-ll_vec3_add3fv(vec3_t left, vec3_t right);
-LINEARLIBDEF vec3_t
-ll_vec3_add3f(vec3_t left, float x, float y, float z);
-LINEARLIBDEF vec3_t
-ll_vec3_add1f(vec3_t left, float value);
-LINEARLIBDEF vec3_t
-ll_vec3_sub3fv(vec3_t left, vec3_t right);
-LINEARLIBDEF vec3_t
-ll_vec3_sub3f(vec3_t left, float x, float y, float z);
-LINEARLIBDEF vec3_t
-ll_vec3_sub1f(vec3_t left, float value);
-LINEARLIBDEF vec3_t
-ll_vec3_mul3fv(vec3_t left, vec3_t right);
-LINEARLIBDEF vec3_t
-ll_vec3_mul3f(vec3_t left, float x, float y, float z);
-LINEARLIBDEF vec3_t
-ll_vec3_mul1f(vec3_t left, float value);
-LINEARLIBDEF vec3_t
-ll_vec3_div3fv(vec3_t left, vec3_t right);
-LINEARLIBDEF vec3_t
-ll_vec3_div3f(vec3_t left, float x, float y, float z);
-LINEARLIBDEF vec3_t
-ll_vec3_div1f(vec3_t left, float value);
-LINEARLIBDEF float
-ll_vec3_dot3fv(vec3_t left, vec3_t right);
-LINEARLIBDEF float
-ll_vec3_dot3f(vec3_t left, float x, float y, float z);
-LINEARLIBDEF vec3_t
-ll_vec3_cross3fv(vec3_t left, vec3_t right);
-LINEARLIBDEF vec3_t
-ll_vec3_cross3f(vec3_t left, float x, float y, float z);
-LINEARLIBDEF vec3_t
-ll_vec3_normalise3fv(vec3_t ivec);
-LINEARLIBDEF vec3_t
-ll_vec3_normalise3f(float x, float y, float z);
+LINEARLIBDEF vec3_t ll_vec3_create3f(float x, float y, float z);
+LINEARLIBDEF vec3_t ll_vec3_create3fv(vec3_t ivec);
+LINEARLIBDEF float  ll_vec3_length3fv(vec3_t ivec);
+LINEARLIBDEF float  ll_vec3_length3f(float x, float y, float z);
+LINEARLIBDEF float  ll_vec3_length_squared3fv(vec3_t ivec);
+LINEARLIBDEF float  ll_vec3_length_squared3f(float x, float y, float z);
+LINEARLIBDEF vec3_t ll_vec3_add3fv(vec3_t left, vec3_t right);
+LINEARLIBDEF vec3_t ll_vec3_add3f(vec3_t left, float x, float y, float z);
+LINEARLIBDEF vec3_t ll_vec3_add1f(vec3_t left, float value);
+LINEARLIBDEF vec3_t ll_vec3_sub3fv(vec3_t left, vec3_t right);
+LINEARLIBDEF vec3_t ll_vec3_sub3f(vec3_t left, float x, float y, float z);
+LINEARLIBDEF vec3_t ll_vec3_sub1f(vec3_t left, float value);
+LINEARLIBDEF vec3_t ll_vec3_mul3fv(vec3_t left, vec3_t right);
+LINEARLIBDEF vec3_t ll_vec3_mul3f(vec3_t left, float x, float y, float z);
+LINEARLIBDEF vec3_t ll_vec3_mul1f(vec3_t left, float value);
+LINEARLIBDEF vec3_t ll_vec3_div3fv(vec3_t left, vec3_t right);
+LINEARLIBDEF vec3_t ll_vec3_div3f(vec3_t left, float x, float y, float z);
+LINEARLIBDEF vec3_t ll_vec3_div1f(vec3_t left, float value);
+LINEARLIBDEF float  ll_vec3_dot3fv(vec3_t left, vec3_t right);
+LINEARLIBDEF float  ll_vec3_dot3f(vec3_t left, float x, float y, float z);
+LINEARLIBDEF vec3_t ll_vec3_cross3fv(vec3_t left, vec3_t right);
+LINEARLIBDEF vec3_t ll_vec3_cross3f(vec3_t left, float x, float y, float z);
+LINEARLIBDEF vec3_t ll_vec3_normalise3fv(vec3_t ivec);
+LINEARLIBDEF vec3_t ll_vec3_normalise3f(float x, float y, float z);
 
-LINEARLIBDEF vec4_t
-ll_vec4_create4f(float x, float y, float z, float w);
-LINEARLIBDEF vec4_t
-ll_vec4_create4fv(vec4_t ivec);
-LINEARLIBDEF float
-ll_vec4_length4fv(vec4_t ivec);
-LINEARLIBDEF float
-ll_vec4_length4f(float x, float y, float z, float w);
-LINEARLIBDEF float
-ll_vec4_length_squared4fv(vec4_t ivec);
-LINEARLIBDEF float
-ll_vec4_length_squared4f(float x, float y, float z, float w);
-LINEARLIBDEF vec4_t
-ll_vec4_add4fv(vec4_t left, vec4_t right);
-LINEARLIBDEF vec4_t
-ll_vec4_add4f(vec4_t left, float x, float y, float z, float w);
-LINEARLIBDEF vec4_t
-ll_vec4_add1f(vec4_t left, float value);
-LINEARLIBDEF vec4_t
-ll_vec4_sub4fv(vec4_t left, vec4_t right);
-LINEARLIBDEF vec4_t
-ll_vec4_sub4f(vec4_t left, float x, float y, float z, float w);
-LINEARLIBDEF vec4_t
-ll_vec4_sub1f(vec4_t left, float value);
-LINEARLIBDEF vec4_t
-ll_vec4_mul4fv(vec4_t left, vec4_t right);
-LINEARLIBDEF vec4_t
-ll_vec4_mul4f(vec4_t left, float x, float y, float z, float w);
-LINEARLIBDEF vec4_t
-ll_vec4_mul1f(vec4_t left, float value);
-LINEARLIBDEF vec4_t
-ll_vec4_div4fv(vec4_t left, vec4_t right);
-LINEARLIBDEF vec4_t
-ll_vec4_div4f(vec4_t left, float x, float y, float z, float w);
-LINEARLIBDEF vec4_t
-ll_vec4_div1f(vec4_t left, float value);
-LINEARLIBDEF float
-ll_vec4_dot4fv(vec4_t left, vec4_t right);
-LINEARLIBDEF float
-ll_vec4_dot4f(vec4_t left, float x, float y, float z, float w);
-LINEARLIBDEF vec4_t
-ll_vec4_normalise4fv(vec4_t ivec);
-LINEARLIBDEF vec4_t
-ll_vec4_normalise4f(float x, float y, float z, float w);
+LINEARLIBDEF vec4_t ll_vec4_create4f(float x, float y, float z, float w);
+LINEARLIBDEF vec4_t ll_vec4_create4fv(vec4_t ivec);
+LINEARLIBDEF float  ll_vec4_length4fv(vec4_t ivec);
+LINEARLIBDEF float  ll_vec4_length4f(float x, float y, float z, float w);
+LINEARLIBDEF float  ll_vec4_length_squared4fv(vec4_t ivec);
+LINEARLIBDEF float  ll_vec4_length_squared4f(float x, float y, float z, float w);
+LINEARLIBDEF vec4_t ll_vec4_add4fv(vec4_t left, vec4_t right);
+LINEARLIBDEF vec4_t ll_vec4_add4f(vec4_t left, float x, float y, float z, float w);
+LINEARLIBDEF vec4_t ll_vec4_add1f(vec4_t left, float value);
+LINEARLIBDEF vec4_t ll_vec4_sub4fv(vec4_t left, vec4_t right);
+LINEARLIBDEF vec4_t ll_vec4_sub4f(vec4_t left, float x, float y, float z, float w);
+LINEARLIBDEF vec4_t ll_vec4_sub1f(vec4_t left, float value);
+LINEARLIBDEF vec4_t ll_vec4_mul4fv(vec4_t left, vec4_t right);
+LINEARLIBDEF vec4_t ll_vec4_mul4f(vec4_t left, float x, float y, float z, float w);
+LINEARLIBDEF vec4_t ll_vec4_mul1f(vec4_t left, float value);
+LINEARLIBDEF vec4_t ll_vec4_div4fv(vec4_t left, vec4_t right);
+LINEARLIBDEF vec4_t ll_vec4_div4f(vec4_t left, float x, float y, float z, float w);
+LINEARLIBDEF vec4_t ll_vec4_div1f(vec4_t left, float value);
+LINEARLIBDEF float  ll_vec4_dot4fv(vec4_t left, vec4_t right);
+LINEARLIBDEF float  ll_vec4_dot4f(vec4_t left, float x, float y, float z, float w);
+LINEARLIBDEF vec4_t ll_vec4_normalise4fv(vec4_t ivec);
+LINEARLIBDEF vec4_t ll_vec4_normalise4f(float x, float y, float z, float w);
 
-LINEARLIBDEF ivec2_t
-ll_ivec2_create2i(int x, int y);
-LINEARLIBDEF ivec2_t
-ll_ivec2_create2iv(ivec2_t ivec);
-LINEARLIBDEF float
-ll_ivec2_length2iv(ivec2_t ivec);
-LINEARLIBDEF float
-ll_ivec2_length2i(int x, int y);
-LINEARLIBDEF ivec2_t
-ll_ivec2_add2iv(ivec2_t left, ivec2_t right);
-LINEARLIBDEF ivec2_t
-ll_ivec2_add2i(ivec2_t left, int x, int y);
-LINEARLIBDEF ivec2_t
-ll_ivec2_add1i(ivec2_t left, int value);
-LINEARLIBDEF ivec2_t
-ll_ivec2_sub2iv(ivec2_t left, ivec2_t right);
-LINEARLIBDEF ivec2_t
-ll_ivec2_sub2i(ivec2_t left, int x, int y);
-LINEARLIBDEF ivec2_t
-ll_ivec2_sub1i(ivec2_t left, int value);
-LINEARLIBDEF ivec2_t
-ll_ivec2_mul2iv(ivec2_t left, ivec2_t right);
-LINEARLIBDEF ivec2_t
-ll_ivec2_mul2i(ivec2_t left, int x, int y);
-LINEARLIBDEF ivec2_t
-ll_ivec2_mul1i(ivec2_t left, int value);
-LINEARLIBDEF ivec2_t
-ll_ivec2_div2iv(ivec2_t left, ivec2_t right);
-LINEARLIBDEF ivec2_t
-ll_ivec2_div2i(ivec2_t left, int x, int y);
-LINEARLIBDEF ivec2_t
-ll_ivec2_div1i(ivec2_t left, int value);
-LINEARLIBDEF float
-ll_ivec2_dot2iv(ivec2_t left, ivec2_t right);
-LINEARLIBDEF float
-ll_ivec2_dot2i(ivec2_t left, int x, int y);
-LINEARLIBDEF float
-ll_ivec2_cross2iv(ivec2_t left, ivec2_t right);
-LINEARLIBDEF float
-ll_ivec2_cross2i(ivec2_t left, int x, int y);
-LINEARLIBDEF ivec2_t
-ll_ivec2_normalise2iv(ivec2_t ivec);
-LINEARLIBDEF ivec2_t
-ll_ivec2_normalise2i(int x, int y);
+LINEARLIBDEF ivec2_t ll_ivec2_create2i(int x, int y);
+LINEARLIBDEF ivec2_t ll_ivec2_create2iv(ivec2_t ivec);
+LINEARLIBDEF float   ll_ivec2_length2iv(ivec2_t ivec);
+LINEARLIBDEF float   ll_ivec2_length2i(int x, int y);
+LINEARLIBDEF ivec2_t ll_ivec2_add2iv(ivec2_t left, ivec2_t right);
+LINEARLIBDEF ivec2_t ll_ivec2_add2i(ivec2_t left, int x, int y);
+LINEARLIBDEF ivec2_t ll_ivec2_add1i(ivec2_t left, int value);
+LINEARLIBDEF ivec2_t ll_ivec2_sub2iv(ivec2_t left, ivec2_t right);
+LINEARLIBDEF ivec2_t ll_ivec2_sub2i(ivec2_t left, int x, int y);
+LINEARLIBDEF ivec2_t ll_ivec2_sub1i(ivec2_t left, int value);
+LINEARLIBDEF ivec2_t ll_ivec2_mul2iv(ivec2_t left, ivec2_t right);
+LINEARLIBDEF ivec2_t ll_ivec2_mul2i(ivec2_t left, int x, int y);
+LINEARLIBDEF ivec2_t ll_ivec2_mul1i(ivec2_t left, int value);
+LINEARLIBDEF ivec2_t ll_ivec2_div2iv(ivec2_t left, ivec2_t right);
+LINEARLIBDEF ivec2_t ll_ivec2_div2i(ivec2_t left, int x, int y);
+LINEARLIBDEF ivec2_t ll_ivec2_div1i(ivec2_t left, int value);
+LINEARLIBDEF float   ll_ivec2_dot2iv(ivec2_t left, ivec2_t right);
+LINEARLIBDEF float   ll_ivec2_dot2i(ivec2_t left, int x, int y);
+LINEARLIBDEF float   ll_ivec2_cross2iv(ivec2_t left, ivec2_t right);
+LINEARLIBDEF float   ll_ivec2_cross2i(ivec2_t left, int x, int y);
+LINEARLIBDEF ivec2_t ll_ivec2_normalise2iv(ivec2_t ivec);
+LINEARLIBDEF ivec2_t ll_ivec2_normalise2i(int x, int y);
 
-LINEARLIBDEF ivec3_t
-ll_ivec3_create3i(int x, int y, int z);
-LINEARLIBDEF ivec3_t
-ll_ivec3_create3iv(ivec3_t ivec);
-LINEARLIBDEF float
-ll_ivec3_length3iv(ivec3_t ivec);
-LINEARLIBDEF float
-ll_ivec3_length3i(int x, int y, int z);
-LINEARLIBDEF float
-ll_ivec3_length_squared3iv(ivec3_t ivec);
-LINEARLIBDEF float
-ll_ivec3_length_squared3i(int x, int y, int z);
-LINEARLIBDEF ivec3_t
-ll_ivec3_add3iv(ivec3_t left, ivec3_t right);
-LINEARLIBDEF ivec3_t
-ll_ivec3_add3i(ivec3_t left, int x, int y, int z);
-LINEARLIBDEF ivec3_t
-ll_ivec3_add1i(ivec3_t left, int value);
-LINEARLIBDEF ivec3_t
-ll_ivec3_sub3iv(ivec3_t left, ivec3_t right);
-LINEARLIBDEF ivec3_t
-ll_ivec3_sub3i(ivec3_t left, int x, int y, int z);
-LINEARLIBDEF ivec3_t
-ll_ivec3_sub1i(ivec3_t left, int value);
-LINEARLIBDEF ivec3_t
-ll_ivec3_mul3iv(ivec3_t left, ivec3_t right);
-LINEARLIBDEF ivec3_t
-ll_ivec3_mul3i(ivec3_t left, int x, int y, int z);
-LINEARLIBDEF ivec3_t
-ll_ivec3_mul1i(ivec3_t left, int value);
-LINEARLIBDEF ivec3_t
-ll_ivec3_div3iv(ivec3_t left, ivec3_t right);
-LINEARLIBDEF ivec3_t
-ll_ivec3_div3i(ivec3_t left, int x, int y, int z);
-LINEARLIBDEF ivec3_t
-ll_ivec3_div1i(ivec3_t left, int value);
-LINEARLIBDEF float
-ll_ivec3_dot3iv(ivec3_t left, ivec3_t right);
-LINEARLIBDEF float
-ll_ivec3_dot3i(ivec3_t left, int x, int y, int z);
-LINEARLIBDEF ivec3_t
-ll_ivec3_cross3iv(ivec3_t left, ivec3_t right);
-LINEARLIBDEF ivec3_t
-ll_ivec3_cross3i(ivec3_t left, int x, int y, int z);
-LINEARLIBDEF ivec3_t
-ll_ivec3_normalise3iv(ivec3_t ivec);
-LINEARLIBDEF ivec3_t
-ll_ivec3_normalise3i(int x, int y, int z);
+LINEARLIBDEF ivec3_t ll_ivec3_create3i(int x, int y, int z);
+LINEARLIBDEF ivec3_t ll_ivec3_create3iv(ivec3_t ivec);
+LINEARLIBDEF float   ll_ivec3_length3iv(ivec3_t ivec);
+LINEARLIBDEF float   ll_ivec3_length3i(int x, int y, int z);
+LINEARLIBDEF float   ll_ivec3_length_squared3iv(ivec3_t ivec);
+LINEARLIBDEF float   ll_ivec3_length_squared3i(int x, int y, int z);
+LINEARLIBDEF ivec3_t ll_ivec3_add3iv(ivec3_t left, ivec3_t right);
+LINEARLIBDEF ivec3_t ll_ivec3_add3i(ivec3_t left, int x, int y, int z);
+LINEARLIBDEF ivec3_t ll_ivec3_add1i(ivec3_t left, int value);
+LINEARLIBDEF ivec3_t ll_ivec3_sub3iv(ivec3_t left, ivec3_t right);
+LINEARLIBDEF ivec3_t ll_ivec3_sub3i(ivec3_t left, int x, int y, int z);
+LINEARLIBDEF ivec3_t ll_ivec3_sub1i(ivec3_t left, int value);
+LINEARLIBDEF ivec3_t ll_ivec3_mul3iv(ivec3_t left, ivec3_t right);
+LINEARLIBDEF ivec3_t ll_ivec3_mul3i(ivec3_t left, int x, int y, int z);
+LINEARLIBDEF ivec3_t ll_ivec3_mul1i(ivec3_t left, int value);
+LINEARLIBDEF ivec3_t ll_ivec3_div3iv(ivec3_t left, ivec3_t right);
+LINEARLIBDEF ivec3_t ll_ivec3_div3i(ivec3_t left, int x, int y, int z);
+LINEARLIBDEF ivec3_t ll_ivec3_div1i(ivec3_t left, int value);
+LINEARLIBDEF float   ll_ivec3_dot3iv(ivec3_t left, ivec3_t right);
+LINEARLIBDEF float   ll_ivec3_dot3i(ivec3_t left, int x, int y, int z);
+LINEARLIBDEF ivec3_t ll_ivec3_cross3iv(ivec3_t left, ivec3_t right);
+LINEARLIBDEF ivec3_t ll_ivec3_cross3i(ivec3_t left, int x, int y, int z);
+LINEARLIBDEF ivec3_t ll_ivec3_normalise3iv(ivec3_t ivec);
+LINEARLIBDEF ivec3_t ll_ivec3_normalise3i(int x, int y, int z);
 
-LINEARLIBDEF ivec4_t
-ll_ivec4_create4i(int x, int y, int z, int w);
-LINEARLIBDEF ivec4_t
-ll_ivec4_create4iv(ivec4_t ivec);
-LINEARLIBDEF float
-ll_ivec4_length4iv(ivec4_t ivec);
-LINEARLIBDEF float
-ll_ivec4_length4i(int x, int y, int z, int w);
-LINEARLIBDEF float
-ll_ivec4_length_squared4iv(ivec4_t ivec);
-LINEARLIBDEF float
-ll_ivec4_length_squared4i(int x, int y, int z, int w);
-LINEARLIBDEF ivec4_t
-ll_ivec4_add4iv(ivec4_t left, ivec4_t right);
-LINEARLIBDEF ivec4_t
-ll_ivec4_add4i(ivec4_t left, int x, int y, int z, int w);
-LINEARLIBDEF ivec4_t
-ll_ivec4_add1i(ivec4_t left, int value);
-LINEARLIBDEF ivec4_t
-ll_ivec4_sub4iv(ivec4_t left, ivec4_t right);
-LINEARLIBDEF ivec4_t
-ll_ivec4_sub4i(ivec4_t left, int x, int y, int z, int w);
-LINEARLIBDEF ivec4_t
-ll_ivec4_sub1i(ivec4_t left, int value);
-LINEARLIBDEF ivec4_t
-ll_ivec4_mul4iv(ivec4_t left, ivec4_t right);
-LINEARLIBDEF ivec4_t
-ll_ivec4_mul4i(ivec4_t left, int x, int y, int z, int w);
-LINEARLIBDEF ivec4_t
-ll_ivec4_mul1i(ivec4_t left, int value);
-LINEARLIBDEF ivec4_t
-ll_ivec4_div4iv(ivec4_t left, ivec4_t right);
-LINEARLIBDEF ivec4_t
-ll_ivec4_div4i(ivec4_t left, int x, int y, int z, int w);
-LINEARLIBDEF ivec4_t
-ll_ivec4_div1i(ivec4_t left, int value);
-LINEARLIBDEF float
-ll_ivec4_dot4iv(ivec4_t left, ivec4_t right);
-LINEARLIBDEF float
-ll_ivec4_dot4i(ivec4_t left, int x, int y, int z, int w);
-LINEARLIBDEF ivec4_t
-ll_ivec4_normalise4iv(ivec4_t ivec);
-LINEARLIBDEF ivec4_t
-ll_ivec4_normalise4i(int x, int y, int z, int w);
+LINEARLIBDEF ivec4_t ll_ivec4_create4i(int x, int y, int z, int w);
+LINEARLIBDEF ivec4_t ll_ivec4_create4iv(ivec4_t ivec);
+LINEARLIBDEF float   ll_ivec4_length4iv(ivec4_t ivec);
+LINEARLIBDEF float   ll_ivec4_length4i(int x, int y, int z, int w);
+LINEARLIBDEF float   ll_ivec4_length_squared4iv(ivec4_t ivec);
+LINEARLIBDEF float   ll_ivec4_length_squared4i(int x, int y, int z, int w);
+LINEARLIBDEF ivec4_t ll_ivec4_add4iv(ivec4_t left, ivec4_t right);
+LINEARLIBDEF ivec4_t ll_ivec4_add4i(ivec4_t left, int x, int y, int z, int w);
+LINEARLIBDEF ivec4_t ll_ivec4_add1i(ivec4_t left, int value);
+LINEARLIBDEF ivec4_t ll_ivec4_sub4iv(ivec4_t left, ivec4_t right);
+LINEARLIBDEF ivec4_t ll_ivec4_sub4i(ivec4_t left, int x, int y, int z, int w);
+LINEARLIBDEF ivec4_t ll_ivec4_sub1i(ivec4_t left, int value);
+LINEARLIBDEF ivec4_t ll_ivec4_mul4iv(ivec4_t left, ivec4_t right);
+LINEARLIBDEF ivec4_t ll_ivec4_mul4i(ivec4_t left, int x, int y, int z, int w);
+LINEARLIBDEF ivec4_t ll_ivec4_mul1i(ivec4_t left, int value);
+LINEARLIBDEF ivec4_t ll_ivec4_div4iv(ivec4_t left, ivec4_t right);
+LINEARLIBDEF ivec4_t ll_ivec4_div4i(ivec4_t left, int x, int y, int z, int w);
+LINEARLIBDEF ivec4_t ll_ivec4_div1i(ivec4_t left, int value);
+LINEARLIBDEF float   ll_ivec4_dot4iv(ivec4_t left, ivec4_t right);
+LINEARLIBDEF float   ll_ivec4_dot4i(ivec4_t left, int x, int y, int z, int w);
+LINEARLIBDEF ivec4_t ll_ivec4_normalise4iv(ivec4_t ivec);
+LINEARLIBDEF ivec4_t ll_ivec4_normalise4i(int x, int y, int z, int w);
 
-LINEARLIBDEF void
-ll_mat4_multiply(mat4_t *left, mat4_t *right);
-LINEARLIBDEF void
-ll_mat4_copy(mat4_t *to, mat4_t *from);
-LINEARLIBDEF void
-ll_mat4_identity(mat4_t *mat);
-LINEARLIBDEF void
-ll_mat4_translate3f(mat4_t *mat, float dx, float dy, float dz);
-LINEARLIBDEF void
-ll_mat4_translate3fv(mat4_t *mat, vec3_t vec);
-LINEARLIBDEF void
-ll_mat4_scale3f(mat4_t *mat, float w, float h, float d);
-LINEARLIBDEF void
-ll_mat4_scale3fv(mat4_t *mat, vec3_t vec);
-LINEARLIBDEF void
-ll_mat4_rotate3f(mat4_t *mat, float x, float y, float z, float angle);
-LINEARLIBDEF void
-ll_mat4_rotate3fv(mat4_t *mat, vec3_t vec, float angle);
-LINEARLIBDEF void
-ll_mat4_translate3f2(mat4_t *mat, float dx, float dy, float dz);
-LINEARLIBDEF void
-ll_mat4_translate3fv2(mat4_t *mat, vec3_t vec);
-LINEARLIBDEF void
-ll_mat4_scale3f2(mat4_t *mat, float w, float h, float d);
-LINEARLIBDEF void
-ll_mat4_scale3fv2(mat4_t *mat, vec3_t vec);
-LINEARLIBDEF void
-ll_mat4_rotate3f2(mat4_t *mat, float x, float y, float z, float angle);
-LINEARLIBDEF void
-ll_mat4_rotate3fv2(mat4_t *mat, vec3_t vec, float angle);
-LINEARLIBDEF void
-ll_mat4_orthographic(mat4_t *mat, float top, float right,
-                     float bottom, float left, float near, float far);
-LINEARLIBDEF void
-ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
-                    float near, float far);
-LINEARLIBDEF void
-ll_mat4_frustum(mat4_t *mat, float left, float right,
-                float bottom, float top, float near, float far);
-LINEARLIBDEF void
-ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
-	       vec3_t lookat);
-LINEARLIBDEF void
-ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat);
+LINEARLIBDEF void ll_mat4_multiply(mat4_t *left, mat4_t *right);
+LINEARLIBDEF void ll_mat4_copy(mat4_t *to, mat4_t *from);
+LINEARLIBDEF void ll_mat4_identity(mat4_t *mat);
+LINEARLIBDEF void ll_mat4_translate3f(mat4_t *mat, float dx, float dy, float dz);
+LINEARLIBDEF void ll_mat4_translate3fv(mat4_t *mat, vec3_t vec);
+LINEARLIBDEF void ll_mat4_scale3f(mat4_t *mat, float w, float h, float d);
+LINEARLIBDEF void ll_mat4_scale3fv(mat4_t *mat, vec3_t vec);
+LINEARLIBDEF void ll_mat4_rotate3f(mat4_t *mat, float x, float y, float z, float angle);
+LINEARLIBDEF void ll_mat4_rotate3fv(mat4_t *mat, vec3_t vec, float angle);
+LINEARLIBDEF void ll_mat4_translate3f2(mat4_t *mat, float dx, float dy, float dz);
+LINEARLIBDEF void ll_mat4_translate3fv2(mat4_t *mat, vec3_t vec);
+LINEARLIBDEF void ll_mat4_scale3f2(mat4_t *mat, float w, float h, float d);
+LINEARLIBDEF void ll_mat4_scale3fv2(mat4_t *mat, vec3_t vec);
+LINEARLIBDEF void ll_mat4_rotate3f2(mat4_t *mat, float x, float y, float z, float angle);
+LINEARLIBDEF void ll_mat4_rotate3fv2(mat4_t *mat, vec3_t vec, float angle);
+LINEARLIBDEF void ll_mat4_orthographic(mat4_t *mat, float top, float right, float bottom, float left, float near, float far);
+LINEARLIBDEF void ll_mat4_perspective(mat4_t *mat, float fovy, float aspect, float near, float far);
+LINEARLIBDEF void ll_mat4_frustum(mat4_t *mat, float left, float right, float bottom, float top, float near, float far);
+LINEARLIBDEF void ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
+LINEARLIBDEF void ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat);
 
-LINEARLIBDEF quaternion_t
-ll_quaternion_create3f(float s, float x, float y, float z);
-LINEARLIBDEF quaternion_t
-ll_quaternion_create3fv(float s, vec3_t v);
-LINEARLIBDEF quaternion_t
-ll_quaternion_angle_axis3f(float angle, float x, float y, float z);
-LINEARLIBDEF quaternion_t
-ll_quaternion_angle_axis3fv(float radians, vec3_t v);
-LINEARLIBDEF quaternion_t 
-ll_quaternion_add(quaternion_t a, quaternion_t b);
-LINEARLIBDEF quaternion_t
-ll_quaternion_sub(quaternion_t a, quaternion_t b);
-LINEARLIBDEF quaternion_t
-ll_quaternion_prod(quaternion_t a, quaternion_t b);
-LINEARLIBDEF float
-ll_quaternion_norm(quaternion_t a);
-LINEARLIBDEF quaternion_t
-ll_quaternion_normalise(quaternion_t a);
-LINEARLIBDEF quaternion_t
-ll_quaternion_conjugate(quaternion_t a);
-LINEARLIBDEF quaternion_t
-ll_quaternion_inverse(quaternion_t a);
-LINEARLIBDEF vec3_t
-ll_quaternion_rotate3fv(quaternion_t a, vec3_t v);
-LINEARLIBDEF vec3_t
-ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z);
+LINEARLIBDEF quaternion_t  ll_quaternion_create3f(float s, float x, float y, float z);
+LINEARLIBDEF quaternion_t  ll_quaternion_create3fv(float s, vec3_t v);
+LINEARLIBDEF quaternion_t  ll_quaternion_angle_axis3f(float angle, float x, float y, float z);
+LINEARLIBDEF quaternion_t  ll_quaternion_angle_axis3fv(float radians, vec3_t v);
+LINEARLIBDEF quaternion_t  ll_quaternion_add(quaternion_t a, quaternion_t b);
+LINEARLIBDEF quaternion_t  ll_quaternion_sub(quaternion_t a, quaternion_t b);
+LINEARLIBDEF quaternion_t  ll_quaternion_prod(quaternion_t a, quaternion_t b);
+LINEARLIBDEF float         ll_quaternion_norm(quaternion_t a);
+LINEARLIBDEF quaternion_t  ll_quaternion_normalise(quaternion_t a);
+LINEARLIBDEF quaternion_t  ll_quaternion_conjugate(quaternion_t a);
+LINEARLIBDEF quaternion_t  ll_quaternion_inverse(quaternion_t a);
+LINEARLIBDEF vec3_t        ll_quaternion_rotate3fv(quaternion_t a, vec3_t v);
+LINEARLIBDEF vec3_t        ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z);
 
 #ifdef LL_USE_MATRIX
 
@@ -569,48 +393,23 @@ ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z);
 static size_t ll_matrix_stack_size;
 static mat4_t ll_matrix_stack[LL_MATRIX_STACK_CAPACITY];
 
-LINEARLIBDEF void
-ll_matrix_mode(matrix_type_t type);
-LINEARLIBDEF void
-ll_matrix_multiply(mat4_t *right);
-LINEARLIBDEF void
-ll_matrix_identity(void);
-LINEARLIBDEF void
-ll_matrix_translate3f(float dx, float dy, float dz);
-LINEARLIBDEF void
-ll_matrix_translate3fv(vec3_t vec);
-LINEARLIBDEF void
-ll_matrix_scale3f(float w, float h, float d);
-LINEARLIBDEF void
-ll_matrix_scale3fv(vec3_t vec);
-LINEARLIBDEF void
-ll_matrix_rotate3f(float x, float y, float z, float angle);
-LINEARLIBDEF void
-ll_matrix_rotate3fv(vec3_t vec, float angle);
-LINEARLIBDEF void
-ll_matrix_orthographic(float top, float right,
-                       float bottom, float left, float near, float far);
-LINEARLIBDEF void
-ll_matrix_perspective(float fovy, float aspect,
-                      float near, float far);
-LINEARLIBDEF void
-ll_matrix_frustum(float left, float right,
-                  float bottom, float top, float near, float far);
-
-LINEARLIBDEF void
-ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
-
-LINEARLIBDEF mat4_t
-ll_matrix_get_copy(void);
-
-LINEARLIBDEF int
-ll_matrix_stack_pop(mat4_t *mat);
-
-LINEARLIBDEF int
-ll_matrix_stack_push(mat4_t *mat);
-
-LINEARLIBDEF void
-ll_quaternion_to_matrix(quaternion_t a);
+LINEARLIBDEF void   ll_matrix_mode(matrix_type_t type);
+LINEARLIBDEF void   ll_matrix_multiply(mat4_t *right);
+LINEARLIBDEF void   ll_matrix_identity(void);
+LINEARLIBDEF void   ll_matrix_translate3f(float dx, float dy, float dz);
+LINEARLIBDEF void   ll_matrix_translate3fv(vec3_t vec);
+LINEARLIBDEF void   ll_matrix_scale3f(float w, float h, float d);
+LINEARLIBDEF void   ll_matrix_scale3fv(vec3_t vec);
+LINEARLIBDEF void   ll_matrix_rotate3f(float x, float y, float z, float angle);
+LINEARLIBDEF void   ll_matrix_rotate3fv(vec3_t vec, float angle);
+LINEARLIBDEF void   ll_matrix_orthographic(float top, float right, float bottom, float left, float near, float far);
+LINEARLIBDEF void   ll_matrix_perspective(float fovy, float aspect, float near, float far);
+LINEARLIBDEF void   ll_matrix_frustum(float left, float right, float bottom, float top, float near, float far);
+LINEARLIBDEF void   ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
+LINEARLIBDEF mat4_t ll_matrix_get_copy(void);
+LINEARLIBDEF int    ll_matrix_stack_pop(mat4_t *mat);
+LINEARLIBDEF int    ll_matrix_stack_push(mat4_t *mat);
+LINEARLIBDEF void   ll_quaternion_to_matrix(quaternion_t a);
 
 #endif /* LL_USE_MATRIX */
 
@@ -619,8 +418,7 @@ ll_quaternion_to_matrix(quaternion_t a);
 /**
  * @return A vec2_t structure.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_create2f(float x, float y)
+LINEARLIBDEF vec2_t ll_vec2_create2f(float x, float y)
 {
 	return (vec2_t) {{ x, y }};
 }
@@ -630,8 +428,7 @@ ll_vec2_create2f(float x, float y)
  *
  * @return A vec2_t structure.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_create2fv(vec2_t vec)
+LINEARLIBDEF vec2_t ll_vec2_create2fv(vec2_t vec)
 {
 	return vec;
 }
@@ -639,8 +436,7 @@ ll_vec2_create2fv(vec2_t vec)
 /**
  * @return The length of @vec.
  */
-LINEARLIBDEF float
-ll_vec2_length2fv(vec2_t vec)
+LINEARLIBDEF float ll_vec2_length2fv(vec2_t vec)
 {
 	return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
 }
@@ -648,8 +444,7 @@ ll_vec2_length2fv(vec2_t vec)
 /**
  * @return The length of a vector, represented by { x, y }.
  */
-LINEARLIBDEF float
-ll_vec2_length2f(float x, float y)
+LINEARLIBDEF float ll_vec2_length2f(float x, float y)
 {
 	return sqrtf((x * x) + (y * y));
 }
@@ -657,8 +452,7 @@ ll_vec2_length2f(float x, float y)
 /**
  * @return The squared length of @vec.
  */
-LINEARLIBDEF float
-ll_vec2_length_squared2fv(vec2_t vec)
+LINEARLIBDEF float ll_vec2_length_squared2fv(vec2_t vec)
 {
 	float length = ll_vec2_length2fv(vec);
 	return length*length;
@@ -667,8 +461,7 @@ ll_vec2_length_squared2fv(vec2_t vec)
 /**
  * @return The squared length of vector, represented by { x, y }.
  */
-LINEARLIBDEF float
-ll_vec2_length_squared2f(float x, float y)
+LINEARLIBDEF float ll_vec2_length_squared2f(float x, float y)
 {
 	float length = ll_vec2_length2f(x, y);
 	return length*length;
@@ -677,8 +470,7 @@ ll_vec2_length_squared2f(float x, float y)
 /**
  * @return A new vector, that is the sum of @left and @right.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_add2fv(vec2_t left, vec2_t right)
+LINEARLIBDEF vec2_t ll_vec2_add2fv(vec2_t left, vec2_t right)
 {
 	return ll_vec2_create2f(left.x + right.x, left.y + right.y);
 }
@@ -686,8 +478,7 @@ ll_vec2_add2fv(vec2_t left, vec2_t right)
 /**
  * @return A new vector, that is the sum of @left and { x, y }.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_add2f(vec2_t left, float x, float y)
+LINEARLIBDEF vec2_t ll_vec2_add2f(vec2_t left, float x, float y)
 {
 	return ll_vec2_create2f(left.x + x, left.y + y);
 }
@@ -696,8 +487,7 @@ ll_vec2_add2f(vec2_t left, float x, float y)
  * @return A new vector, that is the sum of @left
  * and { value, value }.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_add1f(vec2_t left, float value)
+LINEARLIBDEF vec2_t ll_vec2_add1f(vec2_t left, float value)
 {
 	return ll_vec2_create2f(left.x + value, left.y + value);
 }
@@ -705,8 +495,7 @@ ll_vec2_add1f(vec2_t left, float value)
 /**
  * @return A new vector, that is the sum of @left and -@right.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_sub2fv(vec2_t left, vec2_t right)
+LINEARLIBDEF vec2_t ll_vec2_sub2fv(vec2_t left, vec2_t right)
 {
 	return ll_vec2_add2f(left, -right.x, -right.y);
 }
@@ -715,8 +504,7 @@ ll_vec2_sub2fv(vec2_t left, vec2_t right)
  * @return A new vector, that is the sum of @left
  * and { -x, -y }.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_sub2f(vec2_t left, float x, float y)
+LINEARLIBDEF vec2_t ll_vec2_sub2f(vec2_t left, float x, float y)
 {
 	return ll_vec2_add2f(left, -x, -y);
 }
@@ -725,8 +513,7 @@ ll_vec2_sub2f(vec2_t left, float x, float y)
  * @return A new vector, that is the sum of @left
  * and { -value, -value }.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_sub1f(vec2_t left, float value)
+LINEARLIBDEF vec2_t ll_vec2_sub1f(vec2_t left, float value)
 {
 	return ll_vec2_add2f(left, -value, -value);
 }
@@ -735,8 +522,7 @@ ll_vec2_sub1f(vec2_t left, float value)
  * @return A new vector that is the component-wise
  * product of @left and @right.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_mul2fv(vec2_t left, vec2_t right)
+LINEARLIBDEF vec2_t ll_vec2_mul2fv(vec2_t left, vec2_t right)
 {
 	return ll_vec2_create2f(left.x * right.x,
 				left.y * right.y);
@@ -746,8 +532,7 @@ ll_vec2_mul2fv(vec2_t left, vec2_t right)
  * @return A new vector that is the component-wise
  * product of @left and { x, y }.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_mul2f(vec2_t left, float x, float y)
+LINEARLIBDEF vec2_t ll_vec2_mul2f(vec2_t left, float x, float y)
 {
 	return ll_vec2_create2f(left.x * x,
 				left.y * y);
@@ -757,8 +542,7 @@ ll_vec2_mul2f(vec2_t left, float x, float y)
  * @return A new vector, that is the component-wise
  * product of @left and { value, value }
  */
-LINEARLIBDEF vec2_t
-ll_vec2_mul1f(vec2_t left, float value)
+LINEARLIBDEF vec2_t ll_vec2_mul1f(vec2_t left, float value)
 {
 	return ll_vec2_create2f(left.x * value,
 				left.y * value);
@@ -768,8 +552,7 @@ ll_vec2_mul1f(vec2_t left, float value)
  * @return A new vector, that is the component-wise
  * division of @left and @right.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_div2fv(vec2_t left, vec2_t right)
+LINEARLIBDEF vec2_t ll_vec2_div2fv(vec2_t left, vec2_t right)
 {
 	return ll_vec2_create2f(left.x / right.x,
 				left.y / right.y);
@@ -779,8 +562,7 @@ ll_vec2_div2fv(vec2_t left, vec2_t right)
  * @return A new vector, that is the component-wise
  * division of @left and { x, y }.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_div2f(vec2_t left, float x, float y)
+LINEARLIBDEF vec2_t ll_vec2_div2f(vec2_t left, float x, float y)
 {
 	return ll_vec2_create2f(left.x / x,
 				left.y / y);
@@ -790,8 +572,7 @@ ll_vec2_div2f(vec2_t left, float x, float y)
  * @return A new vector, that is the component-wise
  * division of @left and { value, value }.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_div1f(vec2_t left, float value)
+LINEARLIBDEF vec2_t ll_vec2_div1f(vec2_t left, float value)
 {
 	return ll_vec2_create2f(left.x / value,
 				left.y / value);
@@ -801,8 +582,7 @@ ll_vec2_div1f(vec2_t left, float value)
  * @return A new vector, that is the dot product
  * of @left and @right.
  */
-LINEARLIBDEF float
-ll_vec2_dot2fv(vec2_t left, vec2_t right)
+LINEARLIBDEF float ll_vec2_dot2fv(vec2_t left, vec2_t right)
 {
 	return left.x * right.x + left.y * right.y;
 }
@@ -811,8 +591,7 @@ ll_vec2_dot2fv(vec2_t left, vec2_t right)
  * @return A new vector, that is the dot product
  * of @left and { x, y }.
  */
-LINEARLIBDEF float
-ll_vec2_dot2f(vec2_t left, float x, float y)
+LINEARLIBDEF float ll_vec2_dot2f(vec2_t left, float x, float y)
 {
 	return left.x * x + left.y * y;
 }
@@ -821,8 +600,7 @@ ll_vec2_dot2f(vec2_t left, float x, float y)
  * @return A new vector, that is the cross
  * product of @left and @right.
  */
-LINEARLIBDEF float
-ll_vec2_cross2fv(vec2_t left, vec2_t right)
+LINEARLIBDEF float ll_vec2_cross2fv(vec2_t left, vec2_t right)
 {
 	return left.x * right.y - left.y * right.x;
 }
@@ -831,8 +609,7 @@ ll_vec2_cross2fv(vec2_t left, vec2_t right)
  * @return A new vector, that is the cross
  * product of @left and { x, y }.
  */
-LINEARLIBDEF float
-ll_vec2_cross2f(vec2_t left, float x, float y)
+LINEARLIBDEF float ll_vec2_cross2f(vec2_t left, float x, float y)
 {
 	return left.x * y - left.y * x;
 }
@@ -842,8 +619,7 @@ ll_vec2_cross2f(vec2_t left, float x, float y)
  * that the returned vector's length is 1. It is
  * the unit vector of @vec.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_normalise2fv(vec2_t vec)
+LINEARLIBDEF vec2_t ll_vec2_normalise2fv(vec2_t vec)
 {
 	float length = ll_vec2_length2fv(vec);
 	return ll_vec2_create2f( vec.x / length, vec.y / length );
@@ -854,8 +630,7 @@ ll_vec2_normalise2fv(vec2_t vec)
  * that the returned vector's length is 1. It is
  * the unit vector of { x, y }
  */
-LINEARLIBDEF vec2_t
-ll_vec2_normalise2f(float x, float y)
+LINEARLIBDEF vec2_t ll_vec2_normalise2f(float x, float y)
 {
 	float length = ll_vec2_length2f(x, y);
 	return ll_vec2_create2f( x / length, y / length );
@@ -865,8 +640,7 @@ ll_vec2_normalise2f(float x, float y)
  * @return A new vector, that is the result of applying @f
  * over all the elements of @vec.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_apply2fv(vec2_t vec, float (*f)(float))
+LINEARLIBDEF vec2_t ll_vec2_apply2fv(vec2_t vec, float (*f)(float))
 {
 	return (vec2_t) {{ f(vec.x), f(vec.y) }};
 }
@@ -876,14 +650,12 @@ ll_vec2_apply2fv(vec2_t vec, float (*f)(float))
  * over @x and @y, inserting their values into the components
  * of the returned vector.
  */
-LINEARLIBDEF vec2_t
-ll_vec2_apply2f(float x, float y, float (*f)(float))
+LINEARLIBDEF vec2_t ll_vec2_apply2f(float x, float y, float (*f)(float))
 {
 	return (vec2_t) {{ f(x), f(y) }};
 }
 
-LINEARLIBDEF vec2_t
-ll_vec2_origin(void)
+LINEARLIBDEF vec2_t ll_vec2_origin(void)
 {
 	return (vec2_t) {{ 0.0, 0.0 }};
 }
@@ -891,8 +663,7 @@ ll_vec2_origin(void)
 /**
  * @return A vec3_t structure.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_create3f(float x, float y, float z)
+LINEARLIBDEF vec3_t ll_vec3_create3f(float x, float y, float z)
 {
 	return (vec3_t) {{ x, y, z }};
 }
@@ -900,8 +671,7 @@ ll_vec3_create3f(float x, float y, float z)
 /**
  * @return A copy of @vec.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_create3fv(vec3_t vec)
+LINEARLIBDEF vec3_t ll_vec3_create3fv(vec3_t vec)
 {
 	return vec;
 }
@@ -909,8 +679,7 @@ ll_vec3_create3fv(vec3_t vec)
 /**
  * @return The length of @vec.
  */
-LINEARLIBDEF float
-ll_vec3_length3fv(vec3_t vec)
+LINEARLIBDEF float ll_vec3_length3fv(vec3_t vec)
 {
 	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
@@ -918,8 +687,7 @@ ll_vec3_length3fv(vec3_t vec)
 /**
  * @return The length of @vec.
  */
-LINEARLIBDEF float
-ll_vec3_length3f(float x, float y, float z)
+LINEARLIBDEF float ll_vec3_length3f(float x, float y, float z)
 {
 	return sqrtf(x * x + y * y + z * z);
 }
@@ -927,8 +695,7 @@ ll_vec3_length3f(float x, float y, float z)
 /**
  * @return The squared length of @vec.
  */
-LINEARLIBDEF float
-ll_vec3_length_squared3fv(vec3_t vec)
+LINEARLIBDEF float ll_vec3_length_squared3fv(vec3_t vec)
 {
 	float length = ll_vec3_length3fv(vec);
 	return length * length;
@@ -937,8 +704,7 @@ ll_vec3_length_squared3fv(vec3_t vec)
 /**
  * @return The squared length of the vector { x, y, z }.
  */
-LINEARLIBDEF float
-ll_vec3_length_squared3f(float x, float y, float z)
+LINEARLIBDEF float ll_vec3_length_squared3f(float x, float y, float z)
 {
 	float length = ll_vec3_length3f(x, y, z);
 	return length * length;
@@ -948,8 +714,7 @@ ll_vec3_length_squared3f(float x, float y, float z)
  * @return A new vector, that is the sum of @left
  * and @right.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_add3fv(vec3_t left, vec3_t right)
+LINEARLIBDEF vec3_t ll_vec3_add3fv(vec3_t left, vec3_t right)
 {
 	return ll_vec3_create3f(left.x + right.x, left.y + right.y,
 				left.z + right.z);
@@ -959,8 +724,7 @@ ll_vec3_add3fv(vec3_t left, vec3_t right)
  * @return A new vector, that is the sum of @left
  * and { x, y, z }.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_add3f(vec3_t left, float x, float y, float z)
+LINEARLIBDEF vec3_t ll_vec3_add3f(vec3_t left, float x, float y, float z)
 {
 	return ll_vec3_create3f(left.x + x, left.y + y,
 				left.z + z);
@@ -970,8 +734,7 @@ ll_vec3_add3f(vec3_t left, float x, float y, float z)
  * @return A new vector, that is the sum of @left
  * and { value, value, value }.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_add1f(vec3_t left, float value)
+LINEARLIBDEF vec3_t ll_vec3_add1f(vec3_t left, float value)
 {
 	return ll_vec3_create3f(left.x + value, left.y + value,
 				left.z + value);
@@ -981,8 +744,7 @@ ll_vec3_add1f(vec3_t left, float value)
  * @return A new vector, that is the sum of @left
  * and -@right.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_sub3fv(vec3_t left, vec3_t right)
+LINEARLIBDEF vec3_t ll_vec3_sub3fv(vec3_t left, vec3_t right)
 {
 	return ll_vec3_create3f(left.x - right.x, left.y - right.y,
 				left.z - right.z);
@@ -992,8 +754,7 @@ ll_vec3_sub3fv(vec3_t left, vec3_t right)
  * @return A new vector, that is the sum of @left
  * and { -x, -y, -z }.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_sub3f(vec3_t left, float x, float y, float z)
+LINEARLIBDEF vec3_t ll_vec3_sub3f(vec3_t left, float x, float y, float z)
 {
 	return ll_vec3_create3f(left.x - x, left.y - y,
 				left.z - z);
@@ -1003,8 +764,7 @@ ll_vec3_sub3f(vec3_t left, float x, float y, float z)
  * @return A new vector, that is the sum of @left
  * and { -value, -value, -value }.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_sub1f(vec3_t left, float value)
+LINEARLIBDEF vec3_t ll_vec3_sub1f(vec3_t left, float value)
 {
 	return ll_vec3_create3f(left.x - value, left.y - value,
 				left.z - value);
@@ -1014,8 +774,7 @@ ll_vec3_sub1f(vec3_t left, float value)
  * @return A new vector, that is the component-wise
  * product of @left and @right.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_mul3fv(vec3_t left, vec3_t right)
+LINEARLIBDEF vec3_t ll_vec3_mul3fv(vec3_t left, vec3_t right)
 {
 	return ll_vec3_create3f(left.x * right.x, left.y * right.y,
 				left.z * right.z);
@@ -1025,8 +784,7 @@ ll_vec3_mul3fv(vec3_t left, vec3_t right)
  * @return A new vector, that is the component-wise
  * product of @left and { x, y, z }.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_mul3f(vec3_t left, float x, float y, float z)
+LINEARLIBDEF vec3_t ll_vec3_mul3f(vec3_t left, float x, float y, float z)
 {
 	return ll_vec3_create3f(left.x * x, left.y * y,
 				left.z * z);
@@ -1036,8 +794,7 @@ ll_vec3_mul3f(vec3_t left, float x, float y, float z)
  * @return A new vector, that is the component-wise
  * product of @left and { value, value, value }.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_mul1f(vec3_t left, float value)
+LINEARLIBDEF vec3_t ll_vec3_mul1f(vec3_t left, float value)
 {
 	return ll_vec3_create3f(left.x * value, left.y * value,
 				left.z * value);
@@ -1047,8 +804,7 @@ ll_vec3_mul1f(vec3_t left, float value)
  * @return A new vector, that is the component-wise
  * division of @left and @right.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_div3fv(vec3_t left, vec3_t right)
+LINEARLIBDEF vec3_t ll_vec3_div3fv(vec3_t left, vec3_t right)
 {
 	return ll_vec3_create3f(left.x / right.x, left.y / right.y,
 				left.z / right.z);
@@ -1058,8 +814,7 @@ ll_vec3_div3fv(vec3_t left, vec3_t right)
  * @return A new vector, that is the component-wise
  * division of @left and { x, y, z }.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_div3f(vec3_t left, float x, float y, float z)
+LINEARLIBDEF vec3_t ll_vec3_div3f(vec3_t left, float x, float y, float z)
 {
 	return ll_vec3_create3f(left.x / x, left.y / y,
 				left.z / z);
@@ -1069,8 +824,7 @@ ll_vec3_div3f(vec3_t left, float x, float y, float z)
  * @return A new vector, that is the component-wise
  * division of @left and { value, value, value }.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_div1f(vec3_t left, float value)
+LINEARLIBDEF vec3_t ll_vec3_div1f(vec3_t left, float value)
 {
 	return ll_vec3_create3f(left.x / value, left.y / value,
 				left.z / value);
@@ -1079,8 +833,7 @@ ll_vec3_div1f(vec3_t left, float value)
 /**
  * @return The dot product of @left and @right.
  */
-LINEARLIBDEF float
-ll_vec3_dot3fv(vec3_t left, vec3_t right)
+LINEARLIBDEF float ll_vec3_dot3fv(vec3_t left, vec3_t right)
 {
 	return left.x * right.x + left.y * right.y + left.z * right.z;
 }
@@ -1088,8 +841,7 @@ ll_vec3_dot3fv(vec3_t left, vec3_t right)
 /**
  * @return The dot product of @left and { x, y, z }.
  */
-LINEARLIBDEF float
-ll_vec3_dot3f(vec3_t left, float x, float y, float z)
+LINEARLIBDEF float ll_vec3_dot3f(vec3_t left, float x, float y, float z)
 {
 	return left.x * x + left.y * y + left.z * z;
 }
@@ -1099,8 +851,7 @@ ll_vec3_dot3f(vec3_t left, float x, float y, float z)
  * this is essentially a new vector that is perpendicular
  * to @left and @right.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_cross3fv(vec3_t left, vec3_t right)
+LINEARLIBDEF vec3_t ll_vec3_cross3fv(vec3_t left, vec3_t right)
 {
 	return ll_vec3_create3f(left.y*right.z - left.z*right.y,
 				left.z*right.x - left.x*right.z,
@@ -1112,8 +863,7 @@ ll_vec3_cross3fv(vec3_t left, vec3_t right)
  * this is essentially a new vector that is perpendicular
  * to @left and { x, y, z }.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_cross3f(vec3_t left, float x, float y, float z)
+LINEARLIBDEF vec3_t ll_vec3_cross3f(vec3_t left, float x, float y, float z)
 {
 	return ll_vec3_create3f(left.y*z - left.z*y,
 				left.z*x - left.x*z,
@@ -1125,8 +875,7 @@ ll_vec3_cross3f(vec3_t left, float x, float y, float z)
  * length is 1. This is essentially the unit vector
  * of @vec.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_normalise3fv(vec3_t vec)
+LINEARLIBDEF vec3_t ll_vec3_normalise3fv(vec3_t vec)
 {
 	float length = ll_vec3_length3fv(vec);
 	return ll_vec3_create3f( vec.x / length, vec.y / length,
@@ -1138,8 +887,7 @@ ll_vec3_normalise3fv(vec3_t vec)
  * length is 1. This is essentially the unit vector
  * of { x, y, z }.
  */
-LINEARLIBDEF vec3_t
-ll_vec3_normalise3f(float x, float y, float z)
+LINEARLIBDEF vec3_t ll_vec3_normalise3f(float x, float y, float z)
 {
 	float length = ll_vec3_length3f(x, y, z);
 	return ll_vec3_create3f( x / length, y / length,
@@ -1149,8 +897,7 @@ ll_vec3_normalise3f(float x, float y, float z)
 /**
  * @return A vec3_t structure.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_create4f(float x, float y, float z, float w)
+LINEARLIBDEF vec4_t ll_vec4_create4f(float x, float y, float z, float w)
 {
 	return (vec4_t) {{ x, y, z, w }};
 }
@@ -1158,8 +905,7 @@ ll_vec4_create4f(float x, float y, float z, float w)
 /**
  * @return A copy of @vec.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_create4fv(vec4_t vec)
+LINEARLIBDEF vec4_t ll_vec4_create4fv(vec4_t vec)
 {
 	return vec;
 }
@@ -1167,8 +913,7 @@ ll_vec4_create4fv(vec4_t vec)
 /**
  * @return The length of @vec.
  */
-LINEARLIBDEF float
-ll_vec4_length4fv(vec4_t vec)
+LINEARLIBDEF float ll_vec4_length4fv(vec4_t vec)
 {
 	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z
 		     + vec.w * vec.w);
@@ -1177,8 +922,7 @@ ll_vec4_length4fv(vec4_t vec)
 /**
  * @return The length of @vec.
  */
-LINEARLIBDEF float
-ll_vec4_length4f(float x, float y, float z, float w)
+LINEARLIBDEF float ll_vec4_length4f(float x, float y, float z, float w)
 {
 	return sqrtf(x * x + y * y + z * z + w * w);
 }
@@ -1186,8 +930,7 @@ ll_vec4_length4f(float x, float y, float z, float w)
 /**
  * @return The squared length of @vec.
  */
-LINEARLIBDEF float
-ll_vec4_length_squared4fv(vec4_t vec)
+LINEARLIBDEF float ll_vec4_length_squared4fv(vec4_t vec)
 {
 	float length = ll_vec4_length4fv(vec);
 	return length * length;
@@ -1196,8 +939,7 @@ ll_vec4_length_squared4fv(vec4_t vec)
 /**
  * @return The squared length of the vector { x, y, z, w }.
  */
-LINEARLIBDEF float
-ll_vec4_length_squared4f(float x, float y, float z, float w)
+LINEARLIBDEF float ll_vec4_length_squared4f(float x, float y, float z, float w)
 {
 	float length = ll_vec4_length4f(x, y, z, w);
 	return length * length;
@@ -1207,8 +949,7 @@ ll_vec4_length_squared4f(float x, float y, float z, float w)
  * @return A new vector, that is the sum of @left
  * and @right.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_add4fv(vec4_t left, vec4_t right)
+LINEARLIBDEF vec4_t ll_vec4_add4fv(vec4_t left, vec4_t right)
 {
 	return ll_vec4_create4f(left.x + right.x, left.y + right.y,
 				left.z + right.z, left.w + right.w);
@@ -1218,8 +959,7 @@ ll_vec4_add4fv(vec4_t left, vec4_t right)
  * @return A new vector, that is the sum of @left
  * and { x, y, z, w }.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_add4f(vec4_t left, float x, float y, float z, float w)
+LINEARLIBDEF vec4_t ll_vec4_add4f(vec4_t left, float x, float y, float z, float w)
 {
 	return ll_vec4_create4f(left.x + x, left.y + y,
 				left.z + z, left.w + w);
@@ -1229,8 +969,7 @@ ll_vec4_add4f(vec4_t left, float x, float y, float z, float w)
  * @return A new vector, that is the sum of @left
  * and { value, value, value, value }.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_add1f(vec4_t left, float value)
+LINEARLIBDEF vec4_t ll_vec4_add1f(vec4_t left, float value)
 {
 	return ll_vec4_create4f(left.x + value, left.y + value,
 				left.z + value, left.w + value);
@@ -1240,8 +979,7 @@ ll_vec4_add1f(vec4_t left, float value)
  * @return A new vector, that is the sum of @left
  * and -@right.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_sub4fv(vec4_t left, vec4_t right)
+LINEARLIBDEF vec4_t ll_vec4_sub4fv(vec4_t left, vec4_t right)
 {
 	return ll_vec4_create4f(left.x - right.x, left.y - right.y,
 				left.z - right.z, left.w - right.w);
@@ -1251,8 +989,7 @@ ll_vec4_sub4fv(vec4_t left, vec4_t right)
  * @return A new vector, that is the sum of @left
  * and { -x, -y, -z, -w }.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_sub4f(vec4_t left, float x, float y, float z, float w)
+LINEARLIBDEF vec4_t ll_vec4_sub4f(vec4_t left, float x, float y, float z, float w)
 {
 	return ll_vec4_create4f(left.x - x, left.y - y,
 				left.z - z, left.w - w);
@@ -1262,8 +999,7 @@ ll_vec4_sub4f(vec4_t left, float x, float y, float z, float w)
  * @return A new vector, that is the sum of @left
  * and { -value, -value, -value, -value}.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_sub1f(vec4_t left, float value)
+LINEARLIBDEF vec4_t ll_vec4_sub1f(vec4_t left, float value)
 {
 	return ll_vec4_create4f(left.x - value, left.y - value,
 				left.z - value, left.w - value);
@@ -1273,8 +1009,7 @@ ll_vec4_sub1f(vec4_t left, float value)
  * @return A new vector, that is the component-wise
  * product of @left and @right.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_mul4fv(vec4_t left, vec4_t right)
+LINEARLIBDEF vec4_t ll_vec4_mul4fv(vec4_t left, vec4_t right)
 {
 	return ll_vec4_create4f(left.x * right.x, left.y * right.y,
 				left.z * right.z, left.w * right.w);
@@ -1284,8 +1019,7 @@ ll_vec4_mul4fv(vec4_t left, vec4_t right)
  * @return A new vector, that is the component-wise
  * product of @left and { x, y, z }.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_mul4f(vec4_t left, float x, float y, float z, float w)
+LINEARLIBDEF vec4_t ll_vec4_mul4f(vec4_t left, float x, float y, float z, float w)
 {
 	return ll_vec4_create4f(left.x * x, left.y * y,
 				left.z * z, left.w * w);
@@ -1295,8 +1029,7 @@ ll_vec4_mul4f(vec4_t left, float x, float y, float z, float w)
  * @return A new vector, that is the component-wise
  * product of @left and { value, value, value, value }.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_mul1f(vec4_t left, float value)
+LINEARLIBDEF vec4_t ll_vec4_mul1f(vec4_t left, float value)
 {
 	return ll_vec4_create4f(left.x * value, left.y * value,
 				left.z * value, left.w * value);
@@ -1306,8 +1039,7 @@ ll_vec4_mul1f(vec4_t left, float value)
  * @return A new vector, that is the component-wise
  * division of @left and @right.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_div4fv(vec4_t left, vec4_t right)
+LINEARLIBDEF vec4_t ll_vec4_div4fv(vec4_t left, vec4_t right)
 {
 	return ll_vec4_create4f(left.x / right.x, left.y / right.y,
 				left.z / right.z, left.w / right.w);
@@ -1317,8 +1049,7 @@ ll_vec4_div4fv(vec4_t left, vec4_t right)
  * @return A new vector, that is the component-wise
  * division of @left and { x, y, z, w }.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_div4f(vec4_t left, float x, float y, float z, float w)
+LINEARLIBDEF vec4_t ll_vec4_div4f(vec4_t left, float x, float y, float z, float w)
 {
 	return ll_vec4_create4f(left.x / x, left.y / y,
 				left.z / z, left.w / w);
@@ -1328,8 +1059,7 @@ ll_vec4_div4f(vec4_t left, float x, float y, float z, float w)
  * @return A new vector, that is the component-wise
  * division of @left and { value, value, value, value }.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_div1f(vec4_t left, float value)
+LINEARLIBDEF vec4_t ll_vec4_div1f(vec4_t left, float value)
 {
 	return ll_vec4_create4f(left.x / value, left.y / value,
 				left.z / value, left.w / value);
@@ -1338,8 +1068,7 @@ ll_vec4_div1f(vec4_t left, float value)
 /**
  * @return The dot product of @left and @right.
  */
-LINEARLIBDEF float
-ll_vec4_dot4fv(vec4_t left, vec4_t right)
+LINEARLIBDEF float ll_vec4_dot4fv(vec4_t left, vec4_t right)
 {
 	return left.x * right.x + left.y * right.y
 		+ left.z * right.z + left.w * right.w;
@@ -1348,8 +1077,7 @@ ll_vec4_dot4fv(vec4_t left, vec4_t right)
 /**
  * @return The dot product of @left and { x, y, z, w }.
  */
-LINEARLIBDEF float
-ll_vec4_dot4f(vec4_t left, float x, float y, float z, float w)
+LINEARLIBDEF float ll_vec4_dot4f(vec4_t left, float x, float y, float z, float w)
 {
 	return left.x * x + left.y * y + left.z * z
 		+ left.w * w;
@@ -1360,8 +1088,7 @@ ll_vec4_dot4f(vec4_t left, float x, float y, float z, float w)
  * length is 1. This is essentially the unit vector
  * of @vec.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_normalise4fv(vec4_t vec)
+LINEARLIBDEF vec4_t ll_vec4_normalise4fv(vec4_t vec)
 {
 	float length = ll_vec4_length4fv(vec);
 	return ll_vec4_create4f( vec.x / length, vec.y / length,
@@ -1373,8 +1100,7 @@ ll_vec4_normalise4fv(vec4_t vec)
  * length is 1. This is essentially the unit vector
  * of { x, y, z, w }.
  */
-LINEARLIBDEF vec4_t
-ll_vec4_normalise4f(float x, float y, float z, float w)
+LINEARLIBDEF vec4_t ll_vec4_normalise4f(float x, float y, float z, float w)
 {
 	float length = ll_vec4_length4f(x, y, z, w);
 	return ll_vec4_create4f( x / length, y / length,
@@ -1384,8 +1110,7 @@ ll_vec4_normalise4f(float x, float y, float z, float w)
 /**
  * @return A ivec2_t structure.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_create2i(int x, int y)
+LINEARLIBDEF ivec2_t ll_ivec2_create2i(int x, int y)
 {
 	return (ivec2_t) {{ x, y }};
 }
@@ -1395,8 +1120,7 @@ ll_ivec2_create2i(int x, int y)
  *
  * @return A ivec2_t structure.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_create2iv(ivec2_t vec)
+LINEARLIBDEF ivec2_t ll_ivec2_create2iv(ivec2_t vec)
 {
 	return vec;
 }
@@ -1404,8 +1128,7 @@ ll_ivec2_create2iv(ivec2_t vec)
 /**
  * @return The length of @vec.
  */
-LINEARLIBDEF float
-ll_ivec2_length2iv(ivec2_t vec)
+LINEARLIBDEF float ll_ivec2_length2iv(ivec2_t vec)
 {
 	return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
 }
@@ -1413,8 +1136,7 @@ ll_ivec2_length2iv(ivec2_t vec)
 /**
  * @return The length of a vector, represented by { x, y }.
  */
-LINEARLIBDEF float
-ll_ivec2_length2i(int x, int y)
+LINEARLIBDEF float ll_ivec2_length2i(int x, int y)
 {
 	return sqrtf((x * x) + (y * y));
 }
@@ -1422,8 +1144,7 @@ ll_ivec2_length2i(int x, int y)
 /**
  * @return The squared length of @vec.
  */
-LINEARLIBDEF float
-ll_ivec2_length_squared2iv(ivec2_t vec)
+LINEARLIBDEF float ll_ivec2_length_squared2iv(ivec2_t vec)
 {
 	float length = ll_ivec2_length2iv(vec);
 	return length*length;
@@ -1432,8 +1153,7 @@ ll_ivec2_length_squared2iv(ivec2_t vec)
 /**
  * @return The squared length of vector, represented by { x, y }.
  */
-LINEARLIBDEF float
-ll_ivec2_length_squared2i(int x, int y)
+LINEARLIBDEF float ll_ivec2_length_squared2i(int x, int y)
 {
 	float length = ll_ivec2_length2i(x, y);
 	return length*length;
@@ -1442,8 +1162,7 @@ ll_ivec2_length_squared2i(int x, int y)
 /**
  * @return A new vector, that is the sum of @left and @right.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_add2iv(ivec2_t left, ivec2_t right)
+LINEARLIBDEF ivec2_t ll_ivec2_add2iv(ivec2_t left, ivec2_t right)
 {
 	return ll_ivec2_create2i(left.x + right.x, left.y + right.y);
 }
@@ -1451,8 +1170,7 @@ ll_ivec2_add2iv(ivec2_t left, ivec2_t right)
 /**
  * @return A new vector, that is the sum of @left and { x, y }.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_add2i(ivec2_t left, int x, int y)
+LINEARLIBDEF ivec2_t ll_ivec2_add2i(ivec2_t left, int x, int y)
 {
 	return ll_ivec2_create2i(left.x + x, left.y + y);
 }
@@ -1461,8 +1179,7 @@ ll_ivec2_add2i(ivec2_t left, int x, int y)
  * @return A new vector, that is the sum of @left
  * and { value, value }.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_add1i(ivec2_t left, int value)
+LINEARLIBDEF ivec2_t ll_ivec2_add1i(ivec2_t left, int value)
 {
 	return ll_ivec2_create2i(left.x + value, left.y + value);
 }
@@ -1470,8 +1187,7 @@ ll_ivec2_add1i(ivec2_t left, int value)
 /**
  * @return A new vector, that is the sum of @left and -@right.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_sub2iv(ivec2_t left, ivec2_t right)
+LINEARLIBDEF ivec2_t ll_ivec2_sub2iv(ivec2_t left, ivec2_t right)
 {
 	return ll_ivec2_add2i(left, -right.x, -right.y);
 }
@@ -1480,8 +1196,7 @@ ll_ivec2_sub2iv(ivec2_t left, ivec2_t right)
  * @return A new vector, that is the sum of @left
  * and { -x, -y }.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_sub2i(ivec2_t left, int x, int y)
+LINEARLIBDEF ivec2_t ll_ivec2_sub2i(ivec2_t left, int x, int y)
 {
 	return ll_ivec2_add2i(left, -x, -y);
 }
@@ -1490,8 +1205,7 @@ ll_ivec2_sub2i(ivec2_t left, int x, int y)
  * @return A new vector, that is the sum of @left
  * and { -value, -value }.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_sub1i(ivec2_t left, int value)
+LINEARLIBDEF ivec2_t ll_ivec2_sub1i(ivec2_t left, int value)
 {
 	return ll_ivec2_add2i(left, -value, -value);
 }
@@ -1500,8 +1214,7 @@ ll_ivec2_sub1i(ivec2_t left, int value)
  * @return A new vector that is the component-wise
  * product of @left and @right.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_mul2iv(ivec2_t left, ivec2_t right)
+LINEARLIBDEF ivec2_t ll_ivec2_mul2iv(ivec2_t left, ivec2_t right)
 {
 	return ll_ivec2_create2i(left.x * right.x,
 				 left.y * right.y);
@@ -1511,8 +1224,7 @@ ll_ivec2_mul2iv(ivec2_t left, ivec2_t right)
  * @return A new vector that is the component-wise
  * product of @left and { x, y }.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_mul2i(ivec2_t left, int x, int y)
+LINEARLIBDEF ivec2_t ll_ivec2_mul2i(ivec2_t left, int x, int y)
 {
 	return ll_ivec2_create2i(left.x * x,
 				 left.y * y);
@@ -1522,8 +1234,7 @@ ll_ivec2_mul2i(ivec2_t left, int x, int y)
  * @return A new vector, that is the component-wise
  * product of @left and { value, value }
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_mul1i(ivec2_t left, int value)
+LINEARLIBDEF ivec2_t ll_ivec2_mul1i(ivec2_t left, int value)
 {
 	return ll_ivec2_create2i(left.x * value,
 				 left.y * value);
@@ -1533,8 +1244,7 @@ ll_ivec2_mul1i(ivec2_t left, int value)
  * @return A new vector, that is the component-wise
  * division of @left and @right.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_div2iv(ivec2_t left, ivec2_t right)
+LINEARLIBDEF ivec2_t ll_ivec2_div2iv(ivec2_t left, ivec2_t right)
 {
 	return ll_ivec2_create2i(left.x / right.x,
 				 left.y / right.y);
@@ -1544,8 +1254,7 @@ ll_ivec2_div2iv(ivec2_t left, ivec2_t right)
  * @return A new vector, that is the component-wise
  * division of @left and { x, y }.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_div2i(ivec2_t left, int x, int y)
+LINEARLIBDEF ivec2_t ll_ivec2_div2i(ivec2_t left, int x, int y)
 {
 	return ll_ivec2_create2i(left.x / x,
 				 left.y / y);
@@ -1555,8 +1264,7 @@ ll_ivec2_div2i(ivec2_t left, int x, int y)
  * @return A new vector, that is the component-wise
  * division of @left and { value, value }.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_div1i(ivec2_t left, int value)
+LINEARLIBDEF ivec2_t ll_ivec2_div1i(ivec2_t left, int value)
 {
 	return ll_ivec2_create2i(left.x / value,
 				 left.y / value);
@@ -1566,8 +1274,7 @@ ll_ivec2_div1i(ivec2_t left, int value)
  * @return A new vector, that is the dot product
  * of @left and @right.
  */
-LINEARLIBDEF float
-ll_ivec2_dot2iv(ivec2_t left, ivec2_t right)
+LINEARLIBDEF float ll_ivec2_dot2iv(ivec2_t left, ivec2_t right)
 {
 	return left.x * right.x + left.y * right.y;
 }
@@ -1576,8 +1283,7 @@ ll_ivec2_dot2iv(ivec2_t left, ivec2_t right)
  * @return A new vector, that is the dot product
  * of @left and { x, y }.
  */
-LINEARLIBDEF float
-ll_ivec2_dot2i(ivec2_t left, int x, int y)
+LINEARLIBDEF float ll_ivec2_dot2i(ivec2_t left, int x, int y)
 {
 	return left.x * x + left.y * y;
 }
@@ -1586,8 +1292,7 @@ ll_ivec2_dot2i(ivec2_t left, int x, int y)
  * @return A new vector, that is the cross
  * product of @left and @right.
  */
-LINEARLIBDEF float
-ll_ivec2_cross2iv(ivec2_t left, ivec2_t right)
+LINEARLIBDEF float ll_ivec2_cross2iv(ivec2_t left, ivec2_t right)
 {
 	return left.x * right.y - left.y * right.x;
 }
@@ -1596,8 +1301,7 @@ ll_ivec2_cross2iv(ivec2_t left, ivec2_t right)
  * @return A new vector, that is the cross
  * product of @left and { x, y }.
  */
-LINEARLIBDEF float
-ll_ivec2_cross2i(ivec2_t left, int x, int y)
+LINEARLIBDEF float ll_ivec2_cross2i(ivec2_t left, int x, int y)
 {
 	return left.x * y - left.y * x;
 }
@@ -1607,8 +1311,7 @@ ll_ivec2_cross2i(ivec2_t left, int x, int y)
  * that the returned vector's length is 1. It is
  * the unit vector of @vec.
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_normalise2iv(ivec2_t vec)
+LINEARLIBDEF ivec2_t ll_ivec2_normalise2iv(ivec2_t vec)
 {
 	float length = ll_ivec2_length2iv(vec);
 	return ll_ivec2_create2i( vec.x / length, vec.y / length );
@@ -1619,8 +1322,7 @@ ll_ivec2_normalise2iv(ivec2_t vec)
  * that the returned vector's length is 1. It is
  * the unit vector of { x, y }
  */
-LINEARLIBDEF ivec2_t
-ll_ivec2_normalise2i(int x, int y)
+LINEARLIBDEF ivec2_t ll_ivec2_normalise2i(int x, int y)
 {
 	float length = ll_ivec2_length2i(x, y);
 	return ll_ivec2_create2i( x / length, y / length );
@@ -1629,8 +1331,7 @@ ll_ivec2_normalise2i(int x, int y)
 /**
  * @return A ivec3_t structure.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_create3i(int x, int y, int z)
+LINEARLIBDEF ivec3_t ll_ivec3_create3i(int x, int y, int z)
 {
 	return (ivec3_t) {{ x, y, z }};
 }
@@ -1638,8 +1339,7 @@ ll_ivec3_create3i(int x, int y, int z)
 /**
  * @return A copy of @vec.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_create3iv(ivec3_t vec)
+LINEARLIBDEF ivec3_t ll_ivec3_create3iv(ivec3_t vec)
 {
 	return vec;
 }
@@ -1647,8 +1347,7 @@ ll_ivec3_create3iv(ivec3_t vec)
 /**
  * @return The length of @vec.
  */
-LINEARLIBDEF float
-ll_ivec3_length3iv(ivec3_t vec)
+LINEARLIBDEF float ll_ivec3_length3iv(ivec3_t vec)
 {
 	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
@@ -1656,8 +1355,7 @@ ll_ivec3_length3iv(ivec3_t vec)
 /**
  * @return The length of @vec.
  */
-LINEARLIBDEF float
-ll_ivec3_length3i(int x, int y, int z)
+LINEARLIBDEF float ll_ivec3_length3i(int x, int y, int z)
 {
 	return sqrtf(x * x + y * y + z * z);
 }
@@ -1665,8 +1363,7 @@ ll_ivec3_length3i(int x, int y, int z)
 /**
  * @return The squared length of @vec.
  */
-LINEARLIBDEF float
-ll_ivec3_length_squared3iv(ivec3_t vec)
+LINEARLIBDEF float ll_ivec3_length_squared3iv(ivec3_t vec)
 {
 	float length = ll_ivec3_length3iv(vec);
 	return length * length;
@@ -1675,8 +1372,7 @@ ll_ivec3_length_squared3iv(ivec3_t vec)
 /**
  * @return The squared length of the vector { x, y, z }.
  */
-LINEARLIBDEF float
-ll_ivec3_length_squared3i(int x, int y, int z)
+LINEARLIBDEF float ll_ivec3_length_squared3i(int x, int y, int z)
 {
 	float length = ll_ivec3_length3i(x, y, z);
 	return length * length;
@@ -1686,8 +1382,7 @@ ll_ivec3_length_squared3i(int x, int y, int z)
  * @return A new vector, that is the sum of @left
  * and @right.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_add3iv(ivec3_t left, ivec3_t right)
+LINEARLIBDEF ivec3_t ll_ivec3_add3iv(ivec3_t left, ivec3_t right)
 {
 	return ll_ivec3_create3i(left.x + right.x, left.y + right.y,
 				left.z + right.z);
@@ -1697,8 +1392,7 @@ ll_ivec3_add3iv(ivec3_t left, ivec3_t right)
  * @return A new vector, that is the sum of @left
  * and { x, y, z }.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_add3i(ivec3_t left, int x, int y, int z)
+LINEARLIBDEF ivec3_t ll_ivec3_add3i(ivec3_t left, int x, int y, int z)
 {
 	return ll_ivec3_create3i(left.x + x, left.y + y,
 				left.z + z);
@@ -1708,8 +1402,7 @@ ll_ivec3_add3i(ivec3_t left, int x, int y, int z)
  * @return A new vector, that is the sum of @left
  * and { value, value, value }.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_add1i(ivec3_t left, int value)
+LINEARLIBDEF ivec3_t ll_ivec3_add1i(ivec3_t left, int value)
 {
 	return ll_ivec3_create3i(left.x + value, left.y + value,
 				left.z + value);
@@ -1719,8 +1412,7 @@ ll_ivec3_add1i(ivec3_t left, int value)
  * @return A new vector, that is the sum of @left
  * and -@right.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_sub3iv(ivec3_t left, ivec3_t right)
+LINEARLIBDEF ivec3_t ll_ivec3_sub3iv(ivec3_t left, ivec3_t right)
 {
 	return ll_ivec3_create3i(left.x - right.x, left.y - right.y,
 				left.z - right.z);
@@ -1730,8 +1422,7 @@ ll_ivec3_sub3iv(ivec3_t left, ivec3_t right)
  * @return A new vector, that is the sum of @left
  * and { -x, -y, -z }.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_sub3i(ivec3_t left, int x, int y, int z)
+LINEARLIBDEF ivec3_t ll_ivec3_sub3i(ivec3_t left, int x, int y, int z)
 {
 	return ll_ivec3_create3i(left.x - x, left.y - y,
 				left.z - z);
@@ -1741,8 +1432,7 @@ ll_ivec3_sub3i(ivec3_t left, int x, int y, int z)
  * @return A new vector, that is the sum of @left
  * and { -value, -value, -value }.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_sub1i(ivec3_t left, int value)
+LINEARLIBDEF ivec3_t ll_ivec3_sub1i(ivec3_t left, int value)
 {
 	return ll_ivec3_create3i(left.x - value, left.y - value,
 				left.z - value);
@@ -1752,8 +1442,7 @@ ll_ivec3_sub1i(ivec3_t left, int value)
  * @return A new vector, that is the component-wise
  * product of @left and @right.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_mul3iv(ivec3_t left, ivec3_t right)
+LINEARLIBDEF ivec3_t ll_ivec3_mul3iv(ivec3_t left, ivec3_t right)
 {
 	return ll_ivec3_create3i(left.x * right.x, left.y * right.y,
 				left.z * right.z);
@@ -1763,8 +1452,7 @@ ll_ivec3_mul3iv(ivec3_t left, ivec3_t right)
  * @return A new vector, that is the component-wise
  * product of @left and { x, y, z }.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_mul3i(ivec3_t left, int x, int y, int z)
+LINEARLIBDEF ivec3_t ll_ivec3_mul3i(ivec3_t left, int x, int y, int z)
 {
 	return ll_ivec3_create3i(left.x * x, left.y * y,
 				left.z * z);
@@ -1774,8 +1462,7 @@ ll_ivec3_mul3i(ivec3_t left, int x, int y, int z)
  * @return A new vector, that is the component-wise
  * product of @left and { value, value, value }.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_mul1i(ivec3_t left, int value)
+LINEARLIBDEF ivec3_t ll_ivec3_mul1i(ivec3_t left, int value)
 {
 	return ll_ivec3_create3i(left.x * value, left.y * value,
 				left.z * value);
@@ -1785,8 +1472,7 @@ ll_ivec3_mul1i(ivec3_t left, int value)
  * @return A new vector, that is the component-wise
  * division of @left and @right.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_div3iv(ivec3_t left, ivec3_t right)
+LINEARLIBDEF ivec3_t ll_ivec3_div3iv(ivec3_t left, ivec3_t right)
 {
 	return ll_ivec3_create3i(left.x / right.x, left.y / right.y,
 				left.z / right.z);
@@ -1796,8 +1482,7 @@ ll_ivec3_div3iv(ivec3_t left, ivec3_t right)
  * @return A new vector, that is the component-wise
  * division of @left and { x, y, z }.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_div3i(ivec3_t left, int x, int y, int z)
+LINEARLIBDEF ivec3_t ll_ivec3_div3i(ivec3_t left, int x, int y, int z)
 {
 	return ll_ivec3_create3i(left.x / x, left.y / y,
 				left.z / z);
@@ -1807,8 +1492,7 @@ ll_ivec3_div3i(ivec3_t left, int x, int y, int z)
  * @return A new vector, that is the component-wise
  * division of @left and { value, value, value }.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_div1i(ivec3_t left, int value)
+LINEARLIBDEF ivec3_t ll_ivec3_div1i(ivec3_t left, int value)
 {
 	return ll_ivec3_create3i(left.x / value, left.y / value,
 				left.z / value);
@@ -1817,8 +1501,7 @@ ll_ivec3_div1i(ivec3_t left, int value)
 /**
  * @return The dot product of @left and @right.
  */
-LINEARLIBDEF float
-ll_ivec3_dot3iv(ivec3_t left, ivec3_t right)
+LINEARLIBDEF float ll_ivec3_dot3iv(ivec3_t left, ivec3_t right)
 {
 	return left.x * right.x + left.y * right.y + left.z * right.z;
 }
@@ -1826,8 +1509,7 @@ ll_ivec3_dot3iv(ivec3_t left, ivec3_t right)
 /**
  * @return The dot product of @left and { x, y, z }.
  */
-LINEARLIBDEF float
-ll_ivec3_dot3i(ivec3_t left, int x, int y, int z)
+LINEARLIBDEF float ll_ivec3_dot3i(ivec3_t left, int x, int y, int z)
 {
 	return left.x * x + left.y * y + left.z * z;
 }
@@ -1837,8 +1519,7 @@ ll_ivec3_dot3i(ivec3_t left, int x, int y, int z)
  * this is essentially a new vector that is perpendicular
  * to @left and @right.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_cross3iv(ivec3_t left, ivec3_t right)
+LINEARLIBDEF ivec3_t ll_ivec3_cross3iv(ivec3_t left, ivec3_t right)
 {
 	return ll_ivec3_create3i(left.y*right.z - left.z*right.y,
 				left.z*right.x - left.x*right.z,
@@ -1850,8 +1531,7 @@ ll_ivec3_cross3iv(ivec3_t left, ivec3_t right)
  * this is essentially a new vector that is perpendicular
  * to @left and { x, y, z }.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_cross3i(ivec3_t left, int x, int y, int z)
+LINEARLIBDEF ivec3_t ll_ivec3_cross3i(ivec3_t left, int x, int y, int z)
 {
 	return ll_ivec3_create3i(left.y*z - left.z*y,
 				left.z*x - left.x*z,
@@ -1863,8 +1543,7 @@ ll_ivec3_cross3i(ivec3_t left, int x, int y, int z)
  * length is 1. This is essentially the unit vector
  * of @vec.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_normalise3iv(ivec3_t vec)
+LINEARLIBDEF ivec3_t ll_ivec3_normalise3iv(ivec3_t vec)
 {
 	float length = ll_ivec3_length3iv(vec);
 	return ll_ivec3_create3i( vec.x / length, vec.y / length,
@@ -1876,8 +1555,7 @@ ll_ivec3_normalise3iv(ivec3_t vec)
  * length is 1. This is essentially the unit vector
  * of { x, y, z }.
  */
-LINEARLIBDEF ivec3_t
-ll_ivec3_normalise3i(int x, int y, int z)
+LINEARLIBDEF ivec3_t ll_ivec3_normalise3i(int x, int y, int z)
 {
 	float length = ll_ivec3_length3i(x, y, z);
 	return ll_ivec3_create3i( x / length, y / length,
@@ -1887,8 +1565,7 @@ ll_ivec3_normalise3i(int x, int y, int z)
 /**
  * @return A vec3_t structure.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_create4i(int x, int y, int z, int w)
+LINEARLIBDEF ivec4_t ll_ivec4_create4i(int x, int y, int z, int w)
 {
 	return (ivec4_t) {{ x, y, z, w }};
 }
@@ -1896,8 +1573,7 @@ ll_ivec4_create4i(int x, int y, int z, int w)
 /**
  * @return A copy of @vec.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_create4iv(ivec4_t vec)
+LINEARLIBDEF ivec4_t ll_ivec4_create4iv(ivec4_t vec)
 {
 	return vec;
 }
@@ -1905,8 +1581,7 @@ ll_ivec4_create4iv(ivec4_t vec)
 /**
  * @return The length of @vec.
  */
-LINEARLIBDEF float
-ll_ivec4_length4iv(ivec4_t vec)
+LINEARLIBDEF float ll_ivec4_length4iv(ivec4_t vec)
 {
 	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z
 		     + vec.w * vec.w);
@@ -1915,8 +1590,7 @@ ll_ivec4_length4iv(ivec4_t vec)
 /**
  * @return The length of @vec.
  */
-LINEARLIBDEF float
-ll_ivec4_length4i(int x, int y, int z, int w)
+LINEARLIBDEF float ll_ivec4_length4i(int x, int y, int z, int w)
 {
 	return sqrtf(x * x + y * y + z * z + w * w);
 }
@@ -1924,8 +1598,7 @@ ll_ivec4_length4i(int x, int y, int z, int w)
 /**
  * @return The squared length of @vec.
  */
-LINEARLIBDEF float
-ll_ivec4_length_squared4iv(ivec4_t vec)
+LINEARLIBDEF float ll_ivec4_length_squared4iv(ivec4_t vec)
 {
 	float length = ll_ivec4_length4iv(vec);
 	return length * length;
@@ -1934,8 +1607,7 @@ ll_ivec4_length_squared4iv(ivec4_t vec)
 /**
  * @return The squared length of the vector { x, y, z, w }.
  */
-LINEARLIBDEF float
-ll_ivec4_length_squared4i(int x, int y, int z, int w)
+LINEARLIBDEF float ll_ivec4_length_squared4i(int x, int y, int z, int w)
 {
 	float length = ll_ivec4_length4i(x, y, z, w);
 	return length * length;
@@ -1945,8 +1617,7 @@ ll_ivec4_length_squared4i(int x, int y, int z, int w)
  * @return A new vector, that is the sum of @left
  * and @right.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_add4iv(ivec4_t left, ivec4_t right)
+LINEARLIBDEF ivec4_t ll_ivec4_add4iv(ivec4_t left, ivec4_t right)
 {
 	return ll_ivec4_create4i(left.x + right.x, left.y + right.y,
 				left.z + right.z, left.w + right.w);
@@ -1956,8 +1627,7 @@ ll_ivec4_add4iv(ivec4_t left, ivec4_t right)
  * @return A new vector, that is the sum of @left
  * and { x, y, z, w }.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_add4i(ivec4_t left, int x, int y, int z, int w)
+LINEARLIBDEF ivec4_t ll_ivec4_add4i(ivec4_t left, int x, int y, int z, int w)
 {
 	return ll_ivec4_create4i(left.x + x, left.y + y,
 				left.z + z, left.w + w);
@@ -1967,8 +1637,7 @@ ll_ivec4_add4i(ivec4_t left, int x, int y, int z, int w)
  * @return A new vector, that is the sum of @left
  * and { value, value, value, value }.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_add1i(ivec4_t left, int value)
+LINEARLIBDEF ivec4_t ll_ivec4_add1i(ivec4_t left, int value)
 {
 	return ll_ivec4_create4i(left.x + value, left.y + value,
 				left.z + value, left.w + value);
@@ -1978,8 +1647,7 @@ ll_ivec4_add1i(ivec4_t left, int value)
  * @return A new vector, that is the sum of @left
  * and -@right.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_sub4iv(ivec4_t left, ivec4_t right)
+LINEARLIBDEF ivec4_t ll_ivec4_sub4iv(ivec4_t left, ivec4_t right)
 {
 	return ll_ivec4_create4i(left.x - right.x, left.y - right.y,
 				left.z - right.z, left.w - right.w);
@@ -1989,8 +1657,7 @@ ll_ivec4_sub4iv(ivec4_t left, ivec4_t right)
  * @return A new vector, that is the sum of @left
  * and { -x, -y, -z, -w }.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_sub4i(ivec4_t left, int x, int y, int z, int w)
+LINEARLIBDEF ivec4_t ll_ivec4_sub4i(ivec4_t left, int x, int y, int z, int w)
 {
 	return ll_ivec4_create4i(left.x - x, left.y - y,
 				left.z - z, left.w - w);
@@ -2000,8 +1667,7 @@ ll_ivec4_sub4i(ivec4_t left, int x, int y, int z, int w)
  * @return A new vector, that is the sum of @left
  * and { -value, -value, -value, -value}.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_sub1i(ivec4_t left, int value)
+LINEARLIBDEF ivec4_t ll_ivec4_sub1i(ivec4_t left, int value)
 {
 	return ll_ivec4_create4i(left.x - value, left.y - value,
 				left.z - value, left.w - value);
@@ -2011,8 +1677,7 @@ ll_ivec4_sub1i(ivec4_t left, int value)
  * @return A new vector, that is the component-wise
  * product of @left and @right.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_mul4iv(ivec4_t left, ivec4_t right)
+LINEARLIBDEF ivec4_t ll_ivec4_mul4iv(ivec4_t left, ivec4_t right)
 {
 	return ll_ivec4_create4i(left.x * right.x, left.y * right.y,
 				left.z * right.z, left.w * right.w);
@@ -2022,8 +1687,7 @@ ll_ivec4_mul4iv(ivec4_t left, ivec4_t right)
  * @return A new vector, that is the component-wise
  * product of @left and { x, y, z }.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_mul4i(ivec4_t left, int x, int y, int z, int w)
+LINEARLIBDEF ivec4_t ll_ivec4_mul4i(ivec4_t left, int x, int y, int z, int w)
 {
 	return ll_ivec4_create4i(left.x * x, left.y * y,
 				left.z * z, left.w * w);
@@ -2033,8 +1697,7 @@ ll_ivec4_mul4i(ivec4_t left, int x, int y, int z, int w)
  * @return A new vector, that is the component-wise
  * product of @left and { value, value, value, value }.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_mul1i(ivec4_t left, int value)
+LINEARLIBDEF ivec4_t ll_ivec4_mul1i(ivec4_t left, int value)
 {
 	return ll_ivec4_create4i(left.x * value, left.y * value,
 				left.z * value, left.w * value);
@@ -2044,8 +1707,7 @@ ll_ivec4_mul1i(ivec4_t left, int value)
  * @return A new vector, that is the component-wise
  * division of @left and @right.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_div4iv(ivec4_t left, ivec4_t right)
+LINEARLIBDEF ivec4_t ll_ivec4_div4iv(ivec4_t left, ivec4_t right)
 {
 	return ll_ivec4_create4i(left.x / right.x, left.y / right.y,
 				left.z / right.z, left.w / right.w);
@@ -2055,8 +1717,7 @@ ll_ivec4_div4iv(ivec4_t left, ivec4_t right)
  * @return A new vector, that is the component-wise
  * division of @left and { x, y, z, w }.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_div4i(ivec4_t left, int x, int y, int z, int w)
+LINEARLIBDEF ivec4_t ll_ivec4_div4i(ivec4_t left, int x, int y, int z, int w)
 {
 	return ll_ivec4_create4i(left.x / x, left.y / y,
 				left.z / z, left.w / w);
@@ -2066,8 +1727,7 @@ ll_ivec4_div4i(ivec4_t left, int x, int y, int z, int w)
  * @return A new vector, that is the component-wise
  * division of @left and { value, value, value, value }.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_div1i(ivec4_t left, int value)
+LINEARLIBDEF ivec4_t ll_ivec4_div1i(ivec4_t left, int value)
 {
 	return ll_ivec4_create4i(left.x / value, left.y / value,
 				left.z / value, left.w / value);
@@ -2076,8 +1736,7 @@ ll_ivec4_div1i(ivec4_t left, int value)
 /**
  * @return The dot product of @left and @right.
  */
-LINEARLIBDEF float
-ll_ivec4_dot4iv(ivec4_t left, ivec4_t right)
+LINEARLIBDEF float ll_ivec4_dot4iv(ivec4_t left, ivec4_t right)
 {
 	return left.x * right.x + left.y * right.y
 		+ left.z * right.z + left.w * right.w;
@@ -2086,8 +1745,7 @@ ll_ivec4_dot4iv(ivec4_t left, ivec4_t right)
 /**
  * @return The dot product of @left and { x, y, z, w }.
  */
-LINEARLIBDEF float
-ll_ivec4_dot4i(ivec4_t left, int x, int y, int z, int w)
+LINEARLIBDEF float ll_ivec4_dot4i(ivec4_t left, int x, int y, int z, int w)
 {
 	return left.x * x + left.y * y + left.z * z
 		+ left.w * w;
@@ -2098,8 +1756,7 @@ ll_ivec4_dot4i(ivec4_t left, int x, int y, int z, int w)
  * length is 1. This is essentially the unit vector
  * of @vec.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_normalise4iv(ivec4_t vec)
+LINEARLIBDEF ivec4_t ll_ivec4_normalise4iv(ivec4_t vec)
 {
 	float length = ll_ivec4_length4iv(vec);
 	return ll_ivec4_create4i( vec.x / length, vec.y / length,
@@ -2111,8 +1768,7 @@ ll_ivec4_normalise4iv(ivec4_t vec)
  * length is 1. This is essentially the unit vector
  * of { x, y, z, w }.
  */
-LINEARLIBDEF ivec4_t
-ll_ivec4_normalise4i(int x, int y, int z, int w)
+LINEARLIBDEF ivec4_t ll_ivec4_normalise4i(int x, int y, int z, int w)
 {
 	float length = ll_ivec4_length4i(x, y, z, w);
 	return ll_ivec4_create4i( x / length, y / length,
@@ -2125,8 +1781,7 @@ ll_ivec4_normalise4i(int x, int y, int z, int w)
  * corresponds to the matrix on the left. @right corresponds to the
  * matrix on the right.
  */
-LINEARLIBDEF void
-ll_mat4_multiply(mat4_t *left, mat4_t *right)
+LINEARLIBDEF void ll_mat4_multiply(mat4_t *left, mat4_t *right)
 {
         mat4_t final;
         if (!left || !right) return;
@@ -2144,10 +1799,8 @@ ll_mat4_multiply(mat4_t *left, mat4_t *right)
 /**
  * @description copy the matrix contents of @from into @to
  */
-LINEARLIBDEF void
-ll_mat4_copy(mat4_t *to,  mat4_t *from)
+LINEARLIBDEF void ll_mat4_copy(mat4_t *to,  mat4_t *from)
 {
-        if (!to || !from) return;
         for (int i = 0; i < 16; i++)
                 to->data[i] = from->data[i];
 }
@@ -2155,12 +1808,10 @@ ll_mat4_copy(mat4_t *to,  mat4_t *from)
 /**
  * @description stores the identity matrix into @m
  */
-LINEARLIBDEF void
-ll_mat4_identity(mat4_t *mat)
+LINEARLIBDEF void ll_mat4_identity(mat4_t *mat)
 {
-        if (!mat) return;
-        for (int i = 0; i < 16; i++)
-                mat->data[i] = 0;
+	int i;
+	memset(mat, 0, sizeof(*mat));
         mat->m00 = 1.0;
         mat->m11 = 1.0;
         mat->m22 = 1.0;
@@ -2170,10 +1821,8 @@ ll_mat4_identity(mat4_t *mat)
 /**
  * @description stores a translation matrix inside of @mat with @dx, @dy and @dz.
  */
-LINEARLIBDEF void
-ll_mat4_translate3f(mat4_t *mat, float dx, float dy, float dz)
+LINEARLIBDEF void ll_mat4_translate3f(mat4_t *mat, float dx, float dy, float dz)
 {
-        if (!mat) return;
         ll_mat4_identity(mat);
         mat->m30 = dx;
         mat->m31 = dy;
@@ -2184,8 +1833,7 @@ ll_mat4_translate3f(mat4_t *mat, float dx, float dy, float dz)
  * @description same as above, but instead allows to supply a 3-dimensional
  * vector as the 2nd argument, containing (dx, dy, dz)
  */
-LINEARLIBDEF void
-ll_mat4_translate3fv(mat4_t *mat, vec3_t vec)
+LINEARLIBDEF void ll_mat4_translate3fv(mat4_t *mat, vec3_t vec)
 {
         ll_mat4_translate3f(mat, vec.x, vec.y, vec.z);
 }
@@ -2194,8 +1842,7 @@ ll_mat4_translate3fv(mat4_t *mat, vec3_t vec)
  * @description multiplies @m by a scaling matrix with components (w, h, d)
  * storing the result back into @m
  */
-LINEARLIBDEF void
-ll_mat4_scale3f(mat4_t *mat, float w, float h, float d)
+LINEARLIBDEF void ll_mat4_scale3f(mat4_t *mat, float w, float h, float d)
 {
         if (!mat) return;
         ll_mat4_identity(mat);
@@ -2208,8 +1855,7 @@ ll_mat4_scale3f(mat4_t *mat, float w, float h, float d)
  * @description same as above, but instead allows to supply a 3-dimensional
  * vector as the 2nd arugment, containing (w, h, d)
  */
-LINEARLIBDEF void
-ll_mat4_scale3fv(mat4_t *mat, vec3_t vec)
+LINEARLIBDEF void ll_mat4_scale3fv(mat4_t *mat, vec3_t vec)
 {
         ll_mat4_scale3f(mat, vec.x, vec.y, vec.z);
 }
@@ -2218,8 +1864,7 @@ ll_mat4_scale3fv(mat4_t *mat, vec3_t vec)
  * @description found whilst reading over rougier/freetype-gl implementation.
  * that can be found here: https://github.com/rougier/freetype-gl
  */
-LINEARLIBDEF void
-ll_mat4_rotate3f(mat4_t *mat, float x, float y, float z, float theta)
+LINEARLIBDEF void ll_mat4_rotate3f(mat4_t *mat, float x, float y, float z, float theta)
 {
         float c, s, norm;
         if (!mat) return;
@@ -2249,50 +1894,43 @@ ll_mat4_rotate3f(mat4_t *mat, float x, float y, float z, float theta)
  * @descriptionsame as above, but instead allows to supply a 3-dimensional
  * vector as the 2nd argument, containing (x, y, z)
  */
-LINEARLIBDEF void
-ll_mat4_rotate3fv(mat4_t *mat, vec3_t vec, float theta)
+LINEARLIBDEF void ll_mat4_rotate3fv(mat4_t *mat, vec3_t vec, float theta)
 {
         ll_mat4_rotate3f(mat, vec.x, vec.y, vec.z, theta);
 }
 
-LINEARLIBDEF void
-ll_mat4_translate3f2(mat4_t *mat, float dx, float dy, float dz)
+LINEARLIBDEF void ll_mat4_translate3f2(mat4_t *mat, float dx, float dy, float dz)
 {
 	mat4_t m;
         ll_mat4_translate3f(&m, dx, dy, dz);
         ll_mat4_multiply(mat, &m);
 }
 
-LINEARLIBDEF void
-ll_mat4_translate3fv2(mat4_t *mat, vec3_t vec)
+LINEARLIBDEF void ll_mat4_translate3fv2(mat4_t *mat, vec3_t vec)
 {
 	ll_mat4_translate3f2(mat, vec.x, vec.y, vec.z);
 }
 
-LINEARLIBDEF void
-ll_mat4_scale3f2(mat4_t *mat, float w, float h, float d)
+LINEARLIBDEF void ll_mat4_scale3f2(mat4_t *mat, float w, float h, float d)
 {
 	mat4_t m;
         ll_mat4_scale3f(&m, w, h, d);
         ll_mat4_multiply(mat, &m);
 }
 
-LINEARLIBDEF void
-ll_mat4_scale3fv2(mat4_t *mat, vec3_t vec)
+LINEARLIBDEF void ll_mat4_scale3fv2(mat4_t *mat, vec3_t vec)
 {
 	ll_mat4_scale3f2(mat, vec.x, vec.y, vec.z);
 }
 
-LINEARLIBDEF void
-ll_mat4_rotate3f2(mat4_t *mat, float x, float y, float z, float angle)
+LINEARLIBDEF void ll_mat4_rotate3f2(mat4_t *mat, float x, float y, float z, float angle)
 {
 	mat4_t m;
         ll_mat4_rotate3f(&m, x, y, z, angle);
         ll_mat4_multiply(mat, &m);
 }
 
-LINEARLIBDEF void
-ll_mat4_rotate3fv2(mat4_t *mat, vec3_t vec, float angle)
+LINEARLIBDEF void ll_mat4_rotate3fv2(mat4_t *mat, vec3_t vec, float angle)
 {
 	ll_mat4_rotate3f2(mat, vec.x, vec.y, vec.z, angle);
 }
@@ -2302,8 +1940,7 @@ ll_mat4_rotate3fv2(mat4_t *mat, vec3_t vec, float angle)
  * details of how this works can be found online or
  * found at https://github.com/wwotz/linearlib/README.md
  */
-LINEARLIBDEF void
-ll_mat4_orthographic(mat4_t *mat, float top, float right,
+LINEARLIBDEF void ll_mat4_orthographic(mat4_t *mat, float top, float right,
                      float bottom, float left, float near, float far)
 {
         if (!mat || left == right || near == far || bottom == top) return;
@@ -2321,8 +1958,7 @@ ll_mat4_orthographic(mat4_t *mat, float top, float right,
  * details of how this works can be found online or
  * found at https://github.com/wwotz/linearlib/README.md
  */
-LINEARLIBDEF void
-ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
+LINEARLIBDEF void ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
                     float near, float far)
 {
         float w, h;
@@ -2338,8 +1974,7 @@ ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
  * details of how this works can be found online or
  * found at https://github.com/wwotz/linearlib/README.md
  */
-LINEARLIBDEF void
-ll_mat4_frustum(mat4_t *mat, float top, float right,
+LINEARLIBDEF void ll_mat4_frustum(mat4_t *mat, float top, float right,
                 float bottom, float left, float near, float far)
 {
         if (!mat || left == right || bottom == top || near == far) return;
@@ -2359,8 +1994,7 @@ ll_mat4_frustum(mat4_t *mat, float top, float right,
  * details of how this works can be found online or
  * found at https://github.com/wwotz/linearlib/README.md
  */
-LINEARLIBDEF void
-ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
+LINEARLIBDEF void ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
 	       vec3_t lookat)
 {
 	ll_mat4_identity(mat);
@@ -2382,8 +2016,7 @@ ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
 	mat->m33 = 1.0;
 }
 
-LINEARLIBDEF void
-ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat)
+LINEARLIBDEF void ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat)
 {
 	float q00, q01, q11, q12, q03, q13, q02, q22, q23, q33;
 	q00 = q.s*q.s;
@@ -2414,8 +2047,7 @@ ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat)
  *
  * @return A quaternion.
  */
-LINEARLIBDEF quaternion_t
-ll_quaternion_create3f(float s, float x, float y, float z)
+LINEARLIBDEF quaternion_t ll_quaternion_create3f(float s, float x, float y, float z)
 {
 	quaternion_t c;
 	c.s = s;
@@ -2431,8 +2063,7 @@ ll_quaternion_create3f(float s, float x, float y, float z)
  *
  * @return A quaternion.
  */
-LINEARLIBDEF quaternion_t
-ll_quaternion_create3fv(float s, vec3_t v)
+LINEARLIBDEF quaternion_t ll_quaternion_create3fv(float s, vec3_t v)
 {
 	quaternion_t c;
 	c.s = s;
@@ -2446,8 +2077,7 @@ ll_quaternion_create3fv(float s, vec3_t v)
  *
  * @return A quaternion.
  */
-LINEARLIBDEF quaternion_t
-ll_quaternion_angle_axis3f(float radians, float x, float y, float z)
+LINEARLIBDEF quaternion_t ll_quaternion_angle_axis3f(float radians, float x, float y, float z)
 {
 	vec3_t v;
 	quaternion_t c;
@@ -2463,8 +2093,7 @@ ll_quaternion_angle_axis3f(float radians, float x, float y, float z)
  *
  * @return A quaternion.
  */
-LINEARLIBDEF quaternion_t
-ll_quaternion_angle_axis3fv(float radians, vec3_t v)
+LINEARLIBDEF quaternion_t ll_quaternion_angle_axis3fv(float radians, vec3_t v)
 {
 	quaternion_t c;
 	radians /= 2.0;
@@ -2479,8 +2108,7 @@ ll_quaternion_angle_axis3fv(float radians, vec3_t v)
  *
  * @return A quaternion.
  */
-LINEARLIBDEF quaternion_t 
-ll_quaternion_add(quaternion_t a, quaternion_t b)
+LINEARLIBDEF quaternion_t  ll_quaternion_add(quaternion_t a, quaternion_t b)
 {
 	quaternion_t c;
 	c.s = a.s + b.s;
@@ -2494,8 +2122,7 @@ ll_quaternion_add(quaternion_t a, quaternion_t b)
  *
  * @return A quaternion.
  */
-LINEARLIBDEF quaternion_t
-ll_quaternion_sub(quaternion_t a, quaternion_t b)
+LINEARLIBDEF quaternion_t ll_quaternion_sub(quaternion_t a, quaternion_t b)
 {
 	quaternion_t c;
 	c.s = a.s - b.s;
@@ -2509,8 +2136,7 @@ ll_quaternion_sub(quaternion_t a, quaternion_t b)
  *
  * @return A quaternion.
  */
-LINEARLIBDEF quaternion_t
-ll_quaternion_prod(quaternion_t a, quaternion_t b)
+LINEARLIBDEF quaternion_t ll_quaternion_prod(quaternion_t a, quaternion_t b)
 {
 	quaternion_t c;
 	c.s = a.s*b.s - ll_vec3_dot3fv(a.v, b.v);
@@ -2526,8 +2152,7 @@ ll_quaternion_prod(quaternion_t a, quaternion_t b)
  *
  * @return A scalar float.
  */
-LINEARLIBDEF float
-ll_quaternion_dot(quaternion_t a, quaternion_t b)
+LINEARLIBDEF float ll_quaternion_dot(quaternion_t a, quaternion_t b)
 {
 	float dot;
 	dot = a.s * b.s;
@@ -2540,8 +2165,7 @@ ll_quaternion_dot(quaternion_t a, quaternion_t b)
  *
  * @return A scalar float.
  */
-LINEARLIBDEF float
-ll_quaternion_norm(quaternion_t a)
+LINEARLIBDEF float ll_quaternion_norm(quaternion_t a)
 {
 	return sqrtf(a.s*a.s + ll_vec3_dot3fv(a.v, a.v));
 }
@@ -2551,8 +2175,7 @@ ll_quaternion_norm(quaternion_t a)
  *
  * @return A normalised version of the quaternion @a.
  */
-LINEARLIBDEF quaternion_t
-ll_quaternion_normalise(quaternion_t a)
+LINEARLIBDEF quaternion_t ll_quaternion_normalise(quaternion_t a)
 {
 	int i;
 	float norm;
@@ -2571,8 +2194,7 @@ ll_quaternion_normalise(quaternion_t a)
  *
  * @return The conjugate of the quaternion @a.
  */
-LINEARLIBDEF quaternion_t
-ll_quaternion_conjugate(quaternion_t a)
+LINEARLIBDEF quaternion_t ll_quaternion_conjugate(quaternion_t a)
 {
 	quaternion_t c;
 	c.s = a.s;
@@ -2585,8 +2207,7 @@ ll_quaternion_conjugate(quaternion_t a)
  *
  * @return The inverse of the quaternion @a.
  */
-LINEARLIBDEF quaternion_t
-ll_quaternion_inverse(quaternion_t a)
+LINEARLIBDEF quaternion_t ll_quaternion_inverse(quaternion_t a)
 {
 	quaternion_t c;
 	float sqrd_norm;
@@ -2605,8 +2226,7 @@ ll_quaternion_inverse(quaternion_t a)
  *
  * @return A rotated vec3_t.
  */
-LINEARLIBDEF vec3_t
-ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z)
+LINEARLIBDEF vec3_t ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z)
 {
 	quaternion_t c, a_conj;
 	c = ll_quaternion_create3f(0.0, x, y, z);
@@ -2620,8 +2240,7 @@ ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z)
  *
  * @return A rotated vec3_t.
  */
-LINEARLIBDEF vec3_t
-ll_quaternion_rotate3fv(quaternion_t a, vec3_t v)
+LINEARLIBDEF vec3_t ll_quaternion_rotate3fv(quaternion_t a, vec3_t v)
 {
 	quaternion_t c, a_conj;
 	c = ll_quaternion_create3fv(0.0, v);
@@ -2638,8 +2257,7 @@ static int ll_matrices_idx;                 /* The currently bound matrix from @
 /**
  * @description Binds the current matrix to @type.
  */
-LINEARLIBDEF void
-ll_matrix_mode(matrix_type_t type)
+LINEARLIBDEF void ll_matrix_mode(matrix_type_t type)
 {
         if (type >= 0 && type < LL_MATRIX_COUNT)
                 ll_matrices_idx = type;
@@ -2649,8 +2267,7 @@ ll_matrix_mode(matrix_type_t type)
  * @description Performs matrix multiplication on the currently
  * bound matrix, with the @right matrix.
  */
-LINEARLIBDEF void
-ll_matrix_multiply(mat4_t *right)
+LINEARLIBDEF void ll_matrix_multiply(mat4_t *right)
 {
         ll_mat4_multiply(ll_matrices+ll_matrices_idx, right);
 }
@@ -2659,8 +2276,7 @@ ll_matrix_multiply(mat4_t *right)
  * @description Places the identity matrix (I) into the
  * currently bound matrix.
  */
-LINEARLIBDEF void
-ll_matrix_identity(void)
+LINEARLIBDEF void ll_matrix_identity(void)
 {
         ll_mat4_identity(ll_matrices+ll_matrices_idx);
 }
@@ -2671,8 +2287,7 @@ ll_matrix_identity(void)
  * defined as translating some 3D coordinate by the
  * vector { dx, dy, dz }.
  */
-LINEARLIBDEF void
-ll_matrix_translate3f(float dx, float dy, float dz)
+LINEARLIBDEF void ll_matrix_translate3f(float dx, float dy, float dz)
 {
         mat4_t m;
         ll_mat4_translate3f(&m, dx, dy, dz);
@@ -2685,8 +2300,7 @@ ll_matrix_translate3f(float dx, float dy, float dz)
  * defined as translating some 3D coordinate by the
  * vector @vec.
  */
-LINEARLIBDEF void
-ll_matrix_translate3fv(vec3_t vec)
+LINEARLIBDEF void ll_matrix_translate3fv(vec3_t vec)
 {
         ll_matrix_translate3f(vec.x, vec.y, vec.z);
 }
@@ -2697,8 +2311,7 @@ ll_matrix_translate3fv(vec3_t vec)
  * defined as scaling some 3D coordinate by the
  * vector { w, h, d }. 
  */
-LINEARLIBDEF void
-ll_matrix_scale3f(float w, float h, float d)
+LINEARLIBDEF void ll_matrix_scale3f(float w, float h, float d)
 {
         mat4_t m;
         ll_mat4_scale3f(&m, w, h, d);
@@ -2711,8 +2324,7 @@ ll_matrix_scale3f(float w, float h, float d)
  * defined as scaling some 3D coordinate by the
  * vector @vec.
  */
-LINEARLIBDEF void
-ll_matrix_scale3fv(vec3_t vec)
+LINEARLIBDEF void ll_matrix_scale3fv(vec3_t vec)
 {
         ll_matrix_scale3f(vec.x, vec.y, vec.z);
 }
@@ -2724,8 +2336,7 @@ ll_matrix_scale3fv(vec3_t vec)
  * axis v = { x, y, z }, where |v| = 1. By an angle
  * @angle. @angle is defined in degrees [0, 360].
  */
-LINEARLIBDEF void
-ll_matrix_rotate3f(float x, float y, float z, float angle)
+LINEARLIBDEF void ll_matrix_rotate3f(float x, float y, float z, float angle)
 {
         mat4_t m;
         ll_mat4_rotate3f(&m, x, y, z, angle);
@@ -2739,8 +2350,7 @@ ll_matrix_rotate3f(float x, float y, float z, float angle)
  * axis @vec, where |@vec| = 1. By an angle
  * @angle. @angle is defined in degrees [0, 360].
  */
-LINEARLIBDEF void
-ll_matrix_rotate3fv(vec3_t vec, float angle)
+LINEARLIBDEF void ll_matrix_rotate3fv(vec3_t vec, float angle)
 {
         ll_matrix_rotate3f(vec.x, vec.y, vec.z, angle);
 }
@@ -2749,8 +2359,7 @@ ll_matrix_rotate3fv(vec3_t vec, float angle)
  * @description Stores the orthographic matrix
  * into the currently bound matrix. 
  */
-LINEARLIBDEF void
-ll_matrix_orthographic(float top, float right,
+LINEARLIBDEF void ll_matrix_orthographic(float top, float right,
                        float bottom, float left, float near, float far)
 {
         ll_mat4_orthographic(ll_matrices+ll_matrices_idx, top,
@@ -2761,8 +2370,7 @@ ll_matrix_orthographic(float top, float right,
  * @description Stores the orthographic matrix
  * into the currently bound matrix. 
  */
-LINEARLIBDEF void
-ll_matrix_perspective(float fovy, float aspect,
+LINEARLIBDEF void ll_matrix_perspective(float fovy, float aspect,
                       float near, float far)
 {
         ll_mat4_perspective(ll_matrices+ll_matrices_idx,
@@ -2773,8 +2381,7 @@ ll_matrix_perspective(float fovy, float aspect,
  * @description Stores the frustum matrix
  * into the currently bound matrix. 
  */
-LINEARLIBDEF void
-ll_matrix_frustum(float left, float right,
+LINEARLIBDEF void ll_matrix_frustum(float left, float right,
                   float bottom, float top, float near, float far)
 {
         ll_mat4_frustum(ll_matrices+ll_matrices_idx, left, right,
@@ -2785,8 +2392,7 @@ ll_matrix_frustum(float left, float right,
  * @description Stores the lookat matrix
  * into the currently bound matrix. 
  */
-LINEARLIBDEF void
-ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat)
+LINEARLIBDEF void ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat)
 {
 	ll_mat4_lookat(ll_matrices+ll_matrices_idx,
 		       x, y, z, lookat);
@@ -2797,22 +2403,19 @@ ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat)
  * prevents modification of the internal matrix
  * that is bound.
  */
-LINEARLIBDEF mat4_t
-ll_matrix_get_copy(void)
+LINEARLIBDEF mat4_t ll_matrix_get_copy(void)
 {
         return ll_matrices[ll_matrices_idx];
 }
 
-LINEARLIBDEF int
-ll_matrix_stack_pop(mat4_t *mat)
+LINEARLIBDEF int ll_matrix_stack_pop(mat4_t *mat)
 {
 	if (ll_matrix_stack_size <= 0 || !mat) return -1;
 	*mat = ll_matrix_stack[--ll_matrix_stack_size];
 	return 0;
 }
 
-LINEARLIBDEF int
-ll_matrix_stack_push(mat4_t *mat)
+LINEARLIBDEF int ll_matrix_stack_push(mat4_t *mat)
 {
 	if (ll_matrix_stack_size >= LL_MATRIX_STACK_CAPACITY || !mat) return -1;
 	ll_matrix_stack[ll_matrix_stack_size++] = *mat;
@@ -2823,12 +2426,11 @@ ll_matrix_stack_push(mat4_t *mat)
  * @description Converts a quaternion to a matrix and loads
  * it into the currently bound matrix.
  */
-LINEARLIBDEF void
-ll_quaternion_to_matrix(quaternion_t a)
+LINEARLIBDEF void ll_quaternion_to_matrix(quaternion_t a)
 {
 	ll_quaternion_to_mat4(a, ll_matrices+ll_matrices_idx);
 }
 
 #endif /* LL_USE_MATRIX */
 #endif /* LINEARLIB_IMPLEMENTATION */
-#endif /* LINEARLIB_H_ */
+#endif /* LINEARLIB_H_ */ 
