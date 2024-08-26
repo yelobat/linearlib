@@ -1,5 +1,5 @@
 /**
- * Author: wwotz
+ * Author: yelobat
  * Add #LINEARLIB_IMPLEMENTATION to the start of the implementation
  * file in order to add the implementation code to your project.
  */
@@ -226,6 +226,10 @@ LINEARLIBDEF float  ll_vec2_dot2fv(vec2_t left, vec2_t right);
 LINEARLIBDEF float  ll_vec2_dot2f(vec2_t left, float x, float y);
 LINEARLIBDEF float  ll_vec2_cross2fv(vec2_t left, vec2_t right);
 LINEARLIBDEF float  ll_vec2_cross2f(vec2_t left, float x, float y);
+LINEARLIBDEF vec2_t ll_vec2_min2fv(vec2_t x, vec2_t y);
+LINEARLIBDEF vec2_t ll_vec2_min2f(float x0, float y0, float x1, float y1);
+LINEARLIBDEF vec2_t ll_vec2_max2fv(vec2_t x, vec2_t y);
+LINEARLIBDEF vec2_t ll_vec2_max2f(float x0, float y0, float x1, float y1);
 LINEARLIBDEF vec2_t ll_vec2_normalise2fv(vec2_t vec);
 LINEARLIBDEF vec2_t ll_vec2_normalise2f(float x, float y);
 LINEARLIBDEF vec2_t ll_vec2_apply2fv(vec2_t vec, float (*f)(float));
@@ -256,6 +260,7 @@ LINEARLIBDEF vec3_t ll_vec3_cross3fv(vec3_t left, vec3_t right);
 LINEARLIBDEF vec3_t ll_vec3_cross3f(vec3_t left, float x, float y, float z);
 LINEARLIBDEF vec3_t ll_vec3_normalise3fv(vec3_t ivec);
 LINEARLIBDEF vec3_t ll_vec3_normalise3f(float x, float y, float z);
+LINEARLIBDEF vec3_t ll_vec3_origin(void);
 
 LINEARLIBDEF vec4_t ll_vec4_create4f(float x, float y, float z, float w);
 LINEARLIBDEF vec4_t ll_vec4_create4fv(vec4_t ivec);
@@ -614,6 +619,42 @@ LINEARLIBDEF float ll_vec2_cross2f(vec2_t left, float x, float y)
 	return left.x * y - left.y * x;
 }
 
+LINEARLIBDEF vec2_t ll_vec2_min2fv(vec2_t x, vec2_t y)
+{
+	#define u x
+	#define v y
+	return (vec2_t) {
+		u.x > v.x ? v.x : u.x,
+		u.y > v.y ? v.y : u.y
+	};
+	#undef u
+	#undef v
+}
+
+LINEARLIBDEF vec2_t ll_vec2_min2f(float x0, float y0, float x1, float y1)
+{
+	return ll_vec2_min2fv(ll_vec2_create2f(x0, y0),
+			      ll_vec2_create2f(x1, y1));
+}
+
+LINEARLIBDEF vec2_t ll_vec2_max2fv(vec2_t x, vec2_t y)
+{
+	#define u x
+	#define v y
+	return (vec2_t) {
+		u.x > v.x ? u.x : v.x,
+		u.y > v.y ? u.y : v.y
+	};
+	#undef u
+	#undef v
+}
+
+LINEARLIBDEF vec2_t ll_vec2_max2f(float x0, float y0, float x1, float y1)
+{
+	return ll_vec2_max2fv(ll_vec2_create2f(x0, y0),
+			      ll_vec2_create2f(x1, y1));
+}
+
 /**
  * @return A new vector, that is normalised so
  * that the returned vector's length is 1. It is
@@ -892,6 +933,11 @@ LINEARLIBDEF vec3_t ll_vec3_normalise3f(float x, float y, float z)
 	float length = ll_vec3_length3f(x, y, z);
 	return ll_vec3_create3f( x / length, y / length,
 				 z / length );
+}
+
+LINEARLIBDEF vec3_t ll_vec3_origin(void)
+{
+	return (vec3_t) { 0.0, 0.0, 0.0 };
 }
 
 /**
