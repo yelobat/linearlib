@@ -204,6 +204,16 @@ typedef struct quaternion_t {
 	vec3_t v;
 } quaternion_t;
 
+typedef struct aabb_t {
+	vec3_t min;
+	vec3_t max;
+} aabb_t;
+
+typedef struct ray_t {
+	vec3_t origin;
+	vec3_t direction;
+} ray_t;
+
 LINEARLIBDEF vec2_t ll_vec2_create2f(float x, float y);
 LINEARLIBDEF vec2_t ll_vec2_create2fv(vec2_t vec);
 LINEARLIBDEF float  ll_vec2_length2fv(vec2_t vec);
@@ -371,9 +381,11 @@ LINEARLIBDEF void ll_mat4_scale3f2(mat4_t *mat, float w, float h, float d);
 LINEARLIBDEF void ll_mat4_scale3fv2(mat4_t *mat, vec3_t vec);
 LINEARLIBDEF void ll_mat4_rotate3f2(mat4_t *mat, float x, float y, float z, float angle);
 LINEARLIBDEF void ll_mat4_rotate3fv2(mat4_t *mat, vec3_t vec, float angle);
-LINEARLIBDEF void ll_mat4_orthographic(mat4_t *mat, float top, float right, float bottom, float left, float near, float far);
+LINEARLIBDEF void ll_mat4_orthographic(mat4_t *mat, float top, float right, float bottom,
+				       float left, float near, float far);
 LINEARLIBDEF void ll_mat4_perspective(mat4_t *mat, float fovy, float aspect, float near, float far);
-LINEARLIBDEF void ll_mat4_frustum(mat4_t *mat, float left, float right, float bottom, float top, float near, float far);
+LINEARLIBDEF void ll_mat4_frustum(mat4_t *mat, float left, float right, float bottom,
+				  float top, float near, float far);
 LINEARLIBDEF void ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
 LINEARLIBDEF void ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat);
 
@@ -390,6 +402,17 @@ LINEARLIBDEF quaternion_t  ll_quaternion_conjugate(quaternion_t a);
 LINEARLIBDEF quaternion_t  ll_quaternion_inverse(quaternion_t a);
 LINEARLIBDEF vec3_t        ll_quaternion_rotate3fv(quaternion_t a, vec3_t v);
 LINEARLIBDEF vec3_t        ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z);
+
+LINEARLIBDEF ray_t ll_ray_create3f(float ox, float oy, float oz,
+				   float dx, float dy, float dz);
+LINEARLIBDEF ray_t ll_ray_create3fv(vec3_t origin, vec3_t direction);
+
+LINEARLIBDEF aabb_t ll_aabb_create3f(float x0, float y0, float z0,
+				     float x1, float y1, float z1);
+LINEARLIBDEF aabb_t ll_aabb_create3fv(vec3_t min, vec3_t max);
+LINEARLIBDEF int    ll_aabb_contains(aabb_t a, aabb_t b);
+LINEARLIBDEF vec2_t ll_aabb_intersect(ray_t ray, aabb_t aabb);
+LINEARLIBDEF int    ll_aabb_hit(ray_t ray, aabb_t aabb);
 
 #ifdef LL_USE_MATRIX
 
@@ -621,14 +644,14 @@ LINEARLIBDEF float ll_vec2_cross2f(vec2_t left, float x, float y)
 
 LINEARLIBDEF vec2_t ll_vec2_min2fv(vec2_t x, vec2_t y)
 {
-	#define u x
-	#define v y
-	return (vec2_t) {
-		u.x > v.x ? v.x : u.x,
-		u.y > v.y ? v.y : u.y
-	};
-	#undef u
-	#undef v
+#define u x
+#define v y
+	return (vec2_t) {{
+			u.x > v.x ? v.x : u.x,
+			u.y > v.y ? v.y : u.y
+		}};
+#undef u
+#undef v
 }
 
 LINEARLIBDEF vec2_t ll_vec2_min2f(float x0, float y0, float x1, float y1)
@@ -639,14 +662,14 @@ LINEARLIBDEF vec2_t ll_vec2_min2f(float x0, float y0, float x1, float y1)
 
 LINEARLIBDEF vec2_t ll_vec2_max2fv(vec2_t x, vec2_t y)
 {
-	#define u x
-	#define v y
-	return (vec2_t) {
-		u.x > v.x ? u.x : v.x,
-		u.y > v.y ? u.y : v.y
-	};
-	#undef u
-	#undef v
+#define u x
+#define v y
+	return (vec2_t) {{
+			u.x > v.x ? u.x : v.x,
+			u.y > v.y ? u.y : v.y
+		}};
+#undef u
+#undef v
 }
 
 LINEARLIBDEF vec2_t ll_vec2_max2f(float x0, float y0, float x1, float y1)
@@ -937,7 +960,7 @@ LINEARLIBDEF vec3_t ll_vec3_normalise3f(float x, float y, float z)
 
 LINEARLIBDEF vec3_t ll_vec3_origin(void)
 {
-	return (vec3_t) { 0.0, 0.0, 0.0 };
+	return (vec3_t) {{ 0.0, 0.0, 0.0 }};
 }
 
 /**
@@ -1856,7 +1879,6 @@ LINEARLIBDEF void ll_mat4_copy(mat4_t *to,  mat4_t *from)
  */
 LINEARLIBDEF void ll_mat4_identity(mat4_t *mat)
 {
-	int i;
 	memset(mat, 0, sizeof(*mat));
         mat->m00 = 1.0;
         mat->m11 = 1.0;
@@ -2223,7 +2245,6 @@ LINEARLIBDEF float ll_quaternion_norm(quaternion_t a)
  */
 LINEARLIBDEF quaternion_t ll_quaternion_normalise(quaternion_t a)
 {
-	int i;
 	float norm;
 	quaternion_t c;
 
@@ -2293,6 +2314,68 @@ LINEARLIBDEF vec3_t ll_quaternion_rotate3fv(quaternion_t a, vec3_t v)
 	a_conj = ll_quaternion_conjugate(a);
 	c = ll_quaternion_prod(ll_quaternion_prod(a, c), a_conj);
 	return c.v;
+}
+
+LINEARLIBDEF ray_t ll_ray_create3f(float ox, float oy, float oz,
+				   float dx, float dy, float dz)
+{
+	return ll_ray_create3fv((vec3_t) {{ox, oy, oz}},
+				(vec3_t) {{ dx, dy, dz }});
+}
+
+LINEARLIBDEF ray_t ll_ray_create3fv(vec3_t origin, vec3_t direction)
+{
+	return (ray_t) { .origin = origin, .direction = direction };
+}
+
+LINEARLIBDEF aabb_t ll_aabb_create3f(float x0, float y0, float z0,
+				     float x1, float y1, float z1)
+{
+	return  ll_aabb_create3fv((vec3_t) {{ x0, y0, z0 }},
+				  (vec3_t) {{ x1, y1, z1 }});
+}
+
+LINEARLIBDEF aabb_t ll_aabb_create3fv(vec3_t min, vec3_t max)
+{
+	return (aabb_t) { .min = min, .max = max };
+}
+
+// b is the smaller bounding box, a is the bigger one.
+LINEARLIBDEF int ll_aabb_contains(aabb_t a, aabb_t b)
+{
+	size_t i;
+	for (i = 0; i < 3; i++) {
+		if (!((b.min.data[i] >= a.min.data[i] ||
+		       fabsf(b.min.data[i] - a.min.data[i]) < 0.001) &&
+		      (b.max.data[i] <= a.max.data[i] ||
+		       fabsf(b.max.data[i] - a.max.data[i]) < 0.001))) return 0;
+	}
+	return 1;
+}
+
+// Slab Method for AABB - Ray Intersection. 
+LINEARLIBDEF vec2_t ll_aabb_intersect(ray_t ray, aabb_t aabb)
+{
+	int i;
+	float t0, t1;
+	float tmin, tmax;
+	
+	tmin = 0, tmax = INFINITY;
+	for (i = 0; i < 3; i++) {
+		t0 = (aabb.min.data[i] - ray.origin.data[i]) / ray.direction.data[i];
+		t1 = (aabb.max.data[i] - ray.origin.data[i]) / ray.direction.data[i];
+
+		tmin = fminf(fmaxf(t0, tmin), fmaxf(t1, tmin));
+		tmax = fmaxf(fminf(t0, tmax), fminf(t1, tmax));
+	}
+
+	return ll_vec2_create2f(tmin, tmax);
+}
+
+LINEARLIBDEF int ll_aabb_hit(ray_t ray, aabb_t aabb)
+{
+	vec2_t intersect = ll_aabb_intersect(ray, aabb);
+	return intersect.x <= intersect.y;
 }
 
 #ifdef LL_USE_MATRIX
