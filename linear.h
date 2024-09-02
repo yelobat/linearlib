@@ -204,14 +204,18 @@ typedef struct quaternion_t {
 	vec3_t v;
 } quaternion_t;
 
-typedef struct aabb_t {
-	vec3_t min;
-	vec3_t max;
+typedef union aabb_t {
+	vec3_t box[2];
+	struct {
+		vec3_t min;
+		vec3_t max;
+	};
 } aabb_t;
 
 typedef struct ray_t {
 	vec3_t origin;
 	vec3_t direction;
+	float  inv_dir[3];
 } ray_t;
 
 LINEARLIBDEF vec2_t ll_vec2_create2f(float x, float y);
@@ -2319,13 +2323,20 @@ LINEARLIBDEF vec3_t ll_quaternion_rotate3fv(quaternion_t a, vec3_t v)
 LINEARLIBDEF ray_t ll_ray_create3f(float ox, float oy, float oz,
 				   float dx, float dy, float dz)
 {
-	return ll_ray_create3fv((vec3_t) {{ox, oy, oz}},
+	return ll_ray_create3fv((vec3_t) {{ ox, oy, oz }},
 				(vec3_t) {{ dx, dy, dz }});
 }
 
 LINEARLIBDEF ray_t ll_ray_create3fv(vec3_t origin, vec3_t direction)
 {
-	return (ray_t) { .origin = origin, .direction = direction };
+	ray_t ray;
+	size_t i;
+	ray.origin = origin;
+	ray.direction = direction;
+	ray.inv_dir[0] = 1.0f / ray.direction.data[0];
+	ray.inv_dir[1] = 1.0f / ray.direction.data[1];
+	ray.inv_dir[2] = 1.0f / ray.direction.data[2];
+	return ray;
 }
 
 LINEARLIBDEF aabb_t ll_aabb_create3f(float x0, float y0, float z0,
@@ -2337,7 +2348,10 @@ LINEARLIBDEF aabb_t ll_aabb_create3f(float x0, float y0, float z0,
 
 LINEARLIBDEF aabb_t ll_aabb_create3fv(vec3_t min, vec3_t max)
 {
-	return (aabb_t) { .min = min, .max = max };
+	aabb_t aabb;
+	aabb.min = min;
+	aabb.max = max;
+	return aabb;
 }
 
 // b is the smaller bounding box, a is the bigger one.
@@ -2353,29 +2367,36 @@ LINEARLIBDEF int ll_aabb_contains(aabb_t a, aabb_t b)
 	return 1;
 }
 
-// Slab Method for AABB - Ray Intersection. 
+#define LL_MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define LL_MIN(a, b) (((a) < (b)) ? (a) : (b))
+
+// Slab Method for AABB - Ray Intersection.
 LINEARLIBDEF vec2_t ll_aabb_intersect(ray_t ray, aabb_t aabb)
 {
-	int i;
+	int i, sign;
 	float t0, t1;
 	float tmin, tmax;
-	
-	tmin = 0, tmax = INFINITY;
-	for (i = 0; i < 3; i++) {
-		t0 = (aabb.min.data[i] - ray.origin.data[i]) / ray.direction.data[i];
-		t1 = (aabb.max.data[i] - ray.origin.data[i]) / ray.direction.data[i];
 
-		tmin = fminf(fmaxf(t0, tmin), fmaxf(t1, tmin));
-		tmax = fmaxf(fminf(t0, tmax), fminf(t1, tmax));
+	tmin = 0, tmax = INFINITY;
+	for (i = 0; i < 3; ++i) {
+		sign = ray.inv_dir[i] < 0.0 ? 1 : 0;
+		t0 = aabb.box[sign].data[i];
+		t1 = aabb.box[!sign].data[i];
+
+		t0 = (t0 - ray.origin.data[i]) * ray.inv_dir[i];
+		t1 = (t1 - ray.origin.data[i]) * ray.inv_dir[i];
+
+		tmin = LL_MAX(t0, tmin);
+		tmax = LL_MIN(t1, tmax);
 	}
 
-	return ll_vec2_create2f(tmin, tmax);
+	return (vec2_t) {{ tmin, tmax }};
 }
 
 LINEARLIBDEF int ll_aabb_hit(ray_t ray, aabb_t aabb)
 {
 	vec2_t intersect = ll_aabb_intersect(ray, aabb);
-	return intersect.x <= intersect.y;
+	return intersect.x < intersect.y;
 }
 
 #ifdef LL_USE_MATRIX
