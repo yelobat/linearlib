@@ -415,8 +415,10 @@ LINEARLIBDEF aabb_t ll_aabb_create3f(float x0, float y0, float z0,
 				     float x1, float y1, float z1);
 LINEARLIBDEF aabb_t ll_aabb_create3fv(vec3_t min, vec3_t max);
 LINEARLIBDEF int    ll_aabb_contains(aabb_t a, aabb_t b);
-LINEARLIBDEF vec2_t ll_aabb_intersect(ray_t ray, aabb_t aabb);
-LINEARLIBDEF int    ll_aabb_hit(ray_t ray, aabb_t aabb);
+LINEARLIBDEF vec2_t ll_aabb_intersect(const ray_t *ray, const aabb_t *aabb);
+LINEARLIBDEF void   ll_aabb_intersections(const ray_t *ray, size_t count,
+					  const aabb_t *aabbs, float *v);
+LINEARLIBDEF int    ll_aabb_hit(const ray_t *ray, const aabb_t *aabb);
 
 #ifdef LL_USE_MATRIX
 
@@ -2371,7 +2373,7 @@ LINEARLIBDEF int ll_aabb_contains(aabb_t a, aabb_t b)
 #define LL_MIN(a, b) (((a) < (b)) ? (a) : (b))
 
 // Slab Method for AABB - Ray Intersection.
-LINEARLIBDEF vec2_t ll_aabb_intersect(ray_t ray, aabb_t aabb)
+LINEARLIBDEF vec2_t ll_aabb_intersect(const ray_t *ray, const aabb_t *aabb)
 {
 	int i, sign;
 	float t0, t1;
@@ -2379,12 +2381,12 @@ LINEARLIBDEF vec2_t ll_aabb_intersect(ray_t ray, aabb_t aabb)
 
 	tmin = 0, tmax = INFINITY;
 	for (i = 0; i < 3; ++i) {
-		sign = ray.inv_dir[i] < 0.0 ? 1 : 0;
-		t0 = aabb.box[sign].data[i];
-		t1 = aabb.box[!sign].data[i];
+		sign = ray->inv_dir[i] < 0.0 ? 1 : 0;
+		t0 = aabb->box[sign].data[i];
+		t1 = aabb->box[!sign].data[i];
 
-		t0 = (t0 - ray.origin.data[i]) * ray.inv_dir[i];
-		t1 = (t1 - ray.origin.data[i]) * ray.inv_dir[i];
+		t0 = (t0 - ray->origin.data[i]) * ray->inv_dir[i];
+		t1 = (t1 - ray->origin.data[i]) * ray->inv_dir[i];
 
 		tmin = LL_MAX(t0, tmin);
 		tmax = LL_MIN(t1, tmax);
@@ -2393,7 +2395,37 @@ LINEARLIBDEF vec2_t ll_aabb_intersect(ray_t ray, aabb_t aabb)
 	return (vec2_t) {{ tmin, tmax }};
 }
 
-LINEARLIBDEF int ll_aabb_hit(ray_t ray, aabb_t aabb)
+LINEARLIBDEF void ll_aabb_intersections(const ray_t *ray, size_t count,
+					const aabb_t *aabbs, float *v)
+{
+	size_t i, j;
+	int sign[3];
+	float t0, t1;
+	float tmin, tmax;
+
+	for (i = 0; i < 3; i++) {
+		sign[i] = ray->inv_dir[i] < 0.0 ? 1 : 0;
+	}
+
+	for (i = 0; i < count; i++) {
+		const aabb_t *bbox = aabbs + i;
+		tmin = 0, tmax = v[i];
+		for (j = 0; j < 3; j++) {
+			t0 = bbox->box[sign[j]].data[j];
+			t1 = bbox->box[!sign[j]].data[j];
+
+			t0 = (t0 - ray->origin.data[j]) * ray->inv_dir[j];
+			t1 = (t1 - ray->origin.data[j]) * ray->inv_dir[j];
+
+			tmin = LL_MAX(t0, tmin);
+			tmax = LL_MIN(t1, tmax);
+		}
+
+		v[i] = tmin <= tmax ? tmin : v[i];
+	}
+}
+
+LINEARLIBDEF int ll_aabb_hit(const ray_t *ray, const aabb_t *aabb)
 {
 	vec2_t intersect = ll_aabb_intersect(ray, aabb);
 	return intersect.x < intersect.y;
