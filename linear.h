@@ -280,6 +280,7 @@ LINEARLIBDEF vec3_t ll_vec3_cross3f(vec3_t left, float x, float y, float z);
 LINEARLIBDEF vec3_t ll_vec3_normalise3fv(vec3_t ivec);
 LINEARLIBDEF vec3_t ll_vec3_normalise3f(float x, float y, float z);
 LINEARLIBDEF vec3_t ll_vec3_origin(void);
+LINEARLIBDEF vec3_t ll_anim_lerp3fv(vec3_t a, vec3_t b, float t);
 
 LINEARLIBDEF vec4_t ll_vec4_create4f(float x, float y, float z, float w);
 LINEARLIBDEF vec4_t ll_vec4_create4fv(vec4_t ivec);
@@ -1001,6 +1002,17 @@ LINEARLIBDEF vec3_t ll_vec3_normalise3f(float x, float y, float z)
 LINEARLIBDEF vec3_t ll_vec3_origin(void)
 {
 	return (vec3_t) {{ 0.0, 0.0, 0.0 }};
+}
+
+LINEARLIBDEF vec3_t ll_anim_lerp3fv(vec3_t a, vec3_t b, float t)
+{
+	size_t i;
+	vec3_t c;
+	t = ll_anim_clamp1f(t, 0.0, 1.0);
+	for (i = 0; i < 3; i++) {
+		c.data[i] = ll_anim_lerp1f(a.data[i], b.data[i], t);
+	}
+	return c;
 }
 
 /**
