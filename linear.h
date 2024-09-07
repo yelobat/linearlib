@@ -218,6 +218,10 @@ typedef struct ray_t {
 	float  inv_dir[3];
 } ray_t;
 
+LINEARLIBDEF float ll_anim_clamp1f(float x, float l, float u);
+LINEARLIBDEF float ll_anim_smoothstep1f(float x);
+LINEARLIBDEF float ll_anim_lerp1f(float a, float b, float t);
+
 LINEARLIBDEF vec2_t ll_vec2_create2f(float x, float y);
 LINEARLIBDEF vec2_t ll_vec2_create2fv(vec2_t vec);
 LINEARLIBDEF float  ll_vec2_length2fv(vec2_t vec);
@@ -436,7 +440,8 @@ LINEARLIBDEF void   ll_matrix_scale3f(float w, float h, float d);
 LINEARLIBDEF void   ll_matrix_scale3fv(vec3_t vec);
 LINEARLIBDEF void   ll_matrix_rotate3f(float x, float y, float z, float angle);
 LINEARLIBDEF void   ll_matrix_rotate3fv(vec3_t vec, float angle);
-LINEARLIBDEF void   ll_matrix_orthographic(float top, float right, float bottom, float left, float near, float far);
+LINEARLIBDEF void   ll_matrix_orthographic(float top, float right, float bottom, float left,
+					   float near, float far);
 LINEARLIBDEF void   ll_matrix_perspective(float fovy, float aspect, float near, float far);
 LINEARLIBDEF void   ll_matrix_frustum(float left, float right, float bottom, float top, float near, float far);
 LINEARLIBDEF void   ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
@@ -448,6 +453,23 @@ LINEARLIBDEF void   ll_quaternion_to_matrix(quaternion_t a);
 #endif /* LL_USE_MATRIX */
 
 #ifdef LINEARLIB_IMPLEMENTATION
+
+LINEARLIBDEF float ll_anim_clamp1f(float x, float l, float u)
+{
+	return fminf(u, fmaxf(l, x));
+}
+
+LINEARLIBDEF float ll_anim_smoothstep1f(float x)
+{
+	x = ll_anim_clamp1f(x, 0.0, 1.0);
+	return x * x * (3.0 - 2.0 * x);
+}
+
+LINEARLIBDEF float ll_anim_lerp1f(float a, float b, float t)
+{
+	t = ll_anim_clamp1f(t, 0.0, 1.0);
+	return a * (1.0 - t) + t * b;
+}
 
 /**
  * @return A vec2_t structure.
