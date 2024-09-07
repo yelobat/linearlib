@@ -253,6 +253,7 @@ LINEARLIBDEF vec2_t ll_vec2_normalise2f(float x, float y);
 LINEARLIBDEF vec2_t ll_vec2_apply2fv(vec2_t vec, float (*f)(float));
 LINEARLIBDEF vec2_t ll_vec2_apply2f(float x, float y, float (*f)(float));
 LINEARLIBDEF vec2_t ll_vec2_origin(void);
+LINEARLIBDEF vec2_t ll_anim_lerp2fv(vec2_t a, vec2_t b, float t);
 
 LINEARLIBDEF vec3_t ll_vec3_create3f(float x, float y, float z);
 LINEARLIBDEF vec3_t ll_vec3_create3fv(vec3_t ivec);
@@ -750,6 +751,17 @@ LINEARLIBDEF vec2_t ll_vec2_apply2f(float x, float y, float (*f)(float))
 LINEARLIBDEF vec2_t ll_vec2_origin(void)
 {
 	return (vec2_t) {{ 0.0, 0.0 }};
+}
+
+LINEARLIBDEF vec2_t ll_anim_lerp2fv(vec2_t a, vec2_t b, float t)
+{
+	size_t i;
+	vec2_t c;
+	t = ll_anim_clamp1f(t, 0.0, 1.0);
+	for (i = 0; i < 2; i++) {
+		c.data[i] = ll_anim_lerp1f(a.data[i], b.data[i], t);
+	}
+	return c;
 }
 
 /**
