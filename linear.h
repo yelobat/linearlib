@@ -304,6 +304,7 @@ LINEARLIBDEF float  ll_vec4_dot4fv(vec4_t left, vec4_t right);
 LINEARLIBDEF float  ll_vec4_dot4f(vec4_t left, float x, float y, float z, float w);
 LINEARLIBDEF vec4_t ll_vec4_normalise4fv(vec4_t ivec);
 LINEARLIBDEF vec4_t ll_vec4_normalise4f(float x, float y, float z, float w);
+LINEARLIBDEF vec4_t ll_anim_lerp4fv(vec4_t a, vec4_t b, float t);
 
 LINEARLIBDEF ivec2_t ll_ivec2_create2i(int x, int y);
 LINEARLIBDEF ivec2_t ll_ivec2_create2iv(ivec2_t ivec);
@@ -1226,6 +1227,17 @@ LINEARLIBDEF vec4_t ll_vec4_normalise4f(float x, float y, float z, float w)
 	float length = ll_vec4_length4f(x, y, z, w);
 	return ll_vec4_create4f( x / length, y / length,
 				 z / length, w / length );
+}
+
+LINEARLIBDEF vec4_t ll_anim_lerp4fv(vec4_t a, vec4_t b, float t)
+{
+	size_t i;
+	vec4_t c;
+	t = ll_anim_clamp1f(t, 0.0, 1.0);
+	for (i = 0; i < 4; i++) {
+		c.data[i] = ll_anim_lerp1f(a.data[i], b.data[i], t);
+	}
+	return c;
 }
 
 /**
