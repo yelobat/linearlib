@@ -20,6 +20,11 @@
 #endif /* LINEARLIBSTATIC */
 #endif /* LINEARLIBDEF */
 
+#define LL_DEGREES_TO_RADIANS(deg) \
+	(((deg) / 180.0) * M_PI)
+#define LL_RADIANS_TO_DEGREES(rad) \
+	(((rad) / M_PI) * 180.0)
+
 /* &optional */
 #define LL_USE_MATRIX
 
@@ -513,8 +518,7 @@ LINEARLIBDEF float ll_vec2_length2f(float x, float y)
  */
 LINEARLIBDEF float ll_vec2_length_squared2fv(vec2_t vec)
 {
-	float length = ll_vec2_length2fv(vec);
-	return length*length;
+	return vec.x*vec.x + vec.y*vec.y;
 }
 
 /**
@@ -522,8 +526,7 @@ LINEARLIBDEF float ll_vec2_length_squared2fv(vec2_t vec)
  */
 LINEARLIBDEF float ll_vec2_length_squared2f(float x, float y)
 {
-	float length = ll_vec2_length2f(x, y);
-	return length*length;
+	return x*x + y*y;
 }
 
 /**
@@ -803,8 +806,7 @@ LINEARLIBDEF float ll_vec3_length3f(float x, float y, float z)
  */
 LINEARLIBDEF float ll_vec3_length_squared3fv(vec3_t vec)
 {
-	float length = ll_vec3_length3fv(vec);
-	return length * length;
+	return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z;
 }
 
 /**
@@ -812,8 +814,7 @@ LINEARLIBDEF float ll_vec3_length_squared3fv(vec3_t vec)
  */
 LINEARLIBDEF float ll_vec3_length_squared3f(float x, float y, float z)
 {
-	float length = ll_vec3_length3f(x, y, z);
-	return length * length;
+	return x*x + y*y + z*z;
 }
 
 /**
@@ -1054,8 +1055,8 @@ LINEARLIBDEF float ll_vec4_length4f(float x, float y, float z, float w)
  */
 LINEARLIBDEF float ll_vec4_length_squared4fv(vec4_t vec)
 {
-	float length = ll_vec4_length4fv(vec);
-	return length * length;
+	return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z
+		+ vec.w*vec.w;
 }
 
 /**
@@ -1063,8 +1064,7 @@ LINEARLIBDEF float ll_vec4_length_squared4fv(vec4_t vec)
  */
 LINEARLIBDEF float ll_vec4_length_squared4f(float x, float y, float z, float w)
 {
-	float length = ll_vec4_length4f(x, y, z, w);
-	return length * length;
+	return x*x + y*y + z*z + w*w;
 }
 
 /**
@@ -1279,8 +1279,7 @@ LINEARLIBDEF float ll_ivec2_length2i(int x, int y)
  */
 LINEARLIBDEF float ll_ivec2_length_squared2iv(ivec2_t vec)
 {
-	float length = ll_ivec2_length2iv(vec);
-	return length*length;
+	return vec.x*vec.x + vec.y*vec.y;
 }
 
 /**
@@ -1288,8 +1287,7 @@ LINEARLIBDEF float ll_ivec2_length_squared2iv(ivec2_t vec)
  */
 LINEARLIBDEF float ll_ivec2_length_squared2i(int x, int y)
 {
-	float length = ll_ivec2_length2i(x, y);
-	return length*length;
+	return x*x + y*y;
 }
 
 /**
@@ -1498,8 +1496,7 @@ LINEARLIBDEF float ll_ivec3_length3i(int x, int y, int z)
  */
 LINEARLIBDEF float ll_ivec3_length_squared3iv(ivec3_t vec)
 {
-	float length = ll_ivec3_length3iv(vec);
-	return length * length;
+	return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z;
 }
 
 /**
@@ -1507,8 +1504,7 @@ LINEARLIBDEF float ll_ivec3_length_squared3iv(ivec3_t vec)
  */
 LINEARLIBDEF float ll_ivec3_length_squared3i(int x, int y, int z)
 {
-	float length = ll_ivec3_length3i(x, y, z);
-	return length * length;
+	return x*x + y*y + z*z;
 }
 
 /**
@@ -1733,8 +1729,8 @@ LINEARLIBDEF float ll_ivec4_length4i(int x, int y, int z, int w)
  */
 LINEARLIBDEF float ll_ivec4_length_squared4iv(ivec4_t vec)
 {
-	float length = ll_ivec4_length4iv(vec);
-	return length * length;
+	return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z
+		+ vec.w * vec.w;
 }
 
 /**
@@ -1742,8 +1738,7 @@ LINEARLIBDEF float ll_ivec4_length_squared4iv(ivec4_t vec)
  */
 LINEARLIBDEF float ll_ivec4_length_squared4i(int x, int y, int z, int w)
 {
-	float length = ll_ivec4_length4i(x, y, z, w);
-	return length * length;
+	return x * x + y * y + z * z + w * w;
 }
 
 /**
@@ -2001,8 +1996,8 @@ LINEARLIBDEF void ll_mat4_rotate3f(mat4_t *mat, float x, float y, float z, float
         float c, s, norm;
         if (!mat) return;
 
-        c =    (float) cos(M_PI * theta/180.0);
-        s =    (float) sin(M_PI * theta/180.0);
+        c =    (float) cos(LL_DEGREES_TO_RADIANS(theta));
+        s =    (float) sin(LL_DEGREES_TO_RADIANS(theta));
         norm = (float) sqrt(x*x+y*y+z*z);
         
         x /= norm;
@@ -2012,13 +2007,13 @@ LINEARLIBDEF void ll_mat4_rotate3f(mat4_t *mat, float x, float y, float z, float
         ll_mat4_identity(mat);
         
         mat->m00 = x*x*(1-c)+c;
-        mat->m10 = y*x*(1-c)-z*s;
-        mat->m20 = z*x*(1-c)+y*s;
-        mat->m01 = x*y*(1-c)+z*s;
+        mat->m10 = y*x*(1-c)+z*s;
+        mat->m20 = z*x*(1-c)-y*s;
+        mat->m01 = x*y*(1-c)-z*s;
         mat->m11 = y*y*(1-c)+c;
-        mat->m21 = z*y*(1-c)-x*s;
-        mat->m02 = x*z*(1-c)-y*s;
-        mat->m12 = y*z*(1-c)+x*s;
+        mat->m21 = z*y*(1-c)+x*s;
+        mat->m02 = x*z*(1-c)+y*s;
+        mat->m12 = y*z*(1-c)-x*s;
         mat->m22 = z*z*(1-c)+c;
 }
 
