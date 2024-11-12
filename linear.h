@@ -2385,7 +2385,6 @@ LINEARLIBDEF ray_t ll_ray_create3f(float ox, float oy, float oz,
 LINEARLIBDEF ray_t ll_ray_create3fv(vec3_t origin, vec3_t direction)
 {
 	ray_t ray;
-	size_t i;
 	ray.origin = origin;
 	ray.direction = direction;
 	ray.inv_dir[0] = 1.0f / ray.direction.data[0];
