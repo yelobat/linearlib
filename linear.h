@@ -21,10 +21,10 @@
 #endif /* LINEARLIBSTATIC */
 #endif /* LINEARLIBDEF */
 
-#define LL_DEGREES_TO_RADIANS(deg) \
-	(((deg) / 180.0) * M_PI)
-#define LL_RADIANS_TO_DEGREES(rad) \
-	(((rad) / M_PI) * 180.0)
+#define LL_DEGREES_TO_RADIANS(deg)              \
+        (((deg) / 180.0) * M_PI)
+#define LL_RADIANS_TO_DEGREES(rad)              \
+        (((rad) / M_PI) * 180.0)
 
 /* &optional */
 #define LL_USE_MATRIX
@@ -33,7 +33,7 @@ typedef enum matrix_type_t {
         LL_MATRIX_MODEL,       /* Model matrix, used to transform objects to object space */
         LL_MATRIX_VIEW,        /* View matrix, used to transform objects to camera space */
         LL_MATRIX_PROJECTION,  /* Projection matrix, used to transform objects to viewport space */
-	LL_MATRIX_CAMERA,      /* Camera matrix, used for implementing separate matrix for camera view */
+        LL_MATRIX_CAMERA,      /* Camera matrix, used for implementing separate matrix for camera view */
         LL_MATRIX_COUNT
 } matrix_type_t;
 
@@ -206,22 +206,22 @@ typedef union mat4_t {
  * a quaternion.
  */
 typedef struct quaternion_t {
-	float s;
-	vec3_t v;
+        float s;
+        vec3_t v;
 } quaternion_t;
 
 typedef union aabb_t {
-	vec3_t box[2];
-	struct {
-		vec3_t min;
-		vec3_t max;
-	};
+        vec3_t box[2];
+        struct {
+                vec3_t min;
+                vec3_t max;
+        };
 } aabb_t;
 
 typedef struct ray_t {
-	vec3_t origin;
-	vec3_t direction;
-	float  inv_dir[3];
+        vec3_t origin;
+        vec3_t direction;
+        float  inv_dir[3];
 } ray_t;
 
 LINEARLIBDEF float ll_anim_clamp1f(float x, float l, float u);
@@ -399,10 +399,10 @@ LINEARLIBDEF void ll_mat4_scale3fv2(mat4_t *mat, vec3_t vec);
 LINEARLIBDEF void ll_mat4_rotate3f2(mat4_t *mat, float x, float y, float z, float angle);
 LINEARLIBDEF void ll_mat4_rotate3fv2(mat4_t *mat, vec3_t vec, float angle);
 LINEARLIBDEF void ll_mat4_orthographic(mat4_t *mat, float top, float right, float bottom,
-				       float left, float near, float far);
+                                       float left, float near, float far);
 LINEARLIBDEF void ll_mat4_perspective(mat4_t *mat, float fovy, float aspect, float near, float far);
 LINEARLIBDEF void ll_mat4_frustum(mat4_t *mat, float left, float right, float bottom,
-				  float top, float near, float far);
+                                  float top, float near, float far);
 LINEARLIBDEF void ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
 LINEARLIBDEF void ll_mat4_apply(mat4_t *mat, vec3_t *v);
 LINEARLIBDEF int  ll_mat4_stack_pop(mat4_t *mat);
@@ -424,21 +424,23 @@ LINEARLIBDEF vec3_t        ll_quaternion_rotate3fv(quaternion_t a, vec3_t v);
 LINEARLIBDEF vec3_t        ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z);
 
 LINEARLIBDEF ray_t ll_ray_create3f(float ox, float oy, float oz,
-				   float dx, float dy, float dz);
+                                   float dx, float dy, float dz);
 LINEARLIBDEF ray_t ll_ray_create3fv(vec3_t origin, vec3_t direction);
 
 LINEARLIBDEF aabb_t ll_aabb_create3f(float x0, float y0, float z0,
-				     float x1, float y1, float z1);
+                                     float x1, float y1, float z1);
 LINEARLIBDEF aabb_t ll_aabb_create3fv(vec3_t min, vec3_t max);
 LINEARLIBDEF int    ll_aabb_contains(aabb_t a, aabb_t b);
 LINEARLIBDEF vec2_t ll_aabb_intersect(const ray_t *ray, const aabb_t *aabb);
 LINEARLIBDEF void   ll_aabb_intersections(const ray_t *ray, size_t count,
-					  const aabb_t *aabbs, float *v);
+                                          const aabb_t *aabbs, float *v);
 LINEARLIBDEF int    ll_aabb_hit(const ray_t *ray, const aabb_t *aabb);
 
 #ifdef LL_USE_MATRIX
 
 LINEARLIBDEF void   ll_matrix_mode(matrix_type_t type);
+LINEARLIBDEF void   ll_matrix_mode_push(void);
+LINEARLIBDEF void   ll_matrix_mode_pop(void);
 LINEARLIBDEF void   ll_matrix_set(mat4_t *mat);
 LINEARLIBDEF void   ll_matrix_multiply(mat4_t *right);
 LINEARLIBDEF void   ll_matrix_identity(void);
@@ -449,7 +451,7 @@ LINEARLIBDEF void   ll_matrix_scale3fv(vec3_t vec);
 LINEARLIBDEF void   ll_matrix_rotate3f(float x, float y, float z, float angle);
 LINEARLIBDEF void   ll_matrix_rotate3fv(vec3_t vec, float angle);
 LINEARLIBDEF void   ll_matrix_orthographic(float top, float right, float bottom, float left,
-					   float near, float far);
+                                           float near, float far);
 LINEARLIBDEF void   ll_matrix_perspective(float fovy, float aspect, float near, float far);
 LINEARLIBDEF void   ll_matrix_frustum(float left, float right, float bottom, float top, float near, float far);
 LINEARLIBDEF void   ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
@@ -470,19 +472,19 @@ static mat4_t ll_matrix_stack[LL_MATRIX_STACK_CAPACITY];
 
 LINEARLIBDEF float ll_anim_clamp1f(float x, float l, float u)
 {
-	return fminf(u, fmaxf(l, x));
+        return fminf(u, fmaxf(l, x));
 }
 
 LINEARLIBDEF float ll_anim_smoothstep1f(float x)
 {
-	x = ll_anim_clamp1f(x, 0.0, 1.0);
-	return x * x * (3.0 - 2.0 * x);
+        x = ll_anim_clamp1f(x, 0.0, 1.0);
+        return x * x * (3.0 - 2.0 * x);
 }
 
 LINEARLIBDEF float ll_anim_lerp1f(float a, float b, float t)
 {
-	t = ll_anim_clamp1f(t, 0.0, 1.0);
-	return a * (1.0 - t) + t * b;
+        t = ll_anim_clamp1f(t, 0.0, 1.0);
+        return a * (1.0 - t) + t * b;
 }
 
 /**
@@ -490,7 +492,7 @@ LINEARLIBDEF float ll_anim_lerp1f(float a, float b, float t)
  */
 LINEARLIBDEF vec2_t ll_vec2_create2f(float x, float y)
 {
-	return (vec2_t) {{ x, y }};
+        return (vec2_t) {{ x, y }};
 }
 
 /**
@@ -500,7 +502,7 @@ LINEARLIBDEF vec2_t ll_vec2_create2f(float x, float y)
  */
 LINEARLIBDEF vec2_t ll_vec2_create2fv(vec2_t vec)
 {
-	return vec;
+        return vec;
 }
 
 /**
@@ -508,7 +510,7 @@ LINEARLIBDEF vec2_t ll_vec2_create2fv(vec2_t vec)
  */
 LINEARLIBDEF float ll_vec2_length2fv(vec2_t vec)
 {
-	return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
+        return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
 }
 
 /**
@@ -516,7 +518,7 @@ LINEARLIBDEF float ll_vec2_length2fv(vec2_t vec)
  */
 LINEARLIBDEF float ll_vec2_length2f(float x, float y)
 {
-	return sqrtf((x * x) + (y * y));
+        return sqrtf((x * x) + (y * y));
 }
 
 /**
@@ -524,7 +526,7 @@ LINEARLIBDEF float ll_vec2_length2f(float x, float y)
  */
 LINEARLIBDEF float ll_vec2_length_squared2fv(vec2_t vec)
 {
-	return vec.x*vec.x + vec.y*vec.y;
+        return vec.x*vec.x + vec.y*vec.y;
 }
 
 /**
@@ -532,7 +534,7 @@ LINEARLIBDEF float ll_vec2_length_squared2fv(vec2_t vec)
  */
 LINEARLIBDEF float ll_vec2_length_squared2f(float x, float y)
 {
-	return x*x + y*y;
+        return x*x + y*y;
 }
 
 /**
@@ -540,7 +542,7 @@ LINEARLIBDEF float ll_vec2_length_squared2f(float x, float y)
  */
 LINEARLIBDEF vec2_t ll_vec2_add2fv(vec2_t left, vec2_t right)
 {
-	return ll_vec2_create2f(left.x + right.x, left.y + right.y);
+        return ll_vec2_create2f(left.x + right.x, left.y + right.y);
 }
 
 /**
@@ -548,7 +550,7 @@ LINEARLIBDEF vec2_t ll_vec2_add2fv(vec2_t left, vec2_t right)
  */
 LINEARLIBDEF vec2_t ll_vec2_add2f(vec2_t left, float x, float y)
 {
-	return ll_vec2_create2f(left.x + x, left.y + y);
+        return ll_vec2_create2f(left.x + x, left.y + y);
 }
 
 /**
@@ -557,7 +559,7 @@ LINEARLIBDEF vec2_t ll_vec2_add2f(vec2_t left, float x, float y)
  */
 LINEARLIBDEF vec2_t ll_vec2_add1f(vec2_t left, float value)
 {
-	return ll_vec2_create2f(left.x + value, left.y + value);
+        return ll_vec2_create2f(left.x + value, left.y + value);
 }
 
 /**
@@ -565,7 +567,7 @@ LINEARLIBDEF vec2_t ll_vec2_add1f(vec2_t left, float value)
  */
 LINEARLIBDEF vec2_t ll_vec2_sub2fv(vec2_t left, vec2_t right)
 {
-	return ll_vec2_add2f(left, -right.x, -right.y);
+        return ll_vec2_add2f(left, -right.x, -right.y);
 }
 
 /**
@@ -574,7 +576,7 @@ LINEARLIBDEF vec2_t ll_vec2_sub2fv(vec2_t left, vec2_t right)
  */
 LINEARLIBDEF vec2_t ll_vec2_sub2f(vec2_t left, float x, float y)
 {
-	return ll_vec2_add2f(left, -x, -y);
+        return ll_vec2_add2f(left, -x, -y);
 }
 
 /**
@@ -583,7 +585,7 @@ LINEARLIBDEF vec2_t ll_vec2_sub2f(vec2_t left, float x, float y)
  */
 LINEARLIBDEF vec2_t ll_vec2_sub1f(vec2_t left, float value)
 {
-	return ll_vec2_add2f(left, -value, -value);
+        return ll_vec2_add2f(left, -value, -value);
 }
 
 /**
@@ -592,8 +594,8 @@ LINEARLIBDEF vec2_t ll_vec2_sub1f(vec2_t left, float value)
  */
 LINEARLIBDEF vec2_t ll_vec2_mul2fv(vec2_t left, vec2_t right)
 {
-	return ll_vec2_create2f(left.x * right.x,
-				left.y * right.y);
+        return ll_vec2_create2f(left.x * right.x,
+                                left.y * right.y);
 }
 
 /**
@@ -602,8 +604,8 @@ LINEARLIBDEF vec2_t ll_vec2_mul2fv(vec2_t left, vec2_t right)
  */
 LINEARLIBDEF vec2_t ll_vec2_mul2f(vec2_t left, float x, float y)
 {
-	return ll_vec2_create2f(left.x * x,
-				left.y * y);
+        return ll_vec2_create2f(left.x * x,
+                                left.y * y);
 }
 
 /**
@@ -612,8 +614,8 @@ LINEARLIBDEF vec2_t ll_vec2_mul2f(vec2_t left, float x, float y)
  */
 LINEARLIBDEF vec2_t ll_vec2_mul1f(vec2_t left, float value)
 {
-	return ll_vec2_create2f(left.x * value,
-				left.y * value);
+        return ll_vec2_create2f(left.x * value,
+                                left.y * value);
 }
 
 /**
@@ -622,8 +624,8 @@ LINEARLIBDEF vec2_t ll_vec2_mul1f(vec2_t left, float value)
  */
 LINEARLIBDEF vec2_t ll_vec2_div2fv(vec2_t left, vec2_t right)
 {
-	return ll_vec2_create2f(left.x / right.x,
-				left.y / right.y);
+        return ll_vec2_create2f(left.x / right.x,
+                                left.y / right.y);
 }
 
 /**
@@ -632,8 +634,8 @@ LINEARLIBDEF vec2_t ll_vec2_div2fv(vec2_t left, vec2_t right)
  */
 LINEARLIBDEF vec2_t ll_vec2_div2f(vec2_t left, float x, float y)
 {
-	return ll_vec2_create2f(left.x / x,
-				left.y / y);
+        return ll_vec2_create2f(left.x / x,
+                                left.y / y);
 }
 
 /**
@@ -642,8 +644,8 @@ LINEARLIBDEF vec2_t ll_vec2_div2f(vec2_t left, float x, float y)
  */
 LINEARLIBDEF vec2_t ll_vec2_div1f(vec2_t left, float value)
 {
-	return ll_vec2_create2f(left.x / value,
-				left.y / value);
+        return ll_vec2_create2f(left.x / value,
+                                left.y / value);
 }
 
 /**
@@ -652,7 +654,7 @@ LINEARLIBDEF vec2_t ll_vec2_div1f(vec2_t left, float value)
  */
 LINEARLIBDEF float ll_vec2_dot2fv(vec2_t left, vec2_t right)
 {
-	return left.x * right.x + left.y * right.y;
+        return left.x * right.x + left.y * right.y;
 }
 
 /**
@@ -661,7 +663,7 @@ LINEARLIBDEF float ll_vec2_dot2fv(vec2_t left, vec2_t right)
  */
 LINEARLIBDEF float ll_vec2_dot2f(vec2_t left, float x, float y)
 {
-	return left.x * x + left.y * y;
+        return left.x * x + left.y * y;
 }
 
 /**
@@ -670,7 +672,7 @@ LINEARLIBDEF float ll_vec2_dot2f(vec2_t left, float x, float y)
  */
 LINEARLIBDEF float ll_vec2_cross2fv(vec2_t left, vec2_t right)
 {
-	return left.x * right.y - left.y * right.x;
+        return left.x * right.y - left.y * right.x;
 }
 
 /**
@@ -679,43 +681,43 @@ LINEARLIBDEF float ll_vec2_cross2fv(vec2_t left, vec2_t right)
  */
 LINEARLIBDEF float ll_vec2_cross2f(vec2_t left, float x, float y)
 {
-	return left.x * y - left.y * x;
+        return left.x * y - left.y * x;
 }
 
 LINEARLIBDEF vec2_t ll_vec2_min2fv(vec2_t x, vec2_t y)
 {
 #define u x
 #define v y
-	return (vec2_t) {{
-			u.x > v.x ? v.x : u.x,
-			u.y > v.y ? v.y : u.y
-		}};
+        return (vec2_t) {{
+                        u.x > v.x ? v.x : u.x,
+                        u.y > v.y ? v.y : u.y
+                }};
 #undef u
 #undef v
 }
 
 LINEARLIBDEF vec2_t ll_vec2_min2f(float x0, float y0, float x1, float y1)
 {
-	return ll_vec2_min2fv(ll_vec2_create2f(x0, y0),
-			      ll_vec2_create2f(x1, y1));
+        return ll_vec2_min2fv(ll_vec2_create2f(x0, y0),
+                              ll_vec2_create2f(x1, y1));
 }
 
 LINEARLIBDEF vec2_t ll_vec2_max2fv(vec2_t x, vec2_t y)
 {
 #define u x
 #define v y
-	return (vec2_t) {{
-			u.x > v.x ? u.x : v.x,
-			u.y > v.y ? u.y : v.y
-		}};
+        return (vec2_t) {{
+                        u.x > v.x ? u.x : v.x,
+                        u.y > v.y ? u.y : v.y
+                }};
 #undef u
 #undef v
 }
 
 LINEARLIBDEF vec2_t ll_vec2_max2f(float x0, float y0, float x1, float y1)
 {
-	return ll_vec2_max2fv(ll_vec2_create2f(x0, y0),
-			      ll_vec2_create2f(x1, y1));
+        return ll_vec2_max2fv(ll_vec2_create2f(x0, y0),
+                              ll_vec2_create2f(x1, y1));
 }
 
 /**
@@ -725,8 +727,8 @@ LINEARLIBDEF vec2_t ll_vec2_max2f(float x0, float y0, float x1, float y1)
  */
 LINEARLIBDEF vec2_t ll_vec2_normalise2fv(vec2_t vec)
 {
-	float length = ll_vec2_length2fv(vec);
-	return ll_vec2_create2f( vec.x / length, vec.y / length );
+        float length = ll_vec2_length2fv(vec);
+        return ll_vec2_create2f( vec.x / length, vec.y / length );
 }
 
 /**
@@ -736,8 +738,8 @@ LINEARLIBDEF vec2_t ll_vec2_normalise2fv(vec2_t vec)
  */
 LINEARLIBDEF vec2_t ll_vec2_normalise2f(float x, float y)
 {
-	float length = ll_vec2_length2f(x, y);
-	return ll_vec2_create2f( x / length, y / length );
+        float length = ll_vec2_length2f(x, y);
+        return ll_vec2_create2f( x / length, y / length );
 }
 
 /**
@@ -746,7 +748,7 @@ LINEARLIBDEF vec2_t ll_vec2_normalise2f(float x, float y)
  */
 LINEARLIBDEF vec2_t ll_vec2_apply2fv(vec2_t vec, float (*f)(float))
 {
-	return (vec2_t) {{ f(vec.x), f(vec.y) }};
+        return (vec2_t) {{ f(vec.x), f(vec.y) }};
 }
 
 /**
@@ -756,23 +758,23 @@ LINEARLIBDEF vec2_t ll_vec2_apply2fv(vec2_t vec, float (*f)(float))
  */
 LINEARLIBDEF vec2_t ll_vec2_apply2f(float x, float y, float (*f)(float))
 {
-	return (vec2_t) {{ f(x), f(y) }};
+        return (vec2_t) {{ f(x), f(y) }};
 }
 
 LINEARLIBDEF vec2_t ll_vec2_origin(void)
 {
-	return (vec2_t) {{ 0.0, 0.0 }};
+        return (vec2_t) {{ 0.0, 0.0 }};
 }
 
 LINEARLIBDEF vec2_t ll_anim_lerp2fv(vec2_t a, vec2_t b, float t)
 {
-	size_t i;
-	vec2_t c;
-	t = ll_anim_clamp1f(t, 0.0, 1.0);
-	for (i = 0; i < 2; i++) {
-		c.data[i] = ll_anim_lerp1f(a.data[i], b.data[i], t);
-	}
-	return c;
+        size_t i;
+        vec2_t c;
+        t = ll_anim_clamp1f(t, 0.0, 1.0);
+        for (i = 0; i < 2; i++) {
+                c.data[i] = ll_anim_lerp1f(a.data[i], b.data[i], t);
+        }
+        return c;
 }
 
 /**
@@ -780,7 +782,7 @@ LINEARLIBDEF vec2_t ll_anim_lerp2fv(vec2_t a, vec2_t b, float t)
  */
 LINEARLIBDEF vec3_t ll_vec3_create3f(float x, float y, float z)
 {
-	return (vec3_t) {{ x, y, z }};
+        return (vec3_t) {{ x, y, z }};
 }
 
 /**
@@ -788,7 +790,7 @@ LINEARLIBDEF vec3_t ll_vec3_create3f(float x, float y, float z)
  */
 LINEARLIBDEF vec3_t ll_vec3_create3fv(vec3_t vec)
 {
-	return vec;
+        return vec;
 }
 
 /**
@@ -796,7 +798,7 @@ LINEARLIBDEF vec3_t ll_vec3_create3fv(vec3_t vec)
  */
 LINEARLIBDEF float ll_vec3_length3fv(vec3_t vec)
 {
-	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+        return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
 
 /**
@@ -804,7 +806,7 @@ LINEARLIBDEF float ll_vec3_length3fv(vec3_t vec)
  */
 LINEARLIBDEF float ll_vec3_length3f(float x, float y, float z)
 {
-	return sqrtf(x * x + y * y + z * z);
+        return sqrtf(x * x + y * y + z * z);
 }
 
 /**
@@ -812,7 +814,7 @@ LINEARLIBDEF float ll_vec3_length3f(float x, float y, float z)
  */
 LINEARLIBDEF float ll_vec3_length_squared3fv(vec3_t vec)
 {
-	return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z;
+        return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z;
 }
 
 /**
@@ -820,7 +822,7 @@ LINEARLIBDEF float ll_vec3_length_squared3fv(vec3_t vec)
  */
 LINEARLIBDEF float ll_vec3_length_squared3f(float x, float y, float z)
 {
-	return x*x + y*y + z*z;
+        return x*x + y*y + z*z;
 }
 
 /**
@@ -829,8 +831,8 @@ LINEARLIBDEF float ll_vec3_length_squared3f(float x, float y, float z)
  */
 LINEARLIBDEF vec3_t ll_vec3_add3fv(vec3_t left, vec3_t right)
 {
-	return ll_vec3_create3f(left.x + right.x, left.y + right.y,
-				left.z + right.z);
+        return ll_vec3_create3f(left.x + right.x, left.y + right.y,
+                                left.z + right.z);
 }
 
 /**
@@ -839,8 +841,8 @@ LINEARLIBDEF vec3_t ll_vec3_add3fv(vec3_t left, vec3_t right)
  */
 LINEARLIBDEF vec3_t ll_vec3_add3f(vec3_t left, float x, float y, float z)
 {
-	return ll_vec3_create3f(left.x + x, left.y + y,
-				left.z + z);
+        return ll_vec3_create3f(left.x + x, left.y + y,
+                                left.z + z);
 }
 
 /**
@@ -849,8 +851,8 @@ LINEARLIBDEF vec3_t ll_vec3_add3f(vec3_t left, float x, float y, float z)
  */
 LINEARLIBDEF vec3_t ll_vec3_add1f(vec3_t left, float value)
 {
-	return ll_vec3_create3f(left.x + value, left.y + value,
-				left.z + value);
+        return ll_vec3_create3f(left.x + value, left.y + value,
+                                left.z + value);
 }
 
 /**
@@ -859,8 +861,8 @@ LINEARLIBDEF vec3_t ll_vec3_add1f(vec3_t left, float value)
  */
 LINEARLIBDEF vec3_t ll_vec3_sub3fv(vec3_t left, vec3_t right)
 {
-	return ll_vec3_create3f(left.x - right.x, left.y - right.y,
-				left.z - right.z);
+        return ll_vec3_create3f(left.x - right.x, left.y - right.y,
+                                left.z - right.z);
 }
 
 /**
@@ -869,8 +871,8 @@ LINEARLIBDEF vec3_t ll_vec3_sub3fv(vec3_t left, vec3_t right)
  */
 LINEARLIBDEF vec3_t ll_vec3_sub3f(vec3_t left, float x, float y, float z)
 {
-	return ll_vec3_create3f(left.x - x, left.y - y,
-				left.z - z);
+        return ll_vec3_create3f(left.x - x, left.y - y,
+                                left.z - z);
 }
 
 /**
@@ -879,8 +881,8 @@ LINEARLIBDEF vec3_t ll_vec3_sub3f(vec3_t left, float x, float y, float z)
  */
 LINEARLIBDEF vec3_t ll_vec3_sub1f(vec3_t left, float value)
 {
-	return ll_vec3_create3f(left.x - value, left.y - value,
-				left.z - value);
+        return ll_vec3_create3f(left.x - value, left.y - value,
+                                left.z - value);
 }
 
 /**
@@ -889,8 +891,8 @@ LINEARLIBDEF vec3_t ll_vec3_sub1f(vec3_t left, float value)
  */
 LINEARLIBDEF vec3_t ll_vec3_mul3fv(vec3_t left, vec3_t right)
 {
-	return ll_vec3_create3f(left.x * right.x, left.y * right.y,
-				left.z * right.z);
+        return ll_vec3_create3f(left.x * right.x, left.y * right.y,
+                                left.z * right.z);
 }
 
 /**
@@ -899,8 +901,8 @@ LINEARLIBDEF vec3_t ll_vec3_mul3fv(vec3_t left, vec3_t right)
  */
 LINEARLIBDEF vec3_t ll_vec3_mul3f(vec3_t left, float x, float y, float z)
 {
-	return ll_vec3_create3f(left.x * x, left.y * y,
-				left.z * z);
+        return ll_vec3_create3f(left.x * x, left.y * y,
+                                left.z * z);
 }
 
 /**
@@ -909,8 +911,8 @@ LINEARLIBDEF vec3_t ll_vec3_mul3f(vec3_t left, float x, float y, float z)
  */
 LINEARLIBDEF vec3_t ll_vec3_mul1f(vec3_t left, float value)
 {
-	return ll_vec3_create3f(left.x * value, left.y * value,
-				left.z * value);
+        return ll_vec3_create3f(left.x * value, left.y * value,
+                                left.z * value);
 }
 
 /**
@@ -919,8 +921,8 @@ LINEARLIBDEF vec3_t ll_vec3_mul1f(vec3_t left, float value)
  */
 LINEARLIBDEF vec3_t ll_vec3_div3fv(vec3_t left, vec3_t right)
 {
-	return ll_vec3_create3f(left.x / right.x, left.y / right.y,
-				left.z / right.z);
+        return ll_vec3_create3f(left.x / right.x, left.y / right.y,
+                                left.z / right.z);
 }
 
 /**
@@ -929,8 +931,8 @@ LINEARLIBDEF vec3_t ll_vec3_div3fv(vec3_t left, vec3_t right)
  */
 LINEARLIBDEF vec3_t ll_vec3_div3f(vec3_t left, float x, float y, float z)
 {
-	return ll_vec3_create3f(left.x / x, left.y / y,
-				left.z / z);
+        return ll_vec3_create3f(left.x / x, left.y / y,
+                                left.z / z);
 }
 
 /**
@@ -939,8 +941,8 @@ LINEARLIBDEF vec3_t ll_vec3_div3f(vec3_t left, float x, float y, float z)
  */
 LINEARLIBDEF vec3_t ll_vec3_div1f(vec3_t left, float value)
 {
-	return ll_vec3_create3f(left.x / value, left.y / value,
-				left.z / value);
+        return ll_vec3_create3f(left.x / value, left.y / value,
+                                left.z / value);
 }
 
 /**
@@ -948,7 +950,7 @@ LINEARLIBDEF vec3_t ll_vec3_div1f(vec3_t left, float value)
  */
 LINEARLIBDEF float ll_vec3_dot3fv(vec3_t left, vec3_t right)
 {
-	return left.x * right.x + left.y * right.y + left.z * right.z;
+        return left.x * right.x + left.y * right.y + left.z * right.z;
 }
 
 /**
@@ -956,7 +958,7 @@ LINEARLIBDEF float ll_vec3_dot3fv(vec3_t left, vec3_t right)
  */
 LINEARLIBDEF float ll_vec3_dot3f(vec3_t left, float x, float y, float z)
 {
-	return left.x * x + left.y * y + left.z * z;
+        return left.x * x + left.y * y + left.z * z;
 }
 
 /**
@@ -966,9 +968,9 @@ LINEARLIBDEF float ll_vec3_dot3f(vec3_t left, float x, float y, float z)
  */
 LINEARLIBDEF vec3_t ll_vec3_cross3fv(vec3_t left, vec3_t right)
 {
-	return ll_vec3_create3f(left.y*right.z - left.z*right.y,
-				left.z*right.x - left.x*right.z,
-				left.x*right.y - left.y*right.x);
+        return ll_vec3_create3f(left.y*right.z - left.z*right.y,
+                                left.z*right.x - left.x*right.z,
+                                left.x*right.y - left.y*right.x);
 }
 
 /**
@@ -978,9 +980,9 @@ LINEARLIBDEF vec3_t ll_vec3_cross3fv(vec3_t left, vec3_t right)
  */
 LINEARLIBDEF vec3_t ll_vec3_cross3f(vec3_t left, float x, float y, float z)
 {
-	return ll_vec3_create3f(left.y*z - left.z*y,
-				left.z*x - left.x*z,
-				left.x*y - left.y*x);
+        return ll_vec3_create3f(left.y*z - left.z*y,
+                                left.z*x - left.x*z,
+                                left.x*y - left.y*x);
 }
 
 /**
@@ -990,9 +992,9 @@ LINEARLIBDEF vec3_t ll_vec3_cross3f(vec3_t left, float x, float y, float z)
  */
 LINEARLIBDEF vec3_t ll_vec3_normalise3fv(vec3_t vec)
 {
-	float length = ll_vec3_length3fv(vec);
-	return ll_vec3_create3f( vec.x / length, vec.y / length,
-				 vec.z / length );
+        float length = ll_vec3_length3fv(vec);
+        return ll_vec3_create3f( vec.x / length, vec.y / length,
+                                 vec.z / length );
 }
 
 /**
@@ -1002,25 +1004,25 @@ LINEARLIBDEF vec3_t ll_vec3_normalise3fv(vec3_t vec)
  */
 LINEARLIBDEF vec3_t ll_vec3_normalise3f(float x, float y, float z)
 {
-	float length = ll_vec3_length3f(x, y, z);
-	return ll_vec3_create3f( x / length, y / length,
-				 z / length );
+        float length = ll_vec3_length3f(x, y, z);
+        return ll_vec3_create3f( x / length, y / length,
+                                 z / length );
 }
 
 LINEARLIBDEF vec3_t ll_vec3_origin(void)
 {
-	return (vec3_t) {{ 0.0, 0.0, 0.0 }};
+        return (vec3_t) {{ 0.0, 0.0, 0.0 }};
 }
 
 LINEARLIBDEF vec3_t ll_anim_lerp3fv(vec3_t a, vec3_t b, float t)
 {
-	size_t i;
-	vec3_t c;
-	t = ll_anim_clamp1f(t, 0.0, 1.0);
-	for (i = 0; i < 3; i++) {
-		c.data[i] = ll_anim_lerp1f(a.data[i], b.data[i], t);
-	}
-	return c;
+        size_t i;
+        vec3_t c;
+        t = ll_anim_clamp1f(t, 0.0, 1.0);
+        for (i = 0; i < 3; i++) {
+                c.data[i] = ll_anim_lerp1f(a.data[i], b.data[i], t);
+        }
+        return c;
 }
 
 /**
@@ -1028,7 +1030,7 @@ LINEARLIBDEF vec3_t ll_anim_lerp3fv(vec3_t a, vec3_t b, float t)
  */
 LINEARLIBDEF vec4_t ll_vec4_create4f(float x, float y, float z, float w)
 {
-	return (vec4_t) {{ x, y, z, w }};
+        return (vec4_t) {{ x, y, z, w }};
 }
 
 /**
@@ -1036,7 +1038,7 @@ LINEARLIBDEF vec4_t ll_vec4_create4f(float x, float y, float z, float w)
  */
 LINEARLIBDEF vec4_t ll_vec4_create4fv(vec4_t vec)
 {
-	return vec;
+        return vec;
 }
 
 /**
@@ -1044,8 +1046,8 @@ LINEARLIBDEF vec4_t ll_vec4_create4fv(vec4_t vec)
  */
 LINEARLIBDEF float ll_vec4_length4fv(vec4_t vec)
 {
-	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z
-		     + vec.w * vec.w);
+        return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z
+                     + vec.w * vec.w);
 }
 
 /**
@@ -1053,7 +1055,7 @@ LINEARLIBDEF float ll_vec4_length4fv(vec4_t vec)
  */
 LINEARLIBDEF float ll_vec4_length4f(float x, float y, float z, float w)
 {
-	return sqrtf(x * x + y * y + z * z + w * w);
+        return sqrtf(x * x + y * y + z * z + w * w);
 }
 
 /**
@@ -1061,8 +1063,8 @@ LINEARLIBDEF float ll_vec4_length4f(float x, float y, float z, float w)
  */
 LINEARLIBDEF float ll_vec4_length_squared4fv(vec4_t vec)
 {
-	return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z
-		+ vec.w*vec.w;
+        return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z
+                + vec.w*vec.w;
 }
 
 /**
@@ -1070,7 +1072,7 @@ LINEARLIBDEF float ll_vec4_length_squared4fv(vec4_t vec)
  */
 LINEARLIBDEF float ll_vec4_length_squared4f(float x, float y, float z, float w)
 {
-	return x*x + y*y + z*z + w*w;
+        return x*x + y*y + z*z + w*w;
 }
 
 /**
@@ -1079,8 +1081,8 @@ LINEARLIBDEF float ll_vec4_length_squared4f(float x, float y, float z, float w)
  */
 LINEARLIBDEF vec4_t ll_vec4_add4fv(vec4_t left, vec4_t right)
 {
-	return ll_vec4_create4f(left.x + right.x, left.y + right.y,
-				left.z + right.z, left.w + right.w);
+        return ll_vec4_create4f(left.x + right.x, left.y + right.y,
+                                left.z + right.z, left.w + right.w);
 }
 
 /**
@@ -1089,8 +1091,8 @@ LINEARLIBDEF vec4_t ll_vec4_add4fv(vec4_t left, vec4_t right)
  */
 LINEARLIBDEF vec4_t ll_vec4_add4f(vec4_t left, float x, float y, float z, float w)
 {
-	return ll_vec4_create4f(left.x + x, left.y + y,
-				left.z + z, left.w + w);
+        return ll_vec4_create4f(left.x + x, left.y + y,
+                                left.z + z, left.w + w);
 }
 
 /**
@@ -1099,8 +1101,8 @@ LINEARLIBDEF vec4_t ll_vec4_add4f(vec4_t left, float x, float y, float z, float 
  */
 LINEARLIBDEF vec4_t ll_vec4_add1f(vec4_t left, float value)
 {
-	return ll_vec4_create4f(left.x + value, left.y + value,
-				left.z + value, left.w + value);
+        return ll_vec4_create4f(left.x + value, left.y + value,
+                                left.z + value, left.w + value);
 }
 
 /**
@@ -1109,8 +1111,8 @@ LINEARLIBDEF vec4_t ll_vec4_add1f(vec4_t left, float value)
  */
 LINEARLIBDEF vec4_t ll_vec4_sub4fv(vec4_t left, vec4_t right)
 {
-	return ll_vec4_create4f(left.x - right.x, left.y - right.y,
-				left.z - right.z, left.w - right.w);
+        return ll_vec4_create4f(left.x - right.x, left.y - right.y,
+                                left.z - right.z, left.w - right.w);
 }
 
 /**
@@ -1119,8 +1121,8 @@ LINEARLIBDEF vec4_t ll_vec4_sub4fv(vec4_t left, vec4_t right)
  */
 LINEARLIBDEF vec4_t ll_vec4_sub4f(vec4_t left, float x, float y, float z, float w)
 {
-	return ll_vec4_create4f(left.x - x, left.y - y,
-				left.z - z, left.w - w);
+        return ll_vec4_create4f(left.x - x, left.y - y,
+                                left.z - z, left.w - w);
 }
 
 /**
@@ -1129,8 +1131,8 @@ LINEARLIBDEF vec4_t ll_vec4_sub4f(vec4_t left, float x, float y, float z, float 
  */
 LINEARLIBDEF vec4_t ll_vec4_sub1f(vec4_t left, float value)
 {
-	return ll_vec4_create4f(left.x - value, left.y - value,
-				left.z - value, left.w - value);
+        return ll_vec4_create4f(left.x - value, left.y - value,
+                                left.z - value, left.w - value);
 }
 
 /**
@@ -1139,8 +1141,8 @@ LINEARLIBDEF vec4_t ll_vec4_sub1f(vec4_t left, float value)
  */
 LINEARLIBDEF vec4_t ll_vec4_mul4fv(vec4_t left, vec4_t right)
 {
-	return ll_vec4_create4f(left.x * right.x, left.y * right.y,
-				left.z * right.z, left.w * right.w);
+        return ll_vec4_create4f(left.x * right.x, left.y * right.y,
+                                left.z * right.z, left.w * right.w);
 }
 
 /**
@@ -1149,8 +1151,8 @@ LINEARLIBDEF vec4_t ll_vec4_mul4fv(vec4_t left, vec4_t right)
  */
 LINEARLIBDEF vec4_t ll_vec4_mul4f(vec4_t left, float x, float y, float z, float w)
 {
-	return ll_vec4_create4f(left.x * x, left.y * y,
-				left.z * z, left.w * w);
+        return ll_vec4_create4f(left.x * x, left.y * y,
+                                left.z * z, left.w * w);
 }
 
 /**
@@ -1159,8 +1161,8 @@ LINEARLIBDEF vec4_t ll_vec4_mul4f(vec4_t left, float x, float y, float z, float 
  */
 LINEARLIBDEF vec4_t ll_vec4_mul1f(vec4_t left, float value)
 {
-	return ll_vec4_create4f(left.x * value, left.y * value,
-				left.z * value, left.w * value);
+        return ll_vec4_create4f(left.x * value, left.y * value,
+                                left.z * value, left.w * value);
 }
 
 /**
@@ -1169,8 +1171,8 @@ LINEARLIBDEF vec4_t ll_vec4_mul1f(vec4_t left, float value)
  */
 LINEARLIBDEF vec4_t ll_vec4_div4fv(vec4_t left, vec4_t right)
 {
-	return ll_vec4_create4f(left.x / right.x, left.y / right.y,
-				left.z / right.z, left.w / right.w);
+        return ll_vec4_create4f(left.x / right.x, left.y / right.y,
+                                left.z / right.z, left.w / right.w);
 }
 
 /**
@@ -1179,8 +1181,8 @@ LINEARLIBDEF vec4_t ll_vec4_div4fv(vec4_t left, vec4_t right)
  */
 LINEARLIBDEF vec4_t ll_vec4_div4f(vec4_t left, float x, float y, float z, float w)
 {
-	return ll_vec4_create4f(left.x / x, left.y / y,
-				left.z / z, left.w / w);
+        return ll_vec4_create4f(left.x / x, left.y / y,
+                                left.z / z, left.w / w);
 }
 
 /**
@@ -1189,8 +1191,8 @@ LINEARLIBDEF vec4_t ll_vec4_div4f(vec4_t left, float x, float y, float z, float 
  */
 LINEARLIBDEF vec4_t ll_vec4_div1f(vec4_t left, float value)
 {
-	return ll_vec4_create4f(left.x / value, left.y / value,
-				left.z / value, left.w / value);
+        return ll_vec4_create4f(left.x / value, left.y / value,
+                                left.z / value, left.w / value);
 }
 
 /**
@@ -1198,8 +1200,8 @@ LINEARLIBDEF vec4_t ll_vec4_div1f(vec4_t left, float value)
  */
 LINEARLIBDEF float ll_vec4_dot4fv(vec4_t left, vec4_t right)
 {
-	return left.x * right.x + left.y * right.y
-		+ left.z * right.z + left.w * right.w;
+        return left.x * right.x + left.y * right.y
+                + left.z * right.z + left.w * right.w;
 }
 
 /**
@@ -1207,8 +1209,8 @@ LINEARLIBDEF float ll_vec4_dot4fv(vec4_t left, vec4_t right)
  */
 LINEARLIBDEF float ll_vec4_dot4f(vec4_t left, float x, float y, float z, float w)
 {
-	return left.x * x + left.y * y + left.z * z
-		+ left.w * w;
+        return left.x * x + left.y * y + left.z * z
+                + left.w * w;
 }
 
 /**
@@ -1218,9 +1220,9 @@ LINEARLIBDEF float ll_vec4_dot4f(vec4_t left, float x, float y, float z, float w
  */
 LINEARLIBDEF vec4_t ll_vec4_normalise4fv(vec4_t vec)
 {
-	float length = ll_vec4_length4fv(vec);
-	return ll_vec4_create4f( vec.x / length, vec.y / length,
-				 vec.z / length, vec.w / length);
+        float length = ll_vec4_length4fv(vec);
+        return ll_vec4_create4f( vec.x / length, vec.y / length,
+                                 vec.z / length, vec.w / length);
 }
 
 /**
@@ -1230,20 +1232,20 @@ LINEARLIBDEF vec4_t ll_vec4_normalise4fv(vec4_t vec)
  */
 LINEARLIBDEF vec4_t ll_vec4_normalise4f(float x, float y, float z, float w)
 {
-	float length = ll_vec4_length4f(x, y, z, w);
-	return ll_vec4_create4f( x / length, y / length,
-				 z / length, w / length );
+        float length = ll_vec4_length4f(x, y, z, w);
+        return ll_vec4_create4f( x / length, y / length,
+                                 z / length, w / length );
 }
 
 LINEARLIBDEF vec4_t ll_anim_lerp4fv(vec4_t a, vec4_t b, float t)
 {
-	size_t i;
-	vec4_t c;
-	t = ll_anim_clamp1f(t, 0.0, 1.0);
-	for (i = 0; i < 4; i++) {
-		c.data[i] = ll_anim_lerp1f(a.data[i], b.data[i], t);
-	}
-	return c;
+        size_t i;
+        vec4_t c;
+        t = ll_anim_clamp1f(t, 0.0, 1.0);
+        for (i = 0; i < 4; i++) {
+                c.data[i] = ll_anim_lerp1f(a.data[i], b.data[i], t);
+        }
+        return c;
 }
 
 /**
@@ -1251,7 +1253,7 @@ LINEARLIBDEF vec4_t ll_anim_lerp4fv(vec4_t a, vec4_t b, float t)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_create2i(int x, int y)
 {
-	return (ivec2_t) {{ x, y }};
+        return (ivec2_t) {{ x, y }};
 }
 
 /**
@@ -1261,7 +1263,7 @@ LINEARLIBDEF ivec2_t ll_ivec2_create2i(int x, int y)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_create2iv(ivec2_t vec)
 {
-	return vec;
+        return vec;
 }
 
 /**
@@ -1269,7 +1271,7 @@ LINEARLIBDEF ivec2_t ll_ivec2_create2iv(ivec2_t vec)
  */
 LINEARLIBDEF float ll_ivec2_length2iv(ivec2_t vec)
 {
-	return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
+        return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
 }
 
 /**
@@ -1277,7 +1279,7 @@ LINEARLIBDEF float ll_ivec2_length2iv(ivec2_t vec)
  */
 LINEARLIBDEF float ll_ivec2_length2i(int x, int y)
 {
-	return sqrtf((x * x) + (y * y));
+        return sqrtf((x * x) + (y * y));
 }
 
 /**
@@ -1285,7 +1287,7 @@ LINEARLIBDEF float ll_ivec2_length2i(int x, int y)
  */
 LINEARLIBDEF float ll_ivec2_length_squared2iv(ivec2_t vec)
 {
-	return vec.x*vec.x + vec.y*vec.y;
+        return vec.x*vec.x + vec.y*vec.y;
 }
 
 /**
@@ -1293,7 +1295,7 @@ LINEARLIBDEF float ll_ivec2_length_squared2iv(ivec2_t vec)
  */
 LINEARLIBDEF float ll_ivec2_length_squared2i(int x, int y)
 {
-	return x*x + y*y;
+        return x*x + y*y;
 }
 
 /**
@@ -1301,7 +1303,7 @@ LINEARLIBDEF float ll_ivec2_length_squared2i(int x, int y)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_add2iv(ivec2_t left, ivec2_t right)
 {
-	return ll_ivec2_create2i(left.x + right.x, left.y + right.y);
+        return ll_ivec2_create2i(left.x + right.x, left.y + right.y);
 }
 
 /**
@@ -1309,7 +1311,7 @@ LINEARLIBDEF ivec2_t ll_ivec2_add2iv(ivec2_t left, ivec2_t right)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_add2i(ivec2_t left, int x, int y)
 {
-	return ll_ivec2_create2i(left.x + x, left.y + y);
+        return ll_ivec2_create2i(left.x + x, left.y + y);
 }
 
 /**
@@ -1318,7 +1320,7 @@ LINEARLIBDEF ivec2_t ll_ivec2_add2i(ivec2_t left, int x, int y)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_add1i(ivec2_t left, int value)
 {
-	return ll_ivec2_create2i(left.x + value, left.y + value);
+        return ll_ivec2_create2i(left.x + value, left.y + value);
 }
 
 /**
@@ -1326,7 +1328,7 @@ LINEARLIBDEF ivec2_t ll_ivec2_add1i(ivec2_t left, int value)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_sub2iv(ivec2_t left, ivec2_t right)
 {
-	return ll_ivec2_add2i(left, -right.x, -right.y);
+        return ll_ivec2_add2i(left, -right.x, -right.y);
 }
 
 /**
@@ -1335,7 +1337,7 @@ LINEARLIBDEF ivec2_t ll_ivec2_sub2iv(ivec2_t left, ivec2_t right)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_sub2i(ivec2_t left, int x, int y)
 {
-	return ll_ivec2_add2i(left, -x, -y);
+        return ll_ivec2_add2i(left, -x, -y);
 }
 
 /**
@@ -1344,7 +1346,7 @@ LINEARLIBDEF ivec2_t ll_ivec2_sub2i(ivec2_t left, int x, int y)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_sub1i(ivec2_t left, int value)
 {
-	return ll_ivec2_add2i(left, -value, -value);
+        return ll_ivec2_add2i(left, -value, -value);
 }
 
 /**
@@ -1353,8 +1355,8 @@ LINEARLIBDEF ivec2_t ll_ivec2_sub1i(ivec2_t left, int value)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_mul2iv(ivec2_t left, ivec2_t right)
 {
-	return ll_ivec2_create2i(left.x * right.x,
-				 left.y * right.y);
+        return ll_ivec2_create2i(left.x * right.x,
+                                 left.y * right.y);
 }
 
 /**
@@ -1363,8 +1365,8 @@ LINEARLIBDEF ivec2_t ll_ivec2_mul2iv(ivec2_t left, ivec2_t right)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_mul2i(ivec2_t left, int x, int y)
 {
-	return ll_ivec2_create2i(left.x * x,
-				 left.y * y);
+        return ll_ivec2_create2i(left.x * x,
+                                 left.y * y);
 }
 
 /**
@@ -1373,8 +1375,8 @@ LINEARLIBDEF ivec2_t ll_ivec2_mul2i(ivec2_t left, int x, int y)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_mul1i(ivec2_t left, int value)
 {
-	return ll_ivec2_create2i(left.x * value,
-				 left.y * value);
+        return ll_ivec2_create2i(left.x * value,
+                                 left.y * value);
 }
 
 /**
@@ -1383,8 +1385,8 @@ LINEARLIBDEF ivec2_t ll_ivec2_mul1i(ivec2_t left, int value)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_div2iv(ivec2_t left, ivec2_t right)
 {
-	return ll_ivec2_create2i(left.x / right.x,
-				 left.y / right.y);
+        return ll_ivec2_create2i(left.x / right.x,
+                                 left.y / right.y);
 }
 
 /**
@@ -1393,8 +1395,8 @@ LINEARLIBDEF ivec2_t ll_ivec2_div2iv(ivec2_t left, ivec2_t right)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_div2i(ivec2_t left, int x, int y)
 {
-	return ll_ivec2_create2i(left.x / x,
-				 left.y / y);
+        return ll_ivec2_create2i(left.x / x,
+                                 left.y / y);
 }
 
 /**
@@ -1403,8 +1405,8 @@ LINEARLIBDEF ivec2_t ll_ivec2_div2i(ivec2_t left, int x, int y)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_div1i(ivec2_t left, int value)
 {
-	return ll_ivec2_create2i(left.x / value,
-				 left.y / value);
+        return ll_ivec2_create2i(left.x / value,
+                                 left.y / value);
 }
 
 /**
@@ -1413,7 +1415,7 @@ LINEARLIBDEF ivec2_t ll_ivec2_div1i(ivec2_t left, int value)
  */
 LINEARLIBDEF float ll_ivec2_dot2iv(ivec2_t left, ivec2_t right)
 {
-	return left.x * right.x + left.y * right.y;
+        return left.x * right.x + left.y * right.y;
 }
 
 /**
@@ -1422,7 +1424,7 @@ LINEARLIBDEF float ll_ivec2_dot2iv(ivec2_t left, ivec2_t right)
  */
 LINEARLIBDEF float ll_ivec2_dot2i(ivec2_t left, int x, int y)
 {
-	return left.x * x + left.y * y;
+        return left.x * x + left.y * y;
 }
 
 /**
@@ -1431,7 +1433,7 @@ LINEARLIBDEF float ll_ivec2_dot2i(ivec2_t left, int x, int y)
  */
 LINEARLIBDEF float ll_ivec2_cross2iv(ivec2_t left, ivec2_t right)
 {
-	return left.x * right.y - left.y * right.x;
+        return left.x * right.y - left.y * right.x;
 }
 
 /**
@@ -1440,7 +1442,7 @@ LINEARLIBDEF float ll_ivec2_cross2iv(ivec2_t left, ivec2_t right)
  */
 LINEARLIBDEF float ll_ivec2_cross2i(ivec2_t left, int x, int y)
 {
-	return left.x * y - left.y * x;
+        return left.x * y - left.y * x;
 }
 
 /**
@@ -1450,8 +1452,8 @@ LINEARLIBDEF float ll_ivec2_cross2i(ivec2_t left, int x, int y)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_normalise2iv(ivec2_t vec)
 {
-	float length = ll_ivec2_length2iv(vec);
-	return ll_ivec2_create2i( vec.x / length, vec.y / length );
+        float length = ll_ivec2_length2iv(vec);
+        return ll_ivec2_create2i( vec.x / length, vec.y / length );
 }
 
 /**
@@ -1461,8 +1463,8 @@ LINEARLIBDEF ivec2_t ll_ivec2_normalise2iv(ivec2_t vec)
  */
 LINEARLIBDEF ivec2_t ll_ivec2_normalise2i(int x, int y)
 {
-	float length = ll_ivec2_length2i(x, y);
-	return ll_ivec2_create2i( x / length, y / length );
+        float length = ll_ivec2_length2i(x, y);
+        return ll_ivec2_create2i( x / length, y / length );
 }
 
 /**
@@ -1470,7 +1472,7 @@ LINEARLIBDEF ivec2_t ll_ivec2_normalise2i(int x, int y)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_create3i(int x, int y, int z)
 {
-	return (ivec3_t) {{ x, y, z }};
+        return (ivec3_t) {{ x, y, z }};
 }
 
 /**
@@ -1478,7 +1480,7 @@ LINEARLIBDEF ivec3_t ll_ivec3_create3i(int x, int y, int z)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_create3iv(ivec3_t vec)
 {
-	return vec;
+        return vec;
 }
 
 /**
@@ -1486,7 +1488,7 @@ LINEARLIBDEF ivec3_t ll_ivec3_create3iv(ivec3_t vec)
  */
 LINEARLIBDEF float ll_ivec3_length3iv(ivec3_t vec)
 {
-	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+        return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
 
 /**
@@ -1494,7 +1496,7 @@ LINEARLIBDEF float ll_ivec3_length3iv(ivec3_t vec)
  */
 LINEARLIBDEF float ll_ivec3_length3i(int x, int y, int z)
 {
-	return sqrtf(x * x + y * y + z * z);
+        return sqrtf(x * x + y * y + z * z);
 }
 
 /**
@@ -1502,7 +1504,7 @@ LINEARLIBDEF float ll_ivec3_length3i(int x, int y, int z)
  */
 LINEARLIBDEF float ll_ivec3_length_squared3iv(ivec3_t vec)
 {
-	return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z;
+        return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z;
 }
 
 /**
@@ -1510,7 +1512,7 @@ LINEARLIBDEF float ll_ivec3_length_squared3iv(ivec3_t vec)
  */
 LINEARLIBDEF float ll_ivec3_length_squared3i(int x, int y, int z)
 {
-	return x*x + y*y + z*z;
+        return x*x + y*y + z*z;
 }
 
 /**
@@ -1519,8 +1521,8 @@ LINEARLIBDEF float ll_ivec3_length_squared3i(int x, int y, int z)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_add3iv(ivec3_t left, ivec3_t right)
 {
-	return ll_ivec3_create3i(left.x + right.x, left.y + right.y,
-				left.z + right.z);
+        return ll_ivec3_create3i(left.x + right.x, left.y + right.y,
+                                 left.z + right.z);
 }
 
 /**
@@ -1529,8 +1531,8 @@ LINEARLIBDEF ivec3_t ll_ivec3_add3iv(ivec3_t left, ivec3_t right)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_add3i(ivec3_t left, int x, int y, int z)
 {
-	return ll_ivec3_create3i(left.x + x, left.y + y,
-				left.z + z);
+        return ll_ivec3_create3i(left.x + x, left.y + y,
+                                 left.z + z);
 }
 
 /**
@@ -1539,8 +1541,8 @@ LINEARLIBDEF ivec3_t ll_ivec3_add3i(ivec3_t left, int x, int y, int z)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_add1i(ivec3_t left, int value)
 {
-	return ll_ivec3_create3i(left.x + value, left.y + value,
-				left.z + value);
+        return ll_ivec3_create3i(left.x + value, left.y + value,
+                                 left.z + value);
 }
 
 /**
@@ -1549,8 +1551,8 @@ LINEARLIBDEF ivec3_t ll_ivec3_add1i(ivec3_t left, int value)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_sub3iv(ivec3_t left, ivec3_t right)
 {
-	return ll_ivec3_create3i(left.x - right.x, left.y - right.y,
-				left.z - right.z);
+        return ll_ivec3_create3i(left.x - right.x, left.y - right.y,
+                                 left.z - right.z);
 }
 
 /**
@@ -1559,8 +1561,8 @@ LINEARLIBDEF ivec3_t ll_ivec3_sub3iv(ivec3_t left, ivec3_t right)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_sub3i(ivec3_t left, int x, int y, int z)
 {
-	return ll_ivec3_create3i(left.x - x, left.y - y,
-				left.z - z);
+        return ll_ivec3_create3i(left.x - x, left.y - y,
+                                 left.z - z);
 }
 
 /**
@@ -1569,8 +1571,8 @@ LINEARLIBDEF ivec3_t ll_ivec3_sub3i(ivec3_t left, int x, int y, int z)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_sub1i(ivec3_t left, int value)
 {
-	return ll_ivec3_create3i(left.x - value, left.y - value,
-				left.z - value);
+        return ll_ivec3_create3i(left.x - value, left.y - value,
+                                 left.z - value);
 }
 
 /**
@@ -1579,8 +1581,8 @@ LINEARLIBDEF ivec3_t ll_ivec3_sub1i(ivec3_t left, int value)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_mul3iv(ivec3_t left, ivec3_t right)
 {
-	return ll_ivec3_create3i(left.x * right.x, left.y * right.y,
-				left.z * right.z);
+        return ll_ivec3_create3i(left.x * right.x, left.y * right.y,
+                                 left.z * right.z);
 }
 
 /**
@@ -1589,8 +1591,8 @@ LINEARLIBDEF ivec3_t ll_ivec3_mul3iv(ivec3_t left, ivec3_t right)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_mul3i(ivec3_t left, int x, int y, int z)
 {
-	return ll_ivec3_create3i(left.x * x, left.y * y,
-				left.z * z);
+        return ll_ivec3_create3i(left.x * x, left.y * y,
+                                 left.z * z);
 }
 
 /**
@@ -1599,8 +1601,8 @@ LINEARLIBDEF ivec3_t ll_ivec3_mul3i(ivec3_t left, int x, int y, int z)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_mul1i(ivec3_t left, int value)
 {
-	return ll_ivec3_create3i(left.x * value, left.y * value,
-				left.z * value);
+        return ll_ivec3_create3i(left.x * value, left.y * value,
+                                 left.z * value);
 }
 
 /**
@@ -1609,8 +1611,8 @@ LINEARLIBDEF ivec3_t ll_ivec3_mul1i(ivec3_t left, int value)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_div3iv(ivec3_t left, ivec3_t right)
 {
-	return ll_ivec3_create3i(left.x / right.x, left.y / right.y,
-				left.z / right.z);
+        return ll_ivec3_create3i(left.x / right.x, left.y / right.y,
+                                 left.z / right.z);
 }
 
 /**
@@ -1619,8 +1621,8 @@ LINEARLIBDEF ivec3_t ll_ivec3_div3iv(ivec3_t left, ivec3_t right)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_div3i(ivec3_t left, int x, int y, int z)
 {
-	return ll_ivec3_create3i(left.x / x, left.y / y,
-				left.z / z);
+        return ll_ivec3_create3i(left.x / x, left.y / y,
+                                 left.z / z);
 }
 
 /**
@@ -1629,8 +1631,8 @@ LINEARLIBDEF ivec3_t ll_ivec3_div3i(ivec3_t left, int x, int y, int z)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_div1i(ivec3_t left, int value)
 {
-	return ll_ivec3_create3i(left.x / value, left.y / value,
-				left.z / value);
+        return ll_ivec3_create3i(left.x / value, left.y / value,
+                                 left.z / value);
 }
 
 /**
@@ -1638,7 +1640,7 @@ LINEARLIBDEF ivec3_t ll_ivec3_div1i(ivec3_t left, int value)
  */
 LINEARLIBDEF float ll_ivec3_dot3iv(ivec3_t left, ivec3_t right)
 {
-	return left.x * right.x + left.y * right.y + left.z * right.z;
+        return left.x * right.x + left.y * right.y + left.z * right.z;
 }
 
 /**
@@ -1646,7 +1648,7 @@ LINEARLIBDEF float ll_ivec3_dot3iv(ivec3_t left, ivec3_t right)
  */
 LINEARLIBDEF float ll_ivec3_dot3i(ivec3_t left, int x, int y, int z)
 {
-	return left.x * x + left.y * y + left.z * z;
+        return left.x * x + left.y * y + left.z * z;
 }
 
 /**
@@ -1656,9 +1658,9 @@ LINEARLIBDEF float ll_ivec3_dot3i(ivec3_t left, int x, int y, int z)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_cross3iv(ivec3_t left, ivec3_t right)
 {
-	return ll_ivec3_create3i(left.y*right.z - left.z*right.y,
-				left.z*right.x - left.x*right.z,
-				left.x*right.y - left.y*right.x);
+        return ll_ivec3_create3i(left.y*right.z - left.z*right.y,
+                                 left.z*right.x - left.x*right.z,
+                                 left.x*right.y - left.y*right.x);
 }
 
 /**
@@ -1668,9 +1670,9 @@ LINEARLIBDEF ivec3_t ll_ivec3_cross3iv(ivec3_t left, ivec3_t right)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_cross3i(ivec3_t left, int x, int y, int z)
 {
-	return ll_ivec3_create3i(left.y*z - left.z*y,
-				left.z*x - left.x*z,
-				left.x*y - left.y*x);
+        return ll_ivec3_create3i(left.y*z - left.z*y,
+                                 left.z*x - left.x*z,
+                                 left.x*y - left.y*x);
 }
 
 /**
@@ -1680,9 +1682,9 @@ LINEARLIBDEF ivec3_t ll_ivec3_cross3i(ivec3_t left, int x, int y, int z)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_normalise3iv(ivec3_t vec)
 {
-	float length = ll_ivec3_length3iv(vec);
-	return ll_ivec3_create3i( vec.x / length, vec.y / length,
-				 vec.z / length );
+        float length = ll_ivec3_length3iv(vec);
+        return ll_ivec3_create3i( vec.x / length, vec.y / length,
+                                  vec.z / length );
 }
 
 /**
@@ -1692,9 +1694,9 @@ LINEARLIBDEF ivec3_t ll_ivec3_normalise3iv(ivec3_t vec)
  */
 LINEARLIBDEF ivec3_t ll_ivec3_normalise3i(int x, int y, int z)
 {
-	float length = ll_ivec3_length3i(x, y, z);
-	return ll_ivec3_create3i( x / length, y / length,
-				  z / length );
+        float length = ll_ivec3_length3i(x, y, z);
+        return ll_ivec3_create3i( x / length, y / length,
+                                  z / length );
 }
 
 /**
@@ -1702,7 +1704,7 @@ LINEARLIBDEF ivec3_t ll_ivec3_normalise3i(int x, int y, int z)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_create4i(int x, int y, int z, int w)
 {
-	return (ivec4_t) {{ x, y, z, w }};
+        return (ivec4_t) {{ x, y, z, w }};
 }
 
 /**
@@ -1710,7 +1712,7 @@ LINEARLIBDEF ivec4_t ll_ivec4_create4i(int x, int y, int z, int w)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_create4iv(ivec4_t vec)
 {
-	return vec;
+        return vec;
 }
 
 /**
@@ -1718,8 +1720,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_create4iv(ivec4_t vec)
  */
 LINEARLIBDEF float ll_ivec4_length4iv(ivec4_t vec)
 {
-	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z
-		     + vec.w * vec.w);
+        return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z
+                     + vec.w * vec.w);
 }
 
 /**
@@ -1727,7 +1729,7 @@ LINEARLIBDEF float ll_ivec4_length4iv(ivec4_t vec)
  */
 LINEARLIBDEF float ll_ivec4_length4i(int x, int y, int z, int w)
 {
-	return sqrtf(x * x + y * y + z * z + w * w);
+        return sqrtf(x * x + y * y + z * z + w * w);
 }
 
 /**
@@ -1735,8 +1737,8 @@ LINEARLIBDEF float ll_ivec4_length4i(int x, int y, int z, int w)
  */
 LINEARLIBDEF float ll_ivec4_length_squared4iv(ivec4_t vec)
 {
-	return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z
-		+ vec.w * vec.w;
+        return vec.x * vec.x + vec.y * vec.y + vec.z * vec.z
+                + vec.w * vec.w;
 }
 
 /**
@@ -1744,7 +1746,7 @@ LINEARLIBDEF float ll_ivec4_length_squared4iv(ivec4_t vec)
  */
 LINEARLIBDEF float ll_ivec4_length_squared4i(int x, int y, int z, int w)
 {
-	return x * x + y * y + z * z + w * w;
+        return x * x + y * y + z * z + w * w;
 }
 
 /**
@@ -1753,8 +1755,8 @@ LINEARLIBDEF float ll_ivec4_length_squared4i(int x, int y, int z, int w)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_add4iv(ivec4_t left, ivec4_t right)
 {
-	return ll_ivec4_create4i(left.x + right.x, left.y + right.y,
-				left.z + right.z, left.w + right.w);
+        return ll_ivec4_create4i(left.x + right.x, left.y + right.y,
+                                 left.z + right.z, left.w + right.w);
 }
 
 /**
@@ -1763,8 +1765,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_add4iv(ivec4_t left, ivec4_t right)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_add4i(ivec4_t left, int x, int y, int z, int w)
 {
-	return ll_ivec4_create4i(left.x + x, left.y + y,
-				left.z + z, left.w + w);
+        return ll_ivec4_create4i(left.x + x, left.y + y,
+                                 left.z + z, left.w + w);
 }
 
 /**
@@ -1773,8 +1775,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_add4i(ivec4_t left, int x, int y, int z, int w)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_add1i(ivec4_t left, int value)
 {
-	return ll_ivec4_create4i(left.x + value, left.y + value,
-				left.z + value, left.w + value);
+        return ll_ivec4_create4i(left.x + value, left.y + value,
+                                 left.z + value, left.w + value);
 }
 
 /**
@@ -1783,8 +1785,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_add1i(ivec4_t left, int value)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_sub4iv(ivec4_t left, ivec4_t right)
 {
-	return ll_ivec4_create4i(left.x - right.x, left.y - right.y,
-				left.z - right.z, left.w - right.w);
+        return ll_ivec4_create4i(left.x - right.x, left.y - right.y,
+                                 left.z - right.z, left.w - right.w);
 }
 
 /**
@@ -1793,8 +1795,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_sub4iv(ivec4_t left, ivec4_t right)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_sub4i(ivec4_t left, int x, int y, int z, int w)
 {
-	return ll_ivec4_create4i(left.x - x, left.y - y,
-				left.z - z, left.w - w);
+        return ll_ivec4_create4i(left.x - x, left.y - y,
+                                 left.z - z, left.w - w);
 }
 
 /**
@@ -1803,8 +1805,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_sub4i(ivec4_t left, int x, int y, int z, int w)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_sub1i(ivec4_t left, int value)
 {
-	return ll_ivec4_create4i(left.x - value, left.y - value,
-				left.z - value, left.w - value);
+        return ll_ivec4_create4i(left.x - value, left.y - value,
+                                 left.z - value, left.w - value);
 }
 
 /**
@@ -1813,8 +1815,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_sub1i(ivec4_t left, int value)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_mul4iv(ivec4_t left, ivec4_t right)
 {
-	return ll_ivec4_create4i(left.x * right.x, left.y * right.y,
-				left.z * right.z, left.w * right.w);
+        return ll_ivec4_create4i(left.x * right.x, left.y * right.y,
+                                 left.z * right.z, left.w * right.w);
 }
 
 /**
@@ -1823,8 +1825,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_mul4iv(ivec4_t left, ivec4_t right)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_mul4i(ivec4_t left, int x, int y, int z, int w)
 {
-	return ll_ivec4_create4i(left.x * x, left.y * y,
-				left.z * z, left.w * w);
+        return ll_ivec4_create4i(left.x * x, left.y * y,
+                                 left.z * z, left.w * w);
 }
 
 /**
@@ -1833,8 +1835,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_mul4i(ivec4_t left, int x, int y, int z, int w)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_mul1i(ivec4_t left, int value)
 {
-	return ll_ivec4_create4i(left.x * value, left.y * value,
-				left.z * value, left.w * value);
+        return ll_ivec4_create4i(left.x * value, left.y * value,
+                                 left.z * value, left.w * value);
 }
 
 /**
@@ -1843,8 +1845,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_mul1i(ivec4_t left, int value)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_div4iv(ivec4_t left, ivec4_t right)
 {
-	return ll_ivec4_create4i(left.x / right.x, left.y / right.y,
-				left.z / right.z, left.w / right.w);
+        return ll_ivec4_create4i(left.x / right.x, left.y / right.y,
+                                 left.z / right.z, left.w / right.w);
 }
 
 /**
@@ -1853,8 +1855,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_div4iv(ivec4_t left, ivec4_t right)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_div4i(ivec4_t left, int x, int y, int z, int w)
 {
-	return ll_ivec4_create4i(left.x / x, left.y / y,
-				left.z / z, left.w / w);
+        return ll_ivec4_create4i(left.x / x, left.y / y,
+                                 left.z / z, left.w / w);
 }
 
 /**
@@ -1863,8 +1865,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_div4i(ivec4_t left, int x, int y, int z, int w)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_div1i(ivec4_t left, int value)
 {
-	return ll_ivec4_create4i(left.x / value, left.y / value,
-				left.z / value, left.w / value);
+        return ll_ivec4_create4i(left.x / value, left.y / value,
+                                 left.z / value, left.w / value);
 }
 
 /**
@@ -1872,8 +1874,8 @@ LINEARLIBDEF ivec4_t ll_ivec4_div1i(ivec4_t left, int value)
  */
 LINEARLIBDEF float ll_ivec4_dot4iv(ivec4_t left, ivec4_t right)
 {
-	return left.x * right.x + left.y * right.y
-		+ left.z * right.z + left.w * right.w;
+        return left.x * right.x + left.y * right.y
+                + left.z * right.z + left.w * right.w;
 }
 
 /**
@@ -1881,8 +1883,8 @@ LINEARLIBDEF float ll_ivec4_dot4iv(ivec4_t left, ivec4_t right)
  */
 LINEARLIBDEF float ll_ivec4_dot4i(ivec4_t left, int x, int y, int z, int w)
 {
-	return left.x * x + left.y * y + left.z * z
-		+ left.w * w;
+        return left.x * x + left.y * y + left.z * z
+                + left.w * w;
 }
 
 /**
@@ -1892,9 +1894,9 @@ LINEARLIBDEF float ll_ivec4_dot4i(ivec4_t left, int x, int y, int z, int w)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_normalise4iv(ivec4_t vec)
 {
-	float length = ll_ivec4_length4iv(vec);
-	return ll_ivec4_create4i( vec.x / length, vec.y / length,
-				 vec.z / length, vec.w / length);
+        float length = ll_ivec4_length4iv(vec);
+        return ll_ivec4_create4i( vec.x / length, vec.y / length,
+                                  vec.z / length, vec.w / length);
 }
 
 /**
@@ -1904,9 +1906,9 @@ LINEARLIBDEF ivec4_t ll_ivec4_normalise4iv(ivec4_t vec)
  */
 LINEARLIBDEF ivec4_t ll_ivec4_normalise4i(int x, int y, int z, int w)
 {
-	float length = ll_ivec4_length4i(x, y, z, w);
-	return ll_ivec4_create4i( x / length, y / length,
-				  z / length, w / length );
+        float length = ll_ivec4_length4i(x, y, z, w);
+        return ll_ivec4_create4i( x / length, y / length,
+                                  z / length, w / length );
 }
 
 /**
@@ -1944,7 +1946,7 @@ LINEARLIBDEF void ll_mat4_copy(mat4_t *to,  mat4_t *from)
  */
 LINEARLIBDEF void ll_mat4_identity(mat4_t *mat)
 {
-	memset(mat, 0, sizeof(*mat));
+        memset(mat, 0, sizeof(*mat));
         mat->m00 = 1.0;
         mat->m11 = 1.0;
         mat->m22 = 1.0;
@@ -2034,38 +2036,38 @@ LINEARLIBDEF void ll_mat4_rotate3fv(mat4_t *mat, vec3_t vec, float theta)
 
 LINEARLIBDEF void ll_mat4_translate3f2(mat4_t *mat, float dx, float dy, float dz)
 {
-	mat4_t m;
+        mat4_t m;
         ll_mat4_translate3f(&m, dx, dy, dz);
         ll_mat4_multiply(mat, &m);
 }
 
 LINEARLIBDEF void ll_mat4_translate3fv2(mat4_t *mat, vec3_t vec)
 {
-	ll_mat4_translate3f2(mat, vec.x, vec.y, vec.z);
+        ll_mat4_translate3f2(mat, vec.x, vec.y, vec.z);
 }
 
 LINEARLIBDEF void ll_mat4_scale3f2(mat4_t *mat, float w, float h, float d)
 {
-	mat4_t m;
+        mat4_t m;
         ll_mat4_scale3f(&m, w, h, d);
         ll_mat4_multiply(mat, &m);
 }
 
 LINEARLIBDEF void ll_mat4_scale3fv2(mat4_t *mat, vec3_t vec)
 {
-	ll_mat4_scale3f2(mat, vec.x, vec.y, vec.z);
+        ll_mat4_scale3f2(mat, vec.x, vec.y, vec.z);
 }
 
 LINEARLIBDEF void ll_mat4_rotate3f2(mat4_t *mat, float x, float y, float z, float angle)
 {
-	mat4_t m;
+        mat4_t m;
         ll_mat4_rotate3f(&m, x, y, z, angle);
         ll_mat4_multiply(mat, &m);
 }
 
 LINEARLIBDEF void ll_mat4_rotate3fv2(mat4_t *mat, vec3_t vec, float angle)
 {
-	ll_mat4_rotate3f2(mat, vec.x, vec.y, vec.z, angle);
+        ll_mat4_rotate3f2(mat, vec.x, vec.y, vec.z, angle);
 }
 
 /**
@@ -2074,7 +2076,7 @@ LINEARLIBDEF void ll_mat4_rotate3fv2(mat4_t *mat, vec3_t vec, float angle)
  * found at https://github.com/wwotz/linearlib/README.md
  */
 LINEARLIBDEF void ll_mat4_orthographic(mat4_t *mat, float top, float right,
-                     float bottom, float left, float near, float far)
+                                       float bottom, float left, float near, float far)
 {
         if (!mat || left == right || near == far || bottom == top) return;
         ll_mat4_identity(mat);
@@ -2092,7 +2094,7 @@ LINEARLIBDEF void ll_mat4_orthographic(mat4_t *mat, float top, float right,
  * found at https://github.com/wwotz/linearlib/README.md
  */
 LINEARLIBDEF void ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
-                    float near, float far)
+                                      float near, float far)
 {
         float w, h;
         if (!mat || near == far) return;
@@ -2108,7 +2110,7 @@ LINEARLIBDEF void ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
  * found at https://github.com/wwotz/linearlib/README.md
  */
 LINEARLIBDEF void ll_mat4_frustum(mat4_t *mat, float top, float right,
-                float bottom, float left, float near, float far)
+                                  float bottom, float left, float near, float far)
 {
         if (!mat || left == right || bottom == top || near == far) return;
         ll_mat4_identity(mat);
@@ -2128,73 +2130,73 @@ LINEARLIBDEF void ll_mat4_frustum(mat4_t *mat, float top, float right,
  * found at https://github.com/wwotz/linearlib/README.md
  */
 LINEARLIBDEF void ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
-	       vec3_t lookat)
+                                 vec3_t lookat)
 {
-	ll_mat4_identity(mat);
-	mat->m00 = x.x;
-	mat->m01 = y.x;
-	mat->m02 = z.x;
-	mat->m03 = 0.0;
-	mat->m10 = x.y;
-	mat->m11 = y.y;
-	mat->m12 = z.y;
-	mat->m13 = 0.0;
-	mat->m20 = x.z;
-	mat->m21 = y.z;
-	mat->m22 = z.z;
-	mat->m23 = 0.0;
-	mat->m30 = -ll_vec3_dot3fv(x, lookat);
-	mat->m31 = -ll_vec3_dot3fv(y, lookat);
-	mat->m32 = -ll_vec3_dot3fv(z, lookat);
-	mat->m33 = 1.0;
+        ll_mat4_identity(mat);
+        mat->m00 = x.x;
+        mat->m01 = y.x;
+        mat->m02 = z.x;
+        mat->m03 = 0.0;
+        mat->m10 = x.y;
+        mat->m11 = y.y;
+        mat->m12 = z.y;
+        mat->m13 = 0.0;
+        mat->m20 = x.z;
+        mat->m21 = y.z;
+        mat->m22 = z.z;
+        mat->m23 = 0.0;
+        mat->m30 = -ll_vec3_dot3fv(x, lookat);
+        mat->m31 = -ll_vec3_dot3fv(y, lookat);
+        mat->m32 = -ll_vec3_dot3fv(z, lookat);
+        mat->m33 = 1.0;
 }
 
 LINEARLIBDEF void ll_mat4_apply(mat4_t *mat, vec3_t *v)
 {
-	vec3_t nv;
-	nv.x = mat->m00*v->x + mat->m01*v->y + mat->m02*v->z + mat->m30;
-	nv.y = mat->m10*v->x + mat->m11*v->y + mat->m12*v->z + mat->m31;
-	nv.z = mat->m20*v->x + mat->m21*v->y + mat->m22*v->z + mat->m32;
-	*v = nv;
+        vec3_t nv;
+        nv.x = mat->m00*v->x + mat->m01*v->y + mat->m02*v->z + mat->m30;
+        nv.y = mat->m10*v->x + mat->m11*v->y + mat->m12*v->z + mat->m31;
+        nv.z = mat->m20*v->x + mat->m21*v->y + mat->m22*v->z + mat->m32;
+        *v = nv;
 }
 
 LINEARLIBDEF int ll_mat4_stack_pop(mat4_t *mat)
 {
-	if (ll_matrix_stack_size <= 0 || !mat) return -1;
-	*mat = ll_matrix_stack[--ll_matrix_stack_size];
-	return 0;
+        if (ll_matrix_stack_size <= 0 || !mat) return -1;
+        *mat = ll_matrix_stack[--ll_matrix_stack_size];
+        return 0;
 }
 
 LINEARLIBDEF int ll_mat4_stack_push(mat4_t *mat)
 {
-	if (ll_matrix_stack_size >= LL_MATRIX_STACK_CAPACITY || !mat) return -1;
-	ll_matrix_stack[ll_matrix_stack_size++] = *mat;
-	return 0;
+        if (ll_matrix_stack_size >= LL_MATRIX_STACK_CAPACITY || !mat) return -1;
+        ll_matrix_stack[ll_matrix_stack_size++] = *mat;
+        return 0;
 }
 
 LINEARLIBDEF void ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat)
 {
-	float q00, q01, q11, q12, q03, q13, q02, q22, q23, q33;
-	q00 = q.s*q.s;
-	q01 = q.s*q.v.data[0];
-	q11 = q.v.data[0]*q.v.data[0];
-	q12 = q.v.data[0]*q.v.data[1];
-	q03 = q.s*q.v.data[2];
-	q13 = q.v.data[0]*q.v.data[2];
-	q02 = q.s*q.v.data[1];
-	q22 = q.v.data[1]*q.v.data[1];
-	q23 = q.v.data[1]*q.v.data[2];
-	q33 = q.v.data[2]*q.v.data[2];
-	ll_mat4_identity(mat);
-	mat->m00 = 2*(q00 + q11) - 1;
-	mat->m01 = 2*(q12 - q03);
-	mat->m02 = 2*(q13 + q02);
-	mat->m10 = 2*(q12 + q03);
-	mat->m11 = 2*(q00 + q22) - 1;
-	mat->m12 = 2*(q23 - q01);
-	mat->m20 = 2*(q13 - q02);
-	mat->m21 = 2*(q23 + q01);
-	mat->m22 = 2*(q00 + q33) - 1;
+        float q00, q01, q11, q12, q03, q13, q02, q22, q23, q33;
+        q00 = q.s*q.s;
+        q01 = q.s*q.v.data[0];
+        q11 = q.v.data[0]*q.v.data[0];
+        q12 = q.v.data[0]*q.v.data[1];
+        q03 = q.s*q.v.data[2];
+        q13 = q.v.data[0]*q.v.data[2];
+        q02 = q.s*q.v.data[1];
+        q22 = q.v.data[1]*q.v.data[1];
+        q23 = q.v.data[1]*q.v.data[2];
+        q33 = q.v.data[2]*q.v.data[2];
+        ll_mat4_identity(mat);
+        mat->m00 = 2*(q00 + q11) - 1;
+        mat->m01 = 2*(q12 - q03);
+        mat->m02 = 2*(q13 + q02);
+        mat->m10 = 2*(q12 + q03);
+        mat->m11 = 2*(q00 + q22) - 1;
+        mat->m12 = 2*(q23 - q01);
+        mat->m20 = 2*(q13 - q02);
+        mat->m21 = 2*(q23 + q01);
+        mat->m22 = 2*(q00 + q33) - 1;
 }
 
 /** 
@@ -2205,12 +2207,12 @@ LINEARLIBDEF void ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat)
  */
 LINEARLIBDEF quaternion_t ll_quaternion_create3f(float s, float x, float y, float z)
 {
-	quaternion_t c;
-	c.s = s;
-	c.v.x = x;
-	c.v.y = y;
-	c.v.z = z;
-	return c;
+        quaternion_t c;
+        c.s = s;
+        c.v.x = x;
+        c.v.y = y;
+        c.v.z = z;
+        return c;
 }
 
 /** 
@@ -2221,10 +2223,10 @@ LINEARLIBDEF quaternion_t ll_quaternion_create3f(float s, float x, float y, floa
  */
 LINEARLIBDEF quaternion_t ll_quaternion_create3fv(float s, vec3_t v)
 {
-	quaternion_t c;
-	c.s = s;
-	c.v = v;
-	return c;
+        quaternion_t c;
+        c.s = s;
+        c.v = v;
+        return c;
 }
 
 /** 
@@ -2235,12 +2237,12 @@ LINEARLIBDEF quaternion_t ll_quaternion_create3fv(float s, vec3_t v)
  */
 LINEARLIBDEF quaternion_t ll_quaternion_angle_axis3f(float radians, float x, float y, float z)
 {
-	vec3_t v;
-	quaternion_t c;
-	radians /= 2.0;
-	v = ll_vec3_normalise3f(x, y, z);
-	c = ll_quaternion_create3fv(cosf(radians), ll_vec3_mul1f(v, sinf(radians)));
-	return c;
+        vec3_t v;
+        quaternion_t c;
+        radians /= 2.0;
+        v = ll_vec3_normalise3f(x, y, z);
+        c = ll_quaternion_create3fv(cosf(radians), ll_vec3_mul1f(v, sinf(radians)));
+        return c;
 }
 
 /** 
@@ -2251,11 +2253,11 @@ LINEARLIBDEF quaternion_t ll_quaternion_angle_axis3f(float radians, float x, flo
  */
 LINEARLIBDEF quaternion_t ll_quaternion_angle_axis3fv(float radians, vec3_t v)
 {
-	quaternion_t c;
-	radians /= 2.0;
-	v = ll_vec3_normalise3fv(v);
-	c = ll_quaternion_create3fv(cosf(radians), ll_vec3_mul1f(v, sinf(radians)));
-	return c;
+        quaternion_t c;
+        radians /= 2.0;
+        v = ll_vec3_normalise3fv(v);
+        c = ll_quaternion_create3fv(cosf(radians), ll_vec3_mul1f(v, sinf(radians)));
+        return c;
 }
 
 /** 
@@ -2266,10 +2268,10 @@ LINEARLIBDEF quaternion_t ll_quaternion_angle_axis3fv(float radians, vec3_t v)
  */
 LINEARLIBDEF quaternion_t  ll_quaternion_add(quaternion_t a, quaternion_t b)
 {
-	quaternion_t c;
-	c.s = a.s + b.s;
-	c.v = ll_vec3_add3fv(a.v, b.v);
-	return c;
+        quaternion_t c;
+        c.s = a.s + b.s;
+        c.v = ll_vec3_add3fv(a.v, b.v);
+        return c;
 }
 
 /** 
@@ -2280,10 +2282,10 @@ LINEARLIBDEF quaternion_t  ll_quaternion_add(quaternion_t a, quaternion_t b)
  */
 LINEARLIBDEF quaternion_t ll_quaternion_sub(quaternion_t a, quaternion_t b)
 {
-	quaternion_t c;
-	c.s = a.s - b.s;
-	c.v = ll_vec3_sub3fv(a.v, b.v);
-	return c;
+        quaternion_t c;
+        c.s = a.s - b.s;
+        c.v = ll_vec3_sub3fv(a.v, b.v);
+        return c;
 }
 
 /** 
@@ -2294,12 +2296,12 @@ LINEARLIBDEF quaternion_t ll_quaternion_sub(quaternion_t a, quaternion_t b)
  */
 LINEARLIBDEF quaternion_t ll_quaternion_prod(quaternion_t a, quaternion_t b)
 {
-	quaternion_t c;
-	c.s = a.s*b.s - ll_vec3_dot3fv(a.v, b.v);
-	c.v = ll_vec3_add3fv(ll_vec3_mul1f(b.v, a.s),
-			     ll_vec3_add3fv(ll_vec3_mul1f(a.v, b.s),
-					    ll_vec3_cross3fv(a.v, b.v)));
-	return c;
+        quaternion_t c;
+        c.s = a.s*b.s - ll_vec3_dot3fv(a.v, b.v);
+        c.v = ll_vec3_add3fv(ll_vec3_mul1f(b.v, a.s),
+                             ll_vec3_add3fv(ll_vec3_mul1f(a.v, b.s),
+                                            ll_vec3_cross3fv(a.v, b.v)));
+        return c;
 }
 
 /** 
@@ -2310,10 +2312,10 @@ LINEARLIBDEF quaternion_t ll_quaternion_prod(quaternion_t a, quaternion_t b)
  */
 LINEARLIBDEF float ll_quaternion_dot(quaternion_t a, quaternion_t b)
 {
-	float dot;
-	dot = a.s * b.s;
-	dot += ll_vec3_dot3fv(a.v, b.v);
-	return dot;
+        float dot;
+        dot = a.s * b.s;
+        dot += ll_vec3_dot3fv(a.v, b.v);
+        return dot;
 }
 
 /** 
@@ -2323,7 +2325,7 @@ LINEARLIBDEF float ll_quaternion_dot(quaternion_t a, quaternion_t b)
  */
 LINEARLIBDEF float ll_quaternion_norm(quaternion_t a)
 {
-	return sqrtf(a.s*a.s + ll_vec3_dot3fv(a.v, a.v));
+        return sqrtf(a.s*a.s + ll_vec3_dot3fv(a.v, a.v));
 }
 
 /** 
@@ -2333,15 +2335,15 @@ LINEARLIBDEF float ll_quaternion_norm(quaternion_t a)
  */
 LINEARLIBDEF quaternion_t ll_quaternion_normalise(quaternion_t a)
 {
-	float norm;
-	quaternion_t c;
+        float norm;
+        quaternion_t c;
 
-	norm = ll_quaternion_norm(a);
-	c.s = a.s / norm;
-	c.v.data[0] = a.v.data[0] / norm;
-	c.v.data[1] = a.v.data[1] / norm;
-	c.v.data[2] = a.v.data[2] / norm;
-	return c;
+        norm = ll_quaternion_norm(a);
+        c.s = a.s / norm;
+        c.v.data[0] = a.v.data[0] / norm;
+        c.v.data[1] = a.v.data[1] / norm;
+        c.v.data[2] = a.v.data[2] / norm;
+        return c;
 }
 
 /** 
@@ -2351,10 +2353,10 @@ LINEARLIBDEF quaternion_t ll_quaternion_normalise(quaternion_t a)
  */
 LINEARLIBDEF quaternion_t ll_quaternion_conjugate(quaternion_t a)
 {
-	quaternion_t c;
-	c.s = a.s;
-	c.v = ll_vec3_mul1f(a.v, -1.0);
-	return c;
+        quaternion_t c;
+        c.s = a.s;
+        c.v = ll_vec3_mul1f(a.v, -1.0);
+        return c;
 }
 
 /** 
@@ -2364,15 +2366,15 @@ LINEARLIBDEF quaternion_t ll_quaternion_conjugate(quaternion_t a)
  */
 LINEARLIBDEF quaternion_t ll_quaternion_inverse(quaternion_t a)
 {
-	quaternion_t c;
-	float sqrd_norm;
-	c = ll_quaternion_conjugate(a);
-	sqrd_norm = a.s*a.s + ll_vec3_dot3fv(a.v, a.v);
-	c.s = c.s / sqrd_norm;
-	c.v.data[0] = c.v.data[0] / sqrd_norm;
-	c.v.data[1] = c.v.data[1] / sqrd_norm;
-	c.v.data[2] = c.v.data[2] / sqrd_norm;
-	return c;
+        quaternion_t c;
+        float sqrd_norm;
+        c = ll_quaternion_conjugate(a);
+        sqrd_norm = a.s*a.s + ll_vec3_dot3fv(a.v, a.v);
+        c.s = c.s / sqrd_norm;
+        c.v.data[0] = c.v.data[0] / sqrd_norm;
+        c.v.data[1] = c.v.data[1] / sqrd_norm;
+        c.v.data[2] = c.v.data[2] / sqrd_norm;
+        return c;
 }
 
 /** 
@@ -2383,11 +2385,11 @@ LINEARLIBDEF quaternion_t ll_quaternion_inverse(quaternion_t a)
  */
 LINEARLIBDEF vec3_t ll_quaternion_rotate3f(quaternion_t a, float x, float y, float z)
 {
-	quaternion_t c, a_conj;
-	c = ll_quaternion_create3f(0.0, x, y, z);
-	a_conj = ll_quaternion_conjugate(a);
-	c = ll_quaternion_prod(ll_quaternion_prod(a, c), a_conj);
-	return c.v;
+        quaternion_t c, a_conj;
+        c = ll_quaternion_create3f(0.0, x, y, z);
+        a_conj = ll_quaternion_conjugate(a);
+        c = ll_quaternion_prod(ll_quaternion_prod(a, c), a_conj);
+        return c.v;
 }
 
 /** 
@@ -2397,57 +2399,57 @@ LINEARLIBDEF vec3_t ll_quaternion_rotate3f(quaternion_t a, float x, float y, flo
  */
 LINEARLIBDEF vec3_t ll_quaternion_rotate3fv(quaternion_t a, vec3_t v)
 {
-	quaternion_t c, a_conj;
-	c = ll_quaternion_create3fv(0.0, v);
-	a_conj = ll_quaternion_conjugate(a);
-	c = ll_quaternion_prod(ll_quaternion_prod(a, c), a_conj);
-	return c.v;
+        quaternion_t c, a_conj;
+        c = ll_quaternion_create3fv(0.0, v);
+        a_conj = ll_quaternion_conjugate(a);
+        c = ll_quaternion_prod(ll_quaternion_prod(a, c), a_conj);
+        return c.v;
 }
 
 LINEARLIBDEF ray_t ll_ray_create3f(float ox, float oy, float oz,
-				   float dx, float dy, float dz)
+                                   float dx, float dy, float dz)
 {
-	return ll_ray_create3fv((vec3_t) {{ ox, oy, oz }},
-				(vec3_t) {{ dx, dy, dz }});
+        return ll_ray_create3fv((vec3_t) {{ ox, oy, oz }},
+                                (vec3_t) {{ dx, dy, dz }});
 }
 
 LINEARLIBDEF ray_t ll_ray_create3fv(vec3_t origin, vec3_t direction)
 {
-	ray_t ray;
-	ray.origin = origin;
-	ray.direction = direction;
-	ray.inv_dir[0] = 1.0f / ray.direction.data[0];
-	ray.inv_dir[1] = 1.0f / ray.direction.data[1];
-	ray.inv_dir[2] = 1.0f / ray.direction.data[2];
-	return ray;
+        ray_t ray;
+        ray.origin = origin;
+        ray.direction = direction;
+        ray.inv_dir[0] = 1.0f / ray.direction.data[0];
+        ray.inv_dir[1] = 1.0f / ray.direction.data[1];
+        ray.inv_dir[2] = 1.0f / ray.direction.data[2];
+        return ray;
 }
 
 LINEARLIBDEF aabb_t ll_aabb_create3f(float x0, float y0, float z0,
-				     float x1, float y1, float z1)
+                                     float x1, float y1, float z1)
 {
-	return  ll_aabb_create3fv((vec3_t) {{ x0, y0, z0 }},
-				  (vec3_t) {{ x1, y1, z1 }});
+        return  ll_aabb_create3fv((vec3_t) {{ x0, y0, z0 }},
+                                  (vec3_t) {{ x1, y1, z1 }});
 }
 
 LINEARLIBDEF aabb_t ll_aabb_create3fv(vec3_t min, vec3_t max)
 {
-	aabb_t aabb;
-	aabb.min = min;
-	aabb.max = max;
-	return aabb;
+        aabb_t aabb;
+        aabb.min = min;
+        aabb.max = max;
+        return aabb;
 }
 
 // b is the smaller bounding box, a is the bigger one.
 LINEARLIBDEF int ll_aabb_contains(aabb_t a, aabb_t b)
 {
-	size_t i;
-	for (i = 0; i < 3; i++) {
-		if (!((b.min.data[i] >= a.min.data[i] ||
-		       fabsf(b.min.data[i] - a.min.data[i]) < 0.001) &&
-		      (b.max.data[i] <= a.max.data[i] ||
-		       fabsf(b.max.data[i] - a.max.data[i]) < 0.001))) return 0;
-	}
-	return 1;
+        size_t i;
+        for (i = 0; i < 3; i++) {
+                if (!((b.min.data[i] >= a.min.data[i] ||
+                       fabsf(b.min.data[i] - a.min.data[i]) < 0.001) &&
+                      (b.max.data[i] <= a.max.data[i] ||
+                       fabsf(b.max.data[i] - a.max.data[i]) < 0.001))) return 0;
+        }
+        return 1;
 }
 
 #define LL_MAX(a, b) (((a) > (b)) ? (a) : (b))
@@ -2456,60 +2458,60 @@ LINEARLIBDEF int ll_aabb_contains(aabb_t a, aabb_t b)
 // Slab Method for AABB - Ray Intersection.
 LINEARLIBDEF vec2_t ll_aabb_intersect(const ray_t *ray, const aabb_t *aabb)
 {
-	int i, sign;
-	float t0, t1;
-	float tmin, tmax;
+        int i, sign;
+        float t0, t1;
+        float tmin, tmax;
 
-	tmin = 0, tmax = INFINITY;
-	for (i = 0; i < 3; ++i) {
-		sign = ray->inv_dir[i] < 0.0 ? 1 : 0;
-		t0 = aabb->box[sign].data[i];
-		t1 = aabb->box[!sign].data[i];
+        tmin = 0, tmax = INFINITY;
+        for (i = 0; i < 3; ++i) {
+                sign = ray->inv_dir[i] < 0.0 ? 1 : 0;
+                t0 = aabb->box[sign].data[i];
+                t1 = aabb->box[!sign].data[i];
 
-		t0 = (t0 - ray->origin.data[i]) * ray->inv_dir[i];
-		t1 = (t1 - ray->origin.data[i]) * ray->inv_dir[i];
+                t0 = (t0 - ray->origin.data[i]) * ray->inv_dir[i];
+                t1 = (t1 - ray->origin.data[i]) * ray->inv_dir[i];
 
-		tmin = LL_MAX(t0, tmin);
-		tmax = LL_MIN(t1, tmax);
-	}
+                tmin = LL_MAX(t0, tmin);
+                tmax = LL_MIN(t1, tmax);
+        }
 
-	return (vec2_t) {{ tmin, tmax }};
+        return (vec2_t) {{ tmin, tmax }};
 }
 
 LINEARLIBDEF void ll_aabb_intersections(const ray_t *ray, size_t count,
-					const aabb_t *aabbs, float *v)
+                                        const aabb_t *aabbs, float *v)
 {
-	size_t i, j;
-	int sign[3];
-	float t0, t1;
-	float tmin, tmax;
+        size_t i, j;
+        int sign[3];
+        float t0, t1;
+        float tmin, tmax;
 
-	for (i = 0; i < 3; i++) {
-		sign[i] = ray->inv_dir[i] < 0.0 ? 1 : 0;
-	}
+        for (i = 0; i < 3; i++) {
+                sign[i] = ray->inv_dir[i] < 0.0 ? 1 : 0;
+        }
 
-	for (i = 0; i < count; i++) {
-		const aabb_t *bbox = aabbs + i;
-		tmin = 0, tmax = v[i];
-		for (j = 0; j < 3; j++) {
-			t0 = bbox->box[sign[j]].data[j];
-			t1 = bbox->box[!sign[j]].data[j];
+        for (i = 0; i < count; i++) {
+                const aabb_t *bbox = aabbs + i;
+                tmin = 0, tmax = v[i];
+                for (j = 0; j < 3; j++) {
+                        t0 = bbox->box[sign[j]].data[j];
+                        t1 = bbox->box[!sign[j]].data[j];
 
-			t0 = (t0 - ray->origin.data[j]) * ray->inv_dir[j];
-			t1 = (t1 - ray->origin.data[j]) * ray->inv_dir[j];
+                        t0 = (t0 - ray->origin.data[j]) * ray->inv_dir[j];
+                        t1 = (t1 - ray->origin.data[j]) * ray->inv_dir[j];
 
-			tmin = LL_MAX(t0, tmin);
-			tmax = LL_MIN(t1, tmax);
-		}
+                        tmin = LL_MAX(t0, tmin);
+                        tmax = LL_MIN(t1, tmax);
+                }
 
-		v[i] = tmin <= tmax ? tmin : v[i];
-	}
+                v[i] = tmin <= tmax ? tmin : v[i];
+        }
 }
 
 LINEARLIBDEF int ll_aabb_hit(const ray_t *ray, const aabb_t *aabb)
 {
-	vec2_t intersect = ll_aabb_intersect(ray, aabb);
-	return intersect.x < intersect.y;
+        vec2_t intersect = ll_aabb_intersect(ray, aabb);
+        return intersect.x < intersect.y;
 }
 
 
@@ -2518,6 +2520,7 @@ LINEARLIBDEF int ll_aabb_hit(const ray_t *ray, const aabb_t *aabb)
 
 static mat4_t ll_matrices[LL_MATRIX_COUNT]; /* Model, View, Projection Matrices */
 static int ll_matrices_idx;                 /* The currently bound matrix from @ll_matrices */
+static int ll_matrices_sidx = -1;           /* Saved Matrix from @ll_matrices */
 
 /**
  * @description Binds the current matrix to @type.
@@ -2528,10 +2531,21 @@ LINEARLIBDEF void ll_matrix_mode(matrix_type_t type)
                 ll_matrices_idx = type;
 }
 
+LINEARLIBDEF void ll_matrix_mode_push(void)
+{
+        ll_matrices_sidx = ll_matrices_idx;
+}
+
+LINEARLIBDEF void ll_matrix_mode_pop(void)
+{
+        ll_matrices_idx = ll_matrices_sidx;
+        ll_matrices_sidx = -1;
+}
+
 LINEARLIBDEF void ll_matrix_set(mat4_t *mat)
 {
-	assert(mat);
-	ll_matrices[ll_matrices_idx] = *mat;
+        assert(mat);
+        ll_matrices[ll_matrices_idx] = *mat;
 }
 
 /**
@@ -2631,7 +2645,7 @@ LINEARLIBDEF void ll_matrix_rotate3fv(vec3_t vec, float angle)
  * into the currently bound matrix. 
  */
 LINEARLIBDEF void ll_matrix_orthographic(float top, float right,
-                       float bottom, float left, float near, float far)
+                                         float bottom, float left, float near, float far)
 {
         ll_mat4_orthographic(ll_matrices+ll_matrices_idx, top,
                              right, bottom, left, near, far);
@@ -2642,7 +2656,7 @@ LINEARLIBDEF void ll_matrix_orthographic(float top, float right,
  * into the currently bound matrix. 
  */
 LINEARLIBDEF void ll_matrix_perspective(float fovy, float aspect,
-                      float near, float far)
+                                        float near, float far)
 {
         ll_mat4_perspective(ll_matrices+ll_matrices_idx,
                             fovy, aspect, near, far);
@@ -2653,7 +2667,7 @@ LINEARLIBDEF void ll_matrix_perspective(float fovy, float aspect,
  * into the currently bound matrix. 
  */
 LINEARLIBDEF void ll_matrix_frustum(float left, float right,
-                  float bottom, float top, float near, float far)
+                                    float bottom, float top, float near, float far)
 {
         ll_mat4_frustum(ll_matrices+ll_matrices_idx, left, right,
                         bottom, top, near, far);
@@ -2665,13 +2679,13 @@ LINEARLIBDEF void ll_matrix_frustum(float left, float right,
  */
 LINEARLIBDEF void ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat)
 {
-	ll_mat4_lookat(ll_matrices+ll_matrices_idx,
-		       x, y, z, lookat);
+        ll_mat4_lookat(ll_matrices+ll_matrices_idx,
+                       x, y, z, lookat);
 }
 
 LINEARLIBDEF void ll_matrix_apply(vec3_t *v)
 {
-	ll_mat4_apply(ll_matrices+ll_matrices_idx, v);
+        ll_mat4_apply(ll_matrices+ll_matrices_idx, v);
 }
 
 /**
@@ -2686,17 +2700,17 @@ LINEARLIBDEF mat4_t ll_matrix_get_copy(void)
 
 LINEARLIBDEF int ll_matrix_stack_pop(void)
 {
-	if (ll_matrix_stack_size <= 0) return -1;
-	ll_matrix_stack_size--;
-	ll_matrix_set(ll_matrix_stack + ll_matrix_stack_size);
-	return 0;
+        if (ll_matrix_stack_size <= 0) return -1;
+        ll_matrix_stack_size--;
+        ll_matrix_set(ll_matrix_stack + ll_matrix_stack_size);
+        return 0;
 }
 
 LINEARLIBDEF int ll_matrix_stack_push(void)
 {
-	if (ll_matrix_stack_size >= LL_MATRIX_STACK_CAPACITY) return -1;
-	ll_matrix_stack[ll_matrix_stack_size++] = ll_matrix_get_copy();
-	return 0;
+        if (ll_matrix_stack_size >= LL_MATRIX_STACK_CAPACITY) return -1;
+        ll_matrix_stack[ll_matrix_stack_size++] = ll_matrix_get_copy();
+        return 0;
 }
 
 /**
@@ -2705,7 +2719,7 @@ LINEARLIBDEF int ll_matrix_stack_push(void)
  */
 LINEARLIBDEF void ll_quaternion_to_matrix(quaternion_t a)
 {
-	ll_quaternion_to_mat4(a, ll_matrices+ll_matrices_idx);
+        ll_quaternion_to_mat4(a, ll_matrices+ll_matrices_idx);
 }
 
 #endif /* LL_USE_MATRIX */
