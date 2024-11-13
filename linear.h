@@ -11,6 +11,7 @@
 #include <math.h>
 #include <stddef.h>
 #include <string.h>
+#include <assert.h>
 
 #ifndef LINEARLIBDEF
 #ifdef LINEARLIBSTATIC
@@ -403,6 +404,9 @@ LINEARLIBDEF void ll_mat4_perspective(mat4_t *mat, float fovy, float aspect, flo
 LINEARLIBDEF void ll_mat4_frustum(mat4_t *mat, float left, float right, float bottom,
 				  float top, float near, float far);
 LINEARLIBDEF void ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
+LINEARLIBDEF void ll_mat4_apply(mat4_t *mat, vec3_t *v);
+LINEARLIBDEF int  ll_mat4_stack_pop(mat4_t *mat);
+LINEARLIBDEF int  ll_mat4_stack_push(mat4_t *mat);
 LINEARLIBDEF void ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat);
 
 LINEARLIBDEF quaternion_t  ll_quaternion_create3f(float s, float x, float y, float z);
@@ -434,12 +438,8 @@ LINEARLIBDEF int    ll_aabb_hit(const ray_t *ray, const aabb_t *aabb);
 
 #ifdef LL_USE_MATRIX
 
-#define LL_MATRIX_STACK_CAPACITY (16)
-
-static size_t ll_matrix_stack_size;
-static mat4_t ll_matrix_stack[LL_MATRIX_STACK_CAPACITY];
-
 LINEARLIBDEF void   ll_matrix_mode(matrix_type_t type);
+LINEARLIBDEF void   ll_matrix_set(mat4_t *mat);
 LINEARLIBDEF void   ll_matrix_multiply(mat4_t *right);
 LINEARLIBDEF void   ll_matrix_identity(void);
 LINEARLIBDEF void   ll_matrix_translate3f(float dx, float dy, float dz);
@@ -453,14 +453,20 @@ LINEARLIBDEF void   ll_matrix_orthographic(float top, float right, float bottom,
 LINEARLIBDEF void   ll_matrix_perspective(float fovy, float aspect, float near, float far);
 LINEARLIBDEF void   ll_matrix_frustum(float left, float right, float bottom, float top, float near, float far);
 LINEARLIBDEF void   ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat);
+LINEARLIBDEF void   ll_matrix_apply(vec3_t *v);
 LINEARLIBDEF mat4_t ll_matrix_get_copy(void);
-LINEARLIBDEF int    ll_matrix_stack_pop(mat4_t *mat);
-LINEARLIBDEF int    ll_matrix_stack_push(mat4_t *mat);
+LINEARLIBDEF int    ll_matrix_stack_pop(void);
+LINEARLIBDEF int    ll_matrix_stack_push(void);
 LINEARLIBDEF void   ll_quaternion_to_matrix(quaternion_t a);
 
 #endif /* LL_USE_MATRIX */
 
 #ifdef LINEARLIB_IMPLEMENTATION
+
+#define LL_MATRIX_STACK_CAPACITY (16)
+
+static size_t ll_matrix_stack_size;
+static mat4_t ll_matrix_stack[LL_MATRIX_STACK_CAPACITY];
 
 LINEARLIBDEF float ll_anim_clamp1f(float x, float l, float u)
 {
@@ -2143,6 +2149,29 @@ LINEARLIBDEF void ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
 	mat->m33 = 1.0;
 }
 
+LINEARLIBDEF void ll_mat4_apply(mat4_t *mat, vec3_t *v)
+{
+	vec3_t nv;
+	nv.x = mat->m00*v->x + mat->m01*v->y + mat->m02*v->z + mat->m30;
+	nv.y = mat->m10*v->x + mat->m11*v->y + mat->m12*v->z + mat->m31;
+	nv.z = mat->m20*v->x + mat->m21*v->y + mat->m22*v->z + mat->m32;
+	*v = nv;
+}
+
+LINEARLIBDEF int ll_mat4_stack_pop(mat4_t *mat)
+{
+	if (ll_matrix_stack_size <= 0 || !mat) return -1;
+	*mat = ll_matrix_stack[--ll_matrix_stack_size];
+	return 0;
+}
+
+LINEARLIBDEF int ll_mat4_stack_push(mat4_t *mat)
+{
+	if (ll_matrix_stack_size >= LL_MATRIX_STACK_CAPACITY || !mat) return -1;
+	ll_matrix_stack[ll_matrix_stack_size++] = *mat;
+	return 0;
+}
+
 LINEARLIBDEF void ll_quaternion_to_mat4(quaternion_t q, mat4_t *mat)
 {
 	float q00, q01, q11, q12, q03, q13, q02, q22, q23, q33;
@@ -2483,6 +2512,8 @@ LINEARLIBDEF int ll_aabb_hit(const ray_t *ray, const aabb_t *aabb)
 	return intersect.x < intersect.y;
 }
 
+
+
 #ifdef LL_USE_MATRIX
 
 static mat4_t ll_matrices[LL_MATRIX_COUNT]; /* Model, View, Projection Matrices */
@@ -2495,6 +2526,12 @@ LINEARLIBDEF void ll_matrix_mode(matrix_type_t type)
 {
         if (type >= 0 && type < LL_MATRIX_COUNT)
                 ll_matrices_idx = type;
+}
+
+LINEARLIBDEF void ll_matrix_set(mat4_t *mat)
+{
+	assert(mat);
+	ll_matrices[ll_matrices_idx] = *mat;
 }
 
 /**
@@ -2632,6 +2669,11 @@ LINEARLIBDEF void ll_matrix_lookat(vec3_t x, vec3_t y, vec3_t z, vec3_t lookat)
 		       x, y, z, lookat);
 }
 
+LINEARLIBDEF void ll_matrix_apply(vec3_t *v)
+{
+	ll_mat4_apply(ll_matrices+ll_matrices_idx, v);
+}
+
 /**
  * @return A copy of the currently bound matrix.
  * prevents modification of the internal matrix
@@ -2642,17 +2684,18 @@ LINEARLIBDEF mat4_t ll_matrix_get_copy(void)
         return ll_matrices[ll_matrices_idx];
 }
 
-LINEARLIBDEF int ll_matrix_stack_pop(mat4_t *mat)
+LINEARLIBDEF int ll_matrix_stack_pop(void)
 {
-	if (ll_matrix_stack_size <= 0 || !mat) return -1;
-	*mat = ll_matrix_stack[--ll_matrix_stack_size];
+	if (ll_matrix_stack_size <= 0) return -1;
+	ll_matrix_stack_size--;
+	ll_matrix_set(ll_matrix_stack + ll_matrix_stack_size);
 	return 0;
 }
 
-LINEARLIBDEF int ll_matrix_stack_push(mat4_t *mat)
+LINEARLIBDEF int ll_matrix_stack_push(void)
 {
-	if (ll_matrix_stack_size >= LL_MATRIX_STACK_CAPACITY || !mat) return -1;
-	ll_matrix_stack[ll_matrix_stack_size++] = *mat;
+	if (ll_matrix_stack_size >= LL_MATRIX_STACK_CAPACITY) return -1;
+	ll_matrix_stack[ll_matrix_stack_size++] = ll_matrix_get_copy();
 	return 0;
 }
 
