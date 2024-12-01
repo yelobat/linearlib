@@ -2154,9 +2154,9 @@ LINEARLIBDEF void ll_mat4_lookat(mat4_t *mat, vec3_t x, vec3_t y, vec3_t z,
 LINEARLIBDEF void ll_mat4_apply(mat4_t *mat, vec3_t *v)
 {
         vec3_t nv;
-        nv.x = mat->m00*v->x + mat->m01*v->y + mat->m02*v->z + mat->m30;
-        nv.y = mat->m10*v->x + mat->m11*v->y + mat->m12*v->z + mat->m31;
-        nv.z = mat->m20*v->x + mat->m21*v->y + mat->m22*v->z + mat->m32;
+        nv.x = mat->m00*v->x + mat->m10*v->y + mat->m20*v->z + mat->m30;
+        nv.y = mat->m01*v->x + mat->m11*v->y + mat->m21*v->z + mat->m31;
+        nv.z = mat->m02*v->x + mat->m12*v->y + mat->m22*v->z + mat->m32;
         *v = nv;
 }
 
