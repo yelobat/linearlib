@@ -2098,10 +2098,10 @@ LINEARLIBDEF void ll_mat4_perspective(mat4_t *mat, float fovy, float aspect,
 {
         float w, h;
         if (!mat || near == far) return;
-        
+
         h = (float) tan(fovy / 360.0 * M_PI) * near;
         w = h * aspect;
-        ll_mat4_frustum(mat, -h, w, h, -w, near, far);
+        ll_mat4_frustum(mat, h, w, -h, -w, near, far);
 }
 
 /**
